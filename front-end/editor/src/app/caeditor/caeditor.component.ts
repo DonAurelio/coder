@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Cafile } from '../models/cafile';
 
 @Component({
   selector: 'app-caeditor',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./caeditor.component.css']
 })
 export class CaeditorComponent implements OnInit {
-
+  cafile = new Cafile('stencil',20,20,'int',100); 
   constructor() { }
 
   ngOnInit() {
