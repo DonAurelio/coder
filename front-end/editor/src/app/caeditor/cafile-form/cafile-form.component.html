@@ -1,9 +1,9 @@
 <h1>{{ cafile | json }}</h1>
-<form>
+<form (ngSubmit)="onSubmit()" #cafileForm="ngForm">
   <h2>Lattice</h2>
   <hr>
   <div class="form-group">
-    <label>Pattern name</label>
+    <label>Pattern Name</label>
     <select class="form-control" id="pattern_name" required [(ngModel)]="cafile.pattern_name" name="pattern_name">
       <option *ngFor="let pattern_name of patterns_name" [value]="pattern_name">{{pattern_name}}</option>
     </select>
@@ -33,34 +33,38 @@
       </select>
     </div>
     <div class="col-xs-6 form-group">
-      <label>Number of generations</label>
-      <input type="number" class="form-control" value="20" id="matrix_cols_number" required [(ngModel)]="cafile.generations" name="generations">
+      <label>Number of Generations</label>
+      <input type="number" class="form-control" value="20" id="matrix_cols_number" required [(ngModel)]="cafile.generations" name="generations" #generations="ngModel">
+      <div [hidden]="generations.valid || generations.pristine" class="alert alert-danger">
+        Number of generations is required
+      </div>
     </div>
   </div>
   <h3>Neighborhood</h3>
   <hr>
   <div class="row">
-    <div class="col-xs-3 form-grop">
-      <label>Neighbor name</label>
-      <input type="text" class="form-control" id="neighbor_name" placeholder="">
+    <div class="col-xs-6 form-grop">
+      <label>Neighbor Name</label>
+      <select class="form-control" id="neighborhood_name" required [(ngModel)]="cafile.neighborhood_name" name="neighborhood_name" #nbhd_name="ngModel">
+        <option *ngFor="let neighborhood_name of neighborhood_names" [value]="neighborhood_name">{{neighborhood_name}}</option>
+      </select>
     </div>
-    <div class="col-xs-3 form-grop">
-      <label>X offset</label>
-      <input type="number" value="-1" class="form-control" id="neighbor_xoffset">
-    </div>
-    <div class="col-xs-3 form-grop">
-      <label>Y offset</label>
-      <input type="number" value="-1" class="form-control" id="neighbor_yoffset">
-    </div>
-    <div class="col-xs-3 form-grop">
-      <label><br></label>
-      <button type="submit" class="form-control btn btn-primary">Add</button>
+    <div class="col-xs-1 col-sm-offset-1 form-grop">
+      <table class="table table-bordered">
+        <tbody>
+          <tr *ngFor="let row of getCurrentNeighborPattern()">
+            <td *ngFor="let value of row">
+              <span [ngClass]="value === '1' ? 'btn btn-success' : 'btn'"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
   <div class="row ">
     <div class="col-xs-3 form-group">
       <label><br></label>
-      <button type="submit" class="form-control btn btn-primary">Submit</button>
+      <button type="submit" class="form-control btn btn-primary" [disabled]="!cafileForm.form.valid">Submit</button>
     </div>
   </div>
 </form>
