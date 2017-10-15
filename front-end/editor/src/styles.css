@@ -1,1 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+/* The fixed navbar will overlay your other content, unless you add padding to the top of the body. */
+body {
+	padding-top: 65px;
+}

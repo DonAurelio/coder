@@ -1,0 +1,62 @@
+<form>
+  <h2>Lattice</h2>
+  <hr>
+  <div class="form-group">
+    <label>Pattern name</label>
+    <select class="form-control" id="pattern_name">
+      <option>stencil</option>
+    </select>
+    <small class="form-text text-muted">Select the cellular automata programming pattern.</small>
+  </div>
+  <div class="row">
+    <div class="col-xs-6 form-group">
+      <label>Matrix Number of Rows</label>
+      <input type="number" class="form-control" value="20" id="matrix_rows_number">
+    </div>
+    <div class="col-xs-6 form-group">
+      <label>Matrix Number of Cols</label>
+      <input type="number" class="form-control" value="20" id="matrix_cols_number">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6 form-group">
+      <label>States Type</label>
+      <select class="form-control" id="states_type">
+        <option>int</option>
+        <option>bool</option>
+        <option>float</option>
+      </select>
+    </div>
+    <div class="col-xs-6 form-group">
+      <label>Number of generations</label>
+      <input type="number" class="form-control" value="20" id="matrix_cols_number">
+    </div>
+  </div>
+  <h3>Neighborhood</h3>
+  <hr>
+  <div class="row">
+    <div class="col-xs-3 form-grop">
+      <label>Neighbor name</label>
+      <input type="text" class="form-control" id="neighbor_name" placeholder="">
+    </div>
+    <div class="col-xs-3 form-grop">
+      <label>X offset</label>
+      <input type="number" value="-1" class="form-control" id="neighbor_xoffset">
+    </div>
+    <div class="col-xs-3 form-grop">
+      <label>Y offset</label>
+      <input type="number" value="-1" class="form-control" id="neighbor_yoffset">
+    </div>
+    <div class="col-xs-3 form-grop">
+      <label><br></label>
+      <button type="submit" class="form-control btn btn-primary">Add</button>
+    </div>
+  </div>
+  <div class="row ">
+    <div class="col-xs-3 form-group">
+      <label><br></label>
+      <button type="submit" class="form-control btn btn-primary">Submit</button>
+    </div>
+  </div>
+  
+</form>
