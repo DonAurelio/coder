@@ -8,6 +8,7 @@ import { Cafile } from '../models/cafile';
 })
 export class CaeditorComponent implements OnInit {
   cafile = new Cafile('stencil',20,20,'int',100,'neumann'); 
+  
   constructor() { }
 
   ngOnInit() {

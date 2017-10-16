@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Cafile } from '../../models/cafile';
+
+
 @Component({
   selector: 'app-cafile-form',
   templateUrl: './cafile-form.component.html',
@@ -24,14 +26,14 @@ export class CafileFormComponent implements OnInit {
       'neumann': [
         [" "," "," "," "," "],
         [" "," ","1"," "," "],
-        [" ","1"," ","1"," "],
+        [" ","1","1","1"," "],
         [" "," ","1"," "," "],
         [" "," "," "," "," "],
       ],
       'moore': [
         [" "," "," "," "," "],
         [" ","1","1","1"," "],
-        [" ","1","0","1"," "],
+        [" ","1","1","1"," "],
         [" ","1","1","1"," "],
         [" "," "," "," "," "],
       ]
