@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from '../../models/project';
+import { ProjectService } from '../../services/project.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-project-list',
@@ -7,21 +9,18 @@ import { Project } from '../../models/project';
   styleUrls: ['./project-list.component.css']
 })
 export class ProjectListComponent implements OnInit {
-
-  projects: Project[];
+  projects : Observable<Project[]>;
   selectedProject: Project;
 
-  constructor() { 
-    this.projects = [
-      new Project('Project 1','No description'),
-      new Project('Project 2','No description')
-    ];
+  constructor(private projectService: ProjectService) { 
+
   }
 
   ngOnInit() {
+    this.projects = this.projectService.getProjects();
   }
 
-  onSelect(project: Project){
+  onSelect(project: Project): void{
     this.selectedProject = project;
   }
 

@@ -25,7 +25,8 @@ SECRET_KEY = '0p6cu%4z8!=tlrhl#ssy8ox)$#aaq8n4x%wu9g0xcd-w$01&9+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -37,17 +38,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api'
+    'api',
+    # Cors
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    # Cors
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
+
 ]
 
 ROOT_URLCONF = 'code_editor.urls'
@@ -119,3 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Cors
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_CREDENTIALS = True

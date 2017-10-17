@@ -12,4 +12,8 @@ export class ProjectCreateComponent implements OnInit {
   ngOnInit() {
   }
 
+  createProject(form_data): void{
+    console.log(form_data);
+  }
+
 }

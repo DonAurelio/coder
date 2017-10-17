@@ -1,16 +1,16 @@
 <div class="container well well-sm col-md-12">
-  <form>
+  <form (ngSubmit)="createProject(createProjectForm.value)" #createProjectForm="ngForm">
       <h3><small class="text-muted">New project</small></h3>
     <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Name</label>
+      <label class="col-sm-2">Name</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="name" placeholder="Some project name ..">
+        <input type="text" class="form-control" id="name" placeholder="Some project name .." name="name" ngModel>
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Description</label>
+      <label class="col-sm-2">Description</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="description" placeholder="Some description ..">
+        <input type="text" class="form-control" id="description" placeholder="Some description .." name="description" ngModel>
       </div>
     </div>
     <div class="form-group row">
