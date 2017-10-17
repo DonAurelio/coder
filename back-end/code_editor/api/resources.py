@@ -11,6 +11,7 @@ class ProjectResource(ModelResource):
         queryset = Project.objects.all()
         resource_name = 'project'
         authorization = Authorization()
+        always_return_data = True
         # fields = ['name']
 
 

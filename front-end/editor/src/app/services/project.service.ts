@@ -15,6 +15,12 @@ export class ProjectService {
     by the list call to the api endpoint */
     return this.http.get('http://localhost:8000/api/v1/project/')
     .map((response: Response) => response.json()['objects']);
-  } 
+  }
+
+  addProject(project: Object): Observable<Project[]>{
+    return this.http.post('http://localhost:8000/api/v1/project/',project)
+    .map((response: Response) => response.json())
+    .catch((error: any)=> Observable.throw(error.json().error || {message:"Server error !!"}));
+  }
 
 }
