@@ -12,6 +12,7 @@ class ProjectResource(ModelResource):
         resource_name = 'project'
         authorization = Authorization()
         always_return_data = True
+        limit = 100
         # fields = ['name']
 
 

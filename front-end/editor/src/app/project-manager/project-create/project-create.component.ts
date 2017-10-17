@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 
 @Component({
@@ -8,6 +8,10 @@ import { ProjectService } from '../../services/project.service';
 })
 export class ProjectCreateComponent implements OnInit {
 
+  /* This output is used to notify project list component that it needs
+  to update beacuse a new project was added to the database */
+  @Output() onProjectCreated = new EventEmitter<boolean>(); 
+
   constructor(private projectService: ProjectService) { }
 
   ngOnInit() {
@@ -16,8 +20,8 @@ export class ProjectCreateComponent implements OnInit {
   createProject(form_data): void{
     this.projectService.addProject(form_data)
     .subscribe(
-      project => console.log(project),
-      error => console.log(<any>error)
+      project => this.onSuccess(project),
+      error => this.onError(error)
     );
 
     /* Replace the line above for the following line in case of errors in the server side.
@@ -35,6 +39,17 @@ export class ProjectCreateComponent implements OnInit {
       }
     );
     */
+  }
+
+  onSuccess(project: Object) : void {
+    console.log('A project was saved into the data base !!');
+    console.log(project);
+    this.onProjectCreated.emit(true);
+  }
+
+  onError(error: any) : void {
+    console.log("An error has ocurred !!");
+    console.log(error);
   }
 
 }

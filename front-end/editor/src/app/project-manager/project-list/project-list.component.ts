@@ -17,11 +17,19 @@ export class ProjectListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadProjects();
+  }
+
+  loadProjects(){
     this.projects = this.projectService.getProjects();
   }
 
-  onSelect(project: Project): void{
+  onSelect(project: Project) : void{
     this.selectedProject = project;
+  }
+
+  onLoadProjects(value: boolean) : void {
+    this.loadProjects();
   }
 
 }

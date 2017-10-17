@@ -1,8 +1,14 @@
 <div class="container row">
   <div class="col-md-4">
-    <app-project-list></app-project-list>
+    <app-project-list #projectList></app-project-list>
   </div>
   <div class="col-md-8">
-    <app-project-create></app-project-create>
+    <!-- 
+      The app-project-create emits a event that event is handled by the
+      app-project-list component. The emited event means that a project 
+      was creaed on the data base so the project-list component needs to 
+      update the project list.
+    -->
+    <app-project-create (onProjectCreated)="projectList.onLoadProjects($event)"></app-project-create>
   </div>
 </div>
