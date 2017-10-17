@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar.component';
@@ -14,6 +15,15 @@ import { ProjectCreateComponent } from './project-manager/project-create/project
 
 import { CafileService } from './services/cafile.service';
 import { ProjectService } from './services/project.service';
+import { CodeEditorComponent } from './code-editor/code-editor.component';
+
+
+const appRoutes: Routes = [
+  { path: '', redirectTo:'/project', pathMatch: 'full' },
+  { path: 'project', component: ProjectManagerComponent },
+  { path: 'editor', component: CodeEditorComponent }
+];
+
 
 @NgModule({
   declarations: [
@@ -24,9 +34,11 @@ import { ProjectService } from './services/project.service';
     ProjectManagerComponent,
     ProjectListComponent,
     ProjectComponent,
-    ProjectCreateComponent
+    ProjectCreateComponent,
+    CodeEditorComponent
   ],
   imports: [
+    RouterModule.forRoot(appRoutes),
     BrowserModule,
     FormsModule,
     HttpModule
