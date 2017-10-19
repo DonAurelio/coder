@@ -4,3 +4,9 @@
     bottom: 0;
     left: 0;
 }
+
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+

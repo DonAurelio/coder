@@ -1,0 +1,32 @@
+.nopadding {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Reference: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sidenav_push */
+.sidenav {
+  height: 100%;
+  width: 100%;
+
+  top: 0;             /* Top postion for this component*/
+  position: fixed;    /* Necessary to expand to page height */
+  padding-top: 60px;  /* Pading from the top of the page */
+}
+
+.sidenav a {
+  padding: 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+@media screen and (max-height: 450px) {
+.sidenav {padding-top: 15px;}
+.sidenav a {font-size: 18px;}
+}

@@ -1,11 +1,27 @@
-<div ace-editor
-[(text)]="text"
-[mode]="'sql'"
-[theme]="'eclipse'"
-[options]="options"
-[readOnly]="false"
-[autoUpdateContent]="true"
-[durationBeforeCallback]="1000"
-(textChanged)="onChange($event)"
-style="min-height: 200px; width:100%; overflow: auto;">
+<div class="col-md-6 nopadding">
+    <div ace-editor
+    [(text)]="editor_text"
+    [mode]="'c_cpp'"
+    [theme]="'eclipse'"
+    [options]="options"
+    [readOnly]="false"
+    [autoUpdateContent]="true"
+    style="min-height: 400px; width:100%; overflow: auto;">
+    </div>
 </div>
+<div class="col-md-6 nopadding">
+    <div ace-editor
+    [(text)]="preview_text"
+    [mode]="'c_cpp'"
+    [theme]="'eclipse'"
+    [options]="options"
+    [readOnly]="false"
+    [autoUpdateContent]="true"
+    style="min-height: 400px; width:100%; overflow: auto;">
+    </div>
+</div>
+
+
+
+
+

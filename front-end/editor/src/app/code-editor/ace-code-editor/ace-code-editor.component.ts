@@ -7,11 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AceCodeEditorComponent implements OnInit {
 
-  text: string = "";
+  /* Binding with the text typed in the editor */
+  editor_text: string = "Editor text";
+  preview_text: string = "Preview text";
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onChange(event:any): void {
+    console.log("Something changed in code !!");
+    console.log(event);
   }
 
 }
