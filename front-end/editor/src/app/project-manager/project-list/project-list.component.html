@@ -1,22 +1,20 @@
-<div class="container well well-sm col-md-12">
-  <div>
-    <h3><small class="text-muted">Projects</small></h3>
-    <div class="list-group pre-scrollable">
-      <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" 
-      *ngFor="let project of projects | async" 
-      (click)="onSelect(project)"
-      [class.active]="project === selectedProject">
-        <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">{{project.name}}</h5>
-          <small>3 days ago</small>
-        </div>
-        <p class="mb-1">{{project.description}}</p>
-      </a>
-    </div>
-    <div class="form-group row">
-        <div class="offset-sm-2 col-sm-10">
-          <button type="submit" class="btn btn-primary">Open</button>
-        </div>
+<div class="well well-sm col-md-12">
+  <h3><small class="text-muted">Projects</small></h3>
+  <div class="list-group pre-scrollable">
+    <a class="list-group-item list-group-item-action flex-column align-items-start" 
+    *ngFor="let project of projects | async" 
+    (click)="onSelect(project)"
+    [class.active]="project === selectedProject">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{project.name}}</h5>
+        <small>3 days ago</small>
       </div>
+      <p class="mb-1">{{project.description}}</p>
+    </a>
+  </div>
+  <div class="form-group row">
+    <div class="offset-sm-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">Open</button>
+    </div>
   </div>
 </div>
