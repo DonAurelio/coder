@@ -18,6 +18,7 @@ import { ProjectService } from './services/project.service';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { ProjectFileListComponent } from './code-editor/project-file-list/project-file-list.component';
 import { AceCodeEditorComponent } from './code-editor/ace-code-editor/ace-code-editor.component';
+import { ConsoleComponent } from './code-editor/console/console.component';
 
 
 const appRoutes: Routes = [
@@ -38,7 +39,8 @@ const appRoutes: Routes = [
     ProjectCreateComponent,
     CodeEditorComponent,
     ProjectFileListComponent,
-    AceCodeEditorComponent
+    AceCodeEditorComponent,
+    ConsoleComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

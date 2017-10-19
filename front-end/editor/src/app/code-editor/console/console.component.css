@@ -1,0 +1,71 @@
+.component-console {
+  font-family: monospace, serif;
+  font-size: 12px;
+  height: 100%;
+  overflow: scroll;
+  line-height: 14px;
+}
+
+.component-console textarea {
+  resize: none;
+  width: calc(100% - 14px);
+  border: 0;
+  outline: none;
+  margin: 0;
+  margin-left: 14px;
+  font-family: inherit;
+  font-size: 100%;
+  overflow: auto;
+  padding: 0;
+}
+
+.component-console pre {
+  white-space: pre-wrap;
+  margin: 0;
+  border-top: 1px solid #F0F0F0;
+}
+
+.component-console .prompt {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.component-console .prompt .chevron {
+  position: absolute;
+}
+
+.component-console .chevron {
+  width: 10px;
+  font-size: 18px;
+  font-family: verdana,helvetica,arial,sans-serif;
+  margin-top: -2px;
+}
+
+.component-console .old-prompt > span{
+  vertical-align: middle;
+}
+
+.component-console .old-prompt .chevron {
+  margin-right: 6px;
+  margin-left: -14px;
+}
+
+.component-console .old-prompt .val {
+  color: #0080FF;
+}
+
+.component-console .old-prompt {
+  color: gray;
+  margin-left: 14px;
+}
+
+.component-console .result {
+  margin-left: 14px;
+  color: #1C00CF;
+}
+
+.component-console .error {
+  margin-left: 14px;
+  color: #FF0000;
+}
