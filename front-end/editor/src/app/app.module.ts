@@ -19,7 +19,6 @@ import { ProjectCreateComponent } from './project-manager/project-create/project
 import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { ProjectFileListComponent } from './code-editor/project-file-list/project-file-list.component';
 import { AceCodeEditorComponent } from './code-editor/ace-code-editor/ace-code-editor.component';
-import { ConsoleComponent } from './code-editor/console/console.component';
 
 
 const appRoutes: Routes = [
@@ -41,7 +40,6 @@ const appRoutes: Routes = [
     CodeEditorComponent,
     ProjectFileListComponent,
     AceCodeEditorComponent,
-    ConsoleComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
