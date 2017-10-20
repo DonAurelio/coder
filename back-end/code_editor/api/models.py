@@ -4,14 +4,12 @@ from django.db import models
 class File(models.Model):
     """docstring for File"""
 
-    CAFILE = 'Cafile'
-    PARALLEL_FILE = 'Paralell file'
-    SOURCE_CODE =' Source code'
+    C = 'c99'
+    YML = 'yml'
 
     FILE_TYPES = (
-        (CAFILE, 'Cafile'),
-        (PARALLEL_FILE, 'Parallel file'),
-        (SOURCE_CODE, 'Source code')
+        (C, 'c99'),
+        (YML, 'yml')
     )
 
     # The file name.
@@ -19,11 +17,11 @@ class File(models.Model):
     # File type
     ftype = models.CharField(max_length=100, choices=FILE_TYPES)
     # The file's contents
-    text = models.TextField()
+    text = models.TextField(null=True,blank=True)
     # Each file belong to a specific project
     project = models.ForeignKey('Project')
 
-    def __str__():
+    def __str__(self):
         return self.name
 
         
@@ -32,3 +30,11 @@ class Project(models.Model):
 
     # Name for the project
     name = models.CharField(max_length=200)
+    # Project created date
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name

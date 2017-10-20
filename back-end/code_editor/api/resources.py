@@ -23,7 +23,9 @@ class FileResource(ModelResource):
         queryset = File.objects.all()
         resource_name = 'file'
         authorization = Authorization()
-        # filtering = {
-        #     'user': ALL_WITH_RELATIONS
-        # }
+
+        # To make search filtering
+        filtering = {
+            'project': ('exact',)
+        }
 

@@ -5,6 +5,10 @@ import { HttpModule } from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
 import { AceEditorModule } from 'ng2-ace-editor';
 
+import { CafileService } from './services/cafile.service';
+import { ProjectService } from './services/project.service';
+import { FileService } from './services/file.service';
+
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar.component';
 import { CaeditorComponent } from './caeditor/caeditor.component';
@@ -12,9 +16,6 @@ import { CafileFormComponent } from './caeditor/cafile-form/cafile-form.componen
 import { ProjectManagerComponent } from './project-manager/project-manager.component';
 import { ProjectListComponent } from './project-manager/project-list/project-list.component';
 import { ProjectCreateComponent } from './project-manager/project-create/project-create.component';
-
-import { CafileService } from './services/cafile.service';
-import { ProjectService } from './services/project.service';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { ProjectFileListComponent } from './code-editor/project-file-list/project-file-list.component';
 import { AceCodeEditorComponent } from './code-editor/ace-code-editor/ace-code-editor.component';
@@ -49,7 +50,7 @@ const appRoutes: Routes = [
     HttpModule,
     AceEditorModule
   ],
-  providers: [CafileService,ProjectService],
+  providers: [CafileService,ProjectService,FileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

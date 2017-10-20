@@ -1,12 +1,10 @@
 <div class="sidenav well">
-  <h3><small class="text-muted">Projects</small></h3>
+  <h3><small class="text-muted">Project {{project.name}}</small></h3>
   <div class="list-group pre-scrollable">
-    <a href="#" class="list-group-item active">
-      Cras justo odio
-    </a>
-    <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-    <a href="#" class="list-group-item">Morbi leo risus</a>
-    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-    <a href="#" class="list-group-item">Vestibulum at eros</a>
+    <a class="list-group-item" 
+    *ngFor="let file of project_files | async" 
+    (click)="setSelectedFile(file)"
+    [class.active]="file === selectedFile"
+    >{{file.name}}</a>
   </div>
 </div>

@@ -14,7 +14,10 @@
   </div>
   <div class="form-group row">
     <div class="offset-sm-2 col-sm-10">
-      <button type="submit" class="btn btn-primary">Open</button>
+      <button type="submit" 
+      (click)="openProject($event)"
+      [disabled]="!selectedProject" 
+      class="btn btn-primary">Open</button>
     </div>
   </div>
 </div>

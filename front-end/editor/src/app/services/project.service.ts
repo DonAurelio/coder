@@ -25,7 +25,7 @@ export class ProjectService {
     .catch((error: any)=> Observable.throw(error.json().error || {message:"Server error !!"}));
   }
 
-  getProjectById(id: String): Observable<Project[]>{
+  getProjectById(id: String): Observable<Project>{
     /* The slash at the end of the url is optional */
     return this.http.get('http://localhost:8000/api/v1/project/' + id )
     .map((response: Response) => response.json());

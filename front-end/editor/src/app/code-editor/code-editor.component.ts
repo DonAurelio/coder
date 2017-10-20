@@ -20,7 +20,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){
-    this.params.unsubcribe();
+    this.params.unsubscribe();
   }
 
 }
