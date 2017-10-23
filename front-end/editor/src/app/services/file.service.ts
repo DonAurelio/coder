@@ -17,4 +17,14 @@ export class FileService {
     );
   }
 
+  updateFile(file: File): Observable<File> {
+    const apiUrl = 'http://localhost:8000/api/v1';
+    const resource = 'file';
+    const url = `${apiUrl}/${resource}/${file["id"]}/`;
+    return this.http.put(url,file)
+    .map((response: Response) => response.json());
+  }
+
+
+
 }

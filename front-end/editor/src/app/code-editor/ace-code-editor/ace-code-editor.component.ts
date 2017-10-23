@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { File } from '../../models/file';
+import { FileService } from '../../services/file.service';
 
 @Component({
   selector: 'app-ace-code-editor',
@@ -11,14 +13,30 @@ export class AceCodeEditorComponent implements OnInit {
   editor_text: string = "Editor text";
   preview_text: string = "Preview text";
 
-  constructor() { }
+  file: File;
+
+  constructor(private fileService: FileService) {
+    this.file = new File(0,'Test File','c99','#include <stdio.h>');
+
+  }
 
   ngOnInit() {
   }
 
-  onChange(event:any): void {
-    console.log("Something changed in code !!");
-    console.log(event);
+  /* Getting the selected file from the file-list-componet */
+  getSelectedFile(file: File): void {
+    this.file = file;
+    this.editor_text = file.text;
   }
+
+  /* Save changes from the current selected file in the api */
+  saveChanges(): void {
+    this.fileService.updateFile(this.file).subscribe(
+      success => console.log("The file was saved successfully !!"),
+      error => console.log("Some error has ocurred !!"),
+    );
+  }
+
+
 
 }

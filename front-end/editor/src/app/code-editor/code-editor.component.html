@@ -1,9 +1,12 @@
 <div class="container-fluid">
   <div class="col-md-2">
-    <app-project-file-list [project_id]="project_id"></app-project-file-list>
+    <app-project-file-list 
+    [project_id]="project_id"
+    (onFileSelected)="editor.getSelectedFile($event)"
+    ></app-project-file-list>
   </div>
   <div class="col-md-10">
-    <app-ace-code-editor></app-ace-code-editor>
+    <app-ace-code-editor #editor></app-ace-code-editor>
   </div>
 </div>
 

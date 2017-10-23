@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { Project } from '../../models/project';
@@ -18,6 +18,8 @@ export class ProjectFileListComponent implements OnInit {
 
   project_files: Observable<File[]>;
   selectedFile: File;
+
+  @Output() onFileSelected = new EventEmitter<File>();
 
   constructor(private projectService: ProjectService, private fileService: FileService) {
     this.project = new Project(0,'','');
@@ -43,6 +45,7 @@ export class ProjectFileListComponent implements OnInit {
 
   setSelectedFile(file: File): void {
     this.selectedFile = file;
+    this.onFileSelected.emit(this.selectedFile);
   }
 
 }

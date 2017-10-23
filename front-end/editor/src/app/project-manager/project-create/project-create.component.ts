@@ -23,22 +23,6 @@ export class ProjectCreateComponent implements OnInit {
       project => this.onSuccess(project),
       error => this.onError(error)
     );
-
-    /* Replace the line above for the following line in case of errors in the server side.
-    .subscribe(
-      data => {console.log("Data !!")},
-      (err: any) => {
-        if (err.error instanceof Error) {
-          // A client-side or network error occurred. Handle it accordingly.
-          console.log('An error occurred:', err.error.message);
-        } else {
-          // The backend returned an unsuccessful response code.
-          // The response body may contain clues as to what went wrong,
-          console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
-        }
-      }
-    );
-    */
   }
 
   onSuccess(project: Object) : void {
