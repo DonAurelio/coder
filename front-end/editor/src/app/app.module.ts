@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
+
 import { AceEditorModule } from 'ng2-ace-editor';
 
 import { CafileService } from './services/cafile.service';
@@ -17,9 +18,6 @@ import { ProjectManagerComponent } from './project-manager/project-manager.compo
 import { ProjectListComponent } from './project-manager/project-list/project-list.component';
 import { ProjectCreateComponent } from './project-manager/project-create/project-create.component';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
-import { ProjectFileListComponent } from './code-editor/project-file-list/project-file-list.component';
-import { AceCodeEditorComponent } from './code-editor/ace-code-editor/ace-code-editor.component';
-
 
 const appRoutes: Routes = [
   { path: '', redirectTo:'/project', pathMatch: 'full' },
@@ -37,9 +35,7 @@ const appRoutes: Routes = [
     ProjectManagerComponent,
     ProjectListComponent,
     ProjectCreateComponent,
-    CodeEditorComponent,
-    ProjectFileListComponent,
-    AceCodeEditorComponent,
+    CodeEditorComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

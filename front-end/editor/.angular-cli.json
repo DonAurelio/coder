@@ -28,7 +28,7 @@
         "../node_modules/ace-builds/src-min-noconflict/ace.js",
         "../node_modules/ace-builds/src-min-noconflict/theme-eclipse.js",
         "../node_modules/ace-builds/src-min-noconflict/mode-yaml.js",
-        "../node_modules/ace-builds/src-min-noconflict/mode-c_cpp.js"
+        "../node_modules/ace-builds/src-min-noconflict/mode-c_cpp.js"      
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
