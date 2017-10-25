@@ -1,91 +1,92 @@
-<!--
-<div class="container-fluid">
-  <div class="col-md-2">
-    <app-project-file-list 
-    [project_id]="project_id"
-    (onFileSelected)="editor.getSelectedFile($event)"
-    ></app-project-file-list>
-  </div>
-  <div class="col-md-10">
-    <app-ace-code-editor #editor></app-ace-code-editor>
-  </div>
-</div>
--->
 <!-- Reference: view-source:https://bootstrapious.com/tutorial/sidebar/index.html-->
 <div class="wrapper">
-    <!-- Sidebar Holder -->
-    <nav id="sidebar">
-        <div class="sidebar-header">
-            <h3>Bootstrap Sidebar</h3>
+  <!-- Sidebar Holder -->
+  <nav id="sidebar" class="bg-gray">
+      <!-- <div class="sidebar-header">
+          <h3>Bootstrap Sidebar</h3>
+      </div> -->
+      <ul class="list-unstyled components">
+        <li class="active">
+          <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">{{project.name}} Files</a>
+          <ul class="collapse list-unstyled" id="homeSubmenu">
+              <li><a *ngFor="let file of files | async" 
+                (click)="setSelectedFile(file)"
+                [class.active]="file === selectedFile">{{file.name}}</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- <div class="list-group">
+        <a href="#" class="list-group-item active">
+          Cras justo odio
+        </a>
+        <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+        <a href="#" class="list-group-item">Morbi leo risus</a>
+        <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+        <a href="#" class="list-group-item">Vestibulum at eros</a>
+      </div> -->
+
+      <!-- <ul class="list-unstyled CTAs">
+          <li><a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a></li>
+          <li><a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a></li>
+      </ul> -->
+  </nav>
+
+  <!-- Page Content Holder -->
+  <div id="content">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+
+      </div>
+      <div class="panel-body nopadding">
+        <div class="col-md-6 nopadding">
+            <div ace-editor
+            [(text)]="selectedFile.text"
+            [mode]="'c_cpp'"
+            [theme]="'eclipse'"
+            [options]="options"
+            [readOnly]="false"
+            [autoUpdateContent]="true"
+            style="min-height: 400px; width:100%; overflow: auto;">
+            </div>
         </div>
-
-        <ul class="list-unstyled components">
-            <p>Dummy Heading</p>
-            <li class="active">
-                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">{{project.name}}</a>
-                <ul class="collapse list-unstyled" id="homeSubmenu">
-                    <li><a *ngFor="let file of files | async" 
-                      (click)="setSelectedFile(file)"
-                      [class.active]="file === selectedFile">{{file.name}}</a></li>
-                </ul>
-            </li>
-        </ul>
-
-        <ul class="list-unstyled CTAs">
-            <li><a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a></li>
-            <li><a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a></li>
-        </ul>
-    </nav>
-
-    <!-- Page Content Holder -->
-    <div id="content">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <button type="button" class="btn btn-default btn-sm"
-          (click)="saveChanges()"
-          >
-            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
-          </button>
-        </div>
-        <div class="panel-body nopadding">
-          <div class="col-md-6 nopadding">
-              <div ace-editor
-              [(text)]="selectedFile.text"
-              [mode]="'c_cpp'"
-              [theme]="'eclipse'"
-              [options]="options"
-              [readOnly]="false"
-              [autoUpdateContent]="true"
-              style="min-height: 400px; width:100%; overflow: auto;">
-              </div>
-          </div>
-          <div class="col-md-6 nopadding">
-              <div ace-editor
-              [(text)]="preview_text"
-              [mode]="'c_cpp'"
-              [theme]="'eclipse'"
-              [options]="options"
-              [readOnly]="false"
-              [autoUpdateContent]="true"
-              style="min-height: 400px; width:100%; overflow: auto;">
-              </div>
-          </div>
+        <div class="col-md-6 nopadding">
+            <div ace-editor
+            [(text)]="preview_text"
+            [mode]="'c_cpp'"
+            [theme]="'eclipse'"
+            [options]="options"
+            [readOnly]="false"
+            [autoUpdateContent]="true"
+            style="min-height: 400px; width:100%; overflow: auto;">
+            </div>
         </div>
       </div>
+      <div class="panel-footer">
+          
+        <button type="button" class="btn btn-primary btn-sm" (click)="saveChanges()">
+            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+        </button>
+        <button type="button" class="btn btn-success btn-sm">
+            <span class="glyphicon glyphicon-console" aria-hidden="true"></span> Parallelize
+          </button>
 
-      <div class="panel panel-success">
-        <div class="panel-heading">
-  
-        </div>
-        <div class="panel-body">
-          <div class="component-console">
-            <div class="prompt">
-                <span class="chevron">&#8250;</span>
-                <textarea rows=10></textarea>
-            </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+
+      </div>
+      <div class="panel-body">
+        <div class="component-console">
+          <div class="prompt">
+              <span class="chevron">&#8250;</span>
+              <textarea rows=10></textarea>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </div>
 
