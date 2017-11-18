@@ -42,4 +42,19 @@ export class ProjectListComponent implements OnInit {
     this.router.navigate([`/project/edit/${this.selectedProject.id}`]);
   }
 
+  deleteProject(event:any): void {
+    var response: Object;
+    this.projectService.deleteProject(this.selectedProject).subscribe(
+      response => response = response,
+      error => console.log("The project can not be deleted, probably it was already deleted. !!"),
+      
+      /* If the delection was successfull, refresh the projects list */
+      () => { 
+        console.log("The project was deleted successfully !!"); 
+        this.loadProjects();
+        this.selectedProject = null;
+      }
+    );
+
+  }
 }

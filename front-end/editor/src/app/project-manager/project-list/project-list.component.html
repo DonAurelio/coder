@@ -18,6 +18,10 @@
       (click)="openProject($event)"
       [disabled]="!selectedProject" 
       class="btn btn-primary">Open</button>
+      <button type="submit" 
+      (click)="deleteProject($event)"
+      [disabled]="!selectedProject" 
+      class="btn btn-primary">Delete</button>
     </div>
   </div>
 </div>

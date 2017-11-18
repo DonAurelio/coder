@@ -38,4 +38,10 @@ export class ProjectService {
     .map((response: Response) => response.json());
   }
 
+  deleteProject(project: Object): Observable<Object>{
+    const apiUrl = 'http://localhost:8000/api/v1/project';
+    const url = `${apiUrl}/${project["id"]}`;
+    return this.http.delete(url);
+  }
+
 }
