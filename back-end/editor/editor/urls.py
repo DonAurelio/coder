@@ -16,17 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from django.conf.urls import include
 from django.contrib import admin
-from tastypie.api import Api
-from api.resources import ProjectResource
-from api.resources import FileResource
-
-
-v1_api = Api( api_name='v1' )
-v1_api.register( ProjectResource() )
-v1_api.register( FileResource() )
+from project.urls import api
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include(v1_api.urls)),
+    url(r'^api/', include(api.urls)),
 ]

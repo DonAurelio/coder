@@ -1,7 +1,6 @@
 from tastypie.resources import ModelResource
-from tastypie.resources import ALL_WITH_RELATIONS
-from api.models import Project
-from api.models import File
+from project.models import Project
+from project.models import File
 from tastypie.authorization import Authorization
 from tastypie import fields
 

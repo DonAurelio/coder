@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api',
+    # Apps
+    'project.apps.ProjectConfig',
     # Cors
     'corsheaders',
 ]
@@ -57,7 +58,7 @@ MIDDLEWARE = [
 
 ]
 
-ROOT_URLCONF = 'code_editor.urls'
+ROOT_URLCONF = 'editor.urls'
 
 TEMPLATES = [
     {
@@ -75,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'code_editor.wsgi.application'
+WSGI_APPLICATION = 'editor.wsgi.application'
 
 
 # Database
