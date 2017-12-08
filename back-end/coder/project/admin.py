@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import Folder, File
+from .models import Project, File
 
-class FolderAdmin(admin.ModelAdmin):
+class ProjectAdmin(admin.ModelAdmin):
     fields = ('name',)
 
-admin.site.register(Folder, FolderAdmin)
+admin.site.register(Project, ProjectAdmin)
 
 class FileAdmin(admin.ModelAdmin):
     fields = ('name','ftype','text','project')

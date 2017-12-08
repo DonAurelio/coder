@@ -1,14 +1,14 @@
 from tastypie.resources import ModelResource
-from project.models import Folder
+from project.models import Project
 from project.models import File
 from tastypie.authorization import Authorization
 from tastypie import fields
 
 
-class FolderResource(ModelResource):
+class ProjectResource(ModelResource):
     class Meta:
-        queryset = Folder.objects.all()
-        resource_name = 'folder'
+        queryset = Project.objects.all()
+        resource_name = 'project'
         authorization = Authorization()
         always_return_data = True
         limit = 100
@@ -16,7 +16,7 @@ class FolderResource(ModelResource):
 
 
 class FileResource(ModelResource):
-    project = fields.ForeignKey(FolderResource,'folder')
+    project = fields.ForeignKey(ProjectResource,'project')
 
     class Meta:
         queryset = File.objects.all()

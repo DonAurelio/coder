@@ -24,7 +24,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
 
   constructor(private activatedRoute: ActivatedRoute, 
     private fileService: FileService, private projectService: ProjectService ) {
-      this.project = new Project(0,'no name','no description');
+      this.project = new Project(0,'no name','no description','no type');
       this.selectedFile = new File(0,'somefile','somefiletype','example text');
       this.preview_text = "some preview text";
   }
