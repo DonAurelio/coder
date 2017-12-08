@@ -18,14 +18,14 @@ class File(models.Model):
     ftype = models.CharField(max_length=100, choices=FILE_TYPES)
     # The file's contents
     text = models.TextField(null=True,blank=True)
-    # Each file belong to a specific project
-    project = models.ForeignKey('Project')
+    # Each file belong to a folder
+    project = models.ForeignKey('Folder')
 
     def __str__(self):
         return self.name
 
         
-class Project(models.Model):
+class Folder(models.Model):
     """docstring for Project"""
 
     # Name for the project

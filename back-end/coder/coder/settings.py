@@ -58,7 +58,7 @@ MIDDLEWARE = [
 
 ]
 
-ROOT_URLCONF = 'editor.urls'
+ROOT_URLCONF = 'coder.urls'
 
 TEMPLATES = [
     {
@@ -76,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'editor.wsgi.application'
+WSGI_APPLICATION = 'coder.wsgi.application'
 
 
 # Database
