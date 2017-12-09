@@ -3,6 +3,6 @@ from .views import TemplateList, TemplateDetail
 
 
 urlpatterns = [
-    url(r'^template/$', TemplateList.as_view()),
-    url(r'^template/(?P<name>[-\w]+)$', TemplateDetail.as_view()),
+    url(r'^templates$', TemplateList.as_view()),
+    url(r'^templates/(?P<name>[-\w]+)$', TemplateDetail.as_view()),
 ]

@@ -1,19 +1,16 @@
 from django.http import JsonResponse
 from django.views.generic import TemplateView
+from django.views.decorators.csrf import csrf_exempt
+from .models import Resource
 import requests
-
-
-RESOURCE_LOCATION = 'http://localhost:5000/'
-RESOURCE = 'template/'
-RESOURCE_DETAIL = 'template/%s'
 
 
 class TemplateList(TemplateView):
 
     def get(self,request,*args,**kwargs):
 
-        endpoint = RESOURCE_LOCATION + RESOURCE
-        response = requests.get(endpoint)
+        resource = Resource.objects.get(name='templates')
+        response = requests.get(resource.endpoint_url())
 
         return JsonResponse(response.json())
 
@@ -22,10 +19,14 @@ class TemplateDetail(TemplateView):
 
     def get(self,request,*args,**kwargs):
 
-        endpoint = RESOURCE_DETAIL % kwargs['name']
-        response = requests.get(endpoint)
+        template_name = kwargs['name']
+        resource = Resource.objects.get(name='templates')
+        print('endpoint_url',resource.endpoint_url(arg=template_name))
+        response = requests.get(resource.endpoint_url(arg=template_name))
 
-        return JsonResponse({'data':'some'})
+        return JsonResponse(response.json())
 
+    @csrf_exempt
     def post(self,request,*args,**kwargs):
-        pass
+        
+        return JsonResponse(request.body)

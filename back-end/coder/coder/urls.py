@@ -27,7 +27,7 @@ urlpatterns = [
     # Local services urls 
     url(r'^api/', include(api.urls)),
 
-    # Interface to communicate with external services called
-    # Service Providers
-    url(r'^service-provider-api/catt/', include('catt.urls')),
+    # Interface to communicate with external Service Providers
+    # which are not the code of this project
+    url(r'^external-service/catt/', include('catt.urls')),
 ]

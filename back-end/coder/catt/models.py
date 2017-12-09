@@ -10,12 +10,16 @@ class Resource(models.Model):
         try:
             url = self.url + self.name
             response = requests.get(url)
+            code = response.status_code
+            status = 'Online' if code is 200 \
+            else 'Online with erros'
 
-            if response.status_code is 200:
-                status = 'Online'
-            else:
-                status = 'Online with errors'
         except requests.exceptions.ConnectionError as e:
              status = 'Offline'
 
         return status
+
+    def endpoint_url(self,arg=''):
+        args = '' if not arg else '/' + arg
+        url = self.url + self.name + args
+        return url
