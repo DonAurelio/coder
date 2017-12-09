@@ -20,7 +20,14 @@ from project.urls import api
 
 
 urlpatterns = [
+
+    # Django common urls
     url(r'^admin/', admin.site.urls),
+
+    # Local services urls 
     url(r'^api/', include(api.urls)),
-    url(r'^api/', include('catt.urls')),
+
+    # Interface to communicate with external services called
+    # Service Providers
+    url(r'^service-provider-api/catt/', include('catt.urls')),
 ]
