@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Apps
     'project.apps.ProjectConfig',
+    'catt.apps.CattConfig',
     # Cors
     'corsheaders',
 ]

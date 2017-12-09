@@ -22,4 +22,5 @@ from project.urls import api
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(api.urls)),
+    url(r'^api/', include('catt.urls')),
 ]
