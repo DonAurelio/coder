@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { CattService } from '../../services/catt.service';
 import { Cafile } from '../../models/cafile';
 import { Project } from '../../models/project';
+import { Message } from '../../models/message';
 
 @Component({
   selector: 'app-project-create',
@@ -27,6 +28,9 @@ export class ProjectCreateComponent implements OnInit {
   neighborhood_names: string[];
   nbhds_patterns: {};
 
+  // To display informative message regarding project creation process 
+  message : Message;
+
   constructor(private cattService: CattService) {
     this.project = new Project('','','','stencil');
     this.template_names = ['stencil'];
@@ -51,6 +55,11 @@ export class ProjectCreateComponent implements OnInit {
         [" "," "," "," "," "],
       ]
     };
+ 
+    this.message = new Message(
+      'Success','alert alert-warning','',true
+    );
+
   }
 
   ngOnInit() {
@@ -63,20 +72,24 @@ export class ProjectCreateComponent implements OnInit {
   createProject(): void{
     this.cattService.addProject(this.project,this.cafile)
     .subscribe(
-      project => this.onSuccess(project),
+      // Successful responses call the first callback.
+      data => this.onSuccess(data),
+      // Errors will call this callback instead.
       error => this.onError(error)
     );
   }
 
-  onSuccess(project: Object) : void {
-    console.log('A project was saved into the data base !!');
-    console.log(project);
+  onSuccess(data: Object) : void {
+    console.log(data);
     this.onProjectCreated.emit(true);
   }
 
   onError(error: any) : void {
-    console.log("An error has ocurred on the server side !!");
-    console.log(error);
+    this.message.type = 'Error';
+    this.message.css = 'alert alert-warning';
+    this.message.text = 'an error has ocurred on the server side !!';
+    this.message.hidden = false;
+    console.log("an error has ocurred on the server side !!");
   }
 
 }

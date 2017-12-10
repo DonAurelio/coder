@@ -41,7 +41,7 @@ export class CafileFormComponent implements OnInit {
   }
 
   getCurrentNeighborPattern(){
-    return this.nbhds_patterns[this.cafile.neighborhood_name];
+    return this.nbhds_patterns[this.cafile.nbhd_name];
   }
 
   ngOnInit() {

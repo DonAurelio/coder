@@ -23,8 +23,7 @@ export class CattService {
    * @param project details of the project
    * @param cafile settings to the ceelular automata template
    */
-  addProject(project: Object, cafile:Object): Observable<Project[]>{
-    /* The slash at the end of the url is mandatory to post */
+  addProject(project: Object, cafile:Object): Observable<Object>{
     const resource = 'templates';
     const url = `${this.api}/${resource}`;
     var data = {
@@ -33,6 +32,6 @@ export class CattService {
     }
     return this.http.post(url,data)
     .map((response: Response) => response.json())
-    .catch((error: any)=> Observable.throw(error.json().error || {message:"Server error !!"}));
+    .catch((error: any)=> Observable.throw(error.json().error || { message:" Server error !! "}));
   }
 }
