@@ -26,6 +26,11 @@ def exception_handler(function):
 
 class TemplateList(TemplateView):
 
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        # To aviod checking the CSRF token when posting data to the server 
+        return super(TemplateList, self).dispatch(request, *args, **kwargs)
+
     @exception_handler
     def get(self,request,*args,**kwargs):
 
@@ -35,13 +40,21 @@ class TemplateList(TemplateView):
         
         return JsonResponse(data)
 
+    @exception_handler
+    def post(self,request,*args,**kwargs):
+
+        # template_name = kwargs['name']
+        data = json.loads(request.body.decode("utf-8"))
+
+        # resource = Resource.objects.get(name='templates')
+        # url = resource.endpoint_url(arg=template_name)
+        # response = requests.post(url,data=data)
+        # data = response.json()
+
+        return JsonResponse(data)
+
 
 class TemplateDetail(TemplateView):
-
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-
-       return super(TemplateDetail, self).dispatch(request, *args, **kwargs)
 
     @exception_handler
     def get(self,request,*args,**kwargs):
@@ -50,19 +63,6 @@ class TemplateDetail(TemplateView):
         resource = Resource.objects.get(name='templates')
         url = resource.endpoint_url(arg=template_name)
         response = requests.get(url)
-        data = response.json()
-
-        return JsonResponse(data)
-
-    @exception_handler
-    def post(self,request,*args,**kwargs):
-
-        template_name = kwargs['name']
-        data = json.loads(request.body.decode("utf-8"))
-
-        resource = Resource.objects.get(name='templates')
-        url = resource.endpoint_url(arg=template_name)
-        response = requests.post(url,data=data)
         data = response.json()
 
         return JsonResponse(data)

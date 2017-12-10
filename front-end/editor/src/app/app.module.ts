@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AceEditorModule } from 'ng2-ace-editor';
 
+import { CattService } from './services/catt.service';
 import { CafileService } from './services/cafile.service';
 import { ProjectService } from './services/project.service';
 import { FileService } from './services/file.service';
@@ -44,7 +45,7 @@ const appRoutes: Routes = [
     HttpModule,
     AceEditorModule
   ],
-  providers: [CafileService,ProjectService,FileService],
+  providers: [CafileService,ProjectService,FileService,CattService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

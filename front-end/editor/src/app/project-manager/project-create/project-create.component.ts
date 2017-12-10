@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { ProjectService } from '../../services/project.service';
+import { CattService } from '../../services/catt.service';
 import { Cafile } from '../../models/cafile';
 import { Project } from '../../models/project';
 
@@ -27,7 +27,7 @@ export class ProjectCreateComponent implements OnInit {
   neighborhood_names: string[];
   nbhds_patterns: {};
 
-  constructor(private projectService: ProjectService) {
+  constructor(private cattService: CattService) {
     this.project = new Project('','','','stencil');
     this.template_names = ['stencil'];
   
@@ -60,8 +60,8 @@ export class ProjectCreateComponent implements OnInit {
     return this.nbhds_patterns[this.cafile.neighborhood_name];
   }
 
-  createProject(form_data): void{
-    this.projectService.addProject(form_data)
+  createProject(): void{
+    this.cattService.addProject(this.project,this.cafile)
     .subscribe(
       project => this.onSuccess(project),
       error => this.onError(error)
