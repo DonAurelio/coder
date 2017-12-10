@@ -9,18 +9,27 @@ import { File } from "../models/file";
 @Injectable()
 export class FileService {
 
-  constructor(private http: Http) { }
+
+  // the API base url 
+  api: string;
+  // the URL of the resource we require from the api
+  resource: string;
+
+  constructor(private http: Http) { 
+    this.api = 'http://localhost:8000/api/project';
+    this.resource = 'files';
+  }
 
   getFilesFromProject(id: string): Observable<File[]> {
-    return this.http.get(`http://localhost:8000/api/v1/file?project=${id}`).map(
+    var url = `${this.api}/${this.resource}?project=${id}`;
+    return this.http.get(url).map(
       (response: Response) => response.json()['objects']
     );
   }
 
   updateFile(file: File): Observable<File> {
-    const apiUrl = 'http://localhost:8000/api/v1';
-    const resource = 'file';
-    const url = `${apiUrl}/${resource}/${file["id"]}/`;
+    /* The endding slash is mandatory o put method */
+    var url = `${this.api}/${this.resource}/${file["id"]}/`;
     return this.http.put(url,file)
     .map((response: Response) => response.json());
   }

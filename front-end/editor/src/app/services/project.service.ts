@@ -8,26 +8,27 @@ import { Observable } from 'rxjs/Rx';
 @Injectable()
 export class ProjectService {
 
-  constructor(private http: Http) { }
+  // the API base url 
+  api: string;
+  // the URL of the resource we require from the api
+  resource: string;
+
+  constructor(private http: Http) { 
+    this.api = 'http://localhost:8000/api/project';
+    this.resource = 'projects';
+  }
 
   getProjects(): Observable<Project[]> {
     /* We parse the response to a json object and look for the list of objects returned 
     by the list call to the api endpoint */
-    /* The slash at the end of the url is optional */
-    return this.http.get('http://localhost:8000/api/v1/project')
+    var url = `${this.api}/${this.resource}`;
+    return this.http.get(url)
     .map((response: Response) => response.json()['objects']);
   }
 
-  addProject(project: Object): Observable<Project[]>{
-    /* The slash at the end of the url is mandatory to post */
-    return this.http.post('http://localhost:8000/api/v1/project/',project)
-    .map((response: Response) => response.json())
-    .catch((error: any)=> Observable.throw(error.json().error || {message:"Server error !!"}));
-  }
-
   getProjectById(id: String): Observable<Project>{
-    /* The slash at the end of the url is optional */
-    return this.http.get('http://localhost:8000/api/v1/project/' + id )
+    var url = `${this.api}/${this.resource}/${id}`;
+    return this.http.get(url)
     .map((response: Response) => response.json());
   }
 
@@ -39,8 +40,7 @@ export class ProjectService {
   }
 
   deleteProject(project: Object): Observable<Object>{
-    const apiUrl = 'http://localhost:8000/api/v1/project';
-    const url = `${apiUrl}/${project["id"]}`;
+    var url = `${this.api}/${this.resource}/${project["id"]}`;
     return this.http.delete(url);
   }
 

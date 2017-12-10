@@ -8,7 +8,7 @@ from tastypie import fields
 class ProjectResource(ModelResource):
     class Meta:
         queryset = Project.objects.all()
-        resource_name = 'project'
+        resource_name = 'projects'
         authorization = Authorization()
         always_return_data = True
         limit = 100
@@ -20,7 +20,7 @@ class FileResource(ModelResource):
 
     class Meta:
         queryset = File.objects.all()
-        resource_name = 'file'
+        resource_name = 'files'
         authorization = Authorization()
 
         # To make search filtering
