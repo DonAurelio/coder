@@ -7,7 +7,7 @@ import { Cafile } from '../models/cafile';
   styleUrls: ['./caeditor.component.css']
 })
 export class CaeditorComponent implements OnInit {
-  cafile = new Cafile('stencil',20,20,'int',100,'neumann'); 
+  cafile = new Cafile(20,20,'int',100,'neumann'); 
   
   constructor() { }
 
