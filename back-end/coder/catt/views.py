@@ -2,9 +2,10 @@ from django.http import JsonResponse
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from .models import Resource
+from .models import Resource, Cafile
 import requests
 import json
+import project as project_app
 
 
 def exception_handler(function):
@@ -43,13 +44,45 @@ class TemplateList(TemplateView):
     @exception_handler
     def post(self,request,*args,**kwargs):
 
-        # template_name = kwargs['name']
+        # Getting the data given by the front-end
         data = json.loads(request.body.decode("utf-8"))
+        project_data = data['project']
+        cafile_data = data['cafile']
 
-        # resource = Resource.objects.get(name='templates')
-        # url = resource.endpoint_url(arg=template_name)
-        # response = requests.post(url,data=data)
-        # data = response.json()
+        project = project_app.models.Project(
+            name=project_data['name'],
+            description=project_data['description'],
+            base_template=project_data['base_template']
+        )
+
+        cafile = Cafile(**cafile_data)
+
+        # Calling Catt external service to resquest 
+        # data regarding the requested template
+        resource = Resource.objects.get(name='templates')
+        url = resource.endpoint_url(arg=project.base_template)
+        catt_service_response = requests.post(url,data=cafile.data)
+        catt_service_data = catt_service_response.json()
+
+        # If the catt service us availabe we save the project.      
+        project.save()
+
+        # and we create files with the data returned by catt
+        # service.
+
+        # catt_service_data['success']
+        # catt_service_data['error']
+        # catt_service_data['data']
+
+        files = catt_service_data['data']['files']
+        for file in files:
+            new_file = project_app.models.File(
+                project=project,
+                name=file['name'],
+                ftype=file['type'],
+                text=file['text']
+            )
+            new_file.save()
 
         return JsonResponse(data)
 

@@ -30,15 +30,15 @@
     <div class="row">
       <div class="col-xs-6 form-group">
         <label>Matrix Number of Rows</label>
-        <input type="number" class="form-control" value="20" id="row_num" required [(ngModel)]="cafile.row_num" name="row_num" #row_num="ngModel">
-        <div [hidden]="row_num.valid || row_num.pristine" class="alert alert-danger">
+        <input type="number" class="form-control" value="20" id="rowdim" required [(ngModel)]="cafile.rowdim" name="rowdim" #rowdim="ngModel">
+        <div [hidden]="rowdim.valid || rowdim.pristine" class="alert alert-danger">
           Number of rows is required
         </div>
       </div>
       <div class="col-xs-6 form-group">
         <label>Matrix Number of Cols</label>
-        <input type="number" class="form-control" value="20" id="col_num" required [(ngModel)]="cafile.col_num" name="col_num" #col_num="ngModel">
-        <div [hidden]="col_num.valid || col_num.pristine" class="alert alert-danger">
+        <input type="number" class="form-control" value="20" id="coldim" required [(ngModel)]="cafile.coldim" name="coldim" #coldim="ngModel">
+        <div [hidden]="coldim.valid || coldim.pristine" class="alert alert-danger">
           Number of cols is required
         </div>
       </div>
@@ -46,8 +46,8 @@
     <div class="row">
       <div class="col-xs-6 form-group">
         <label>States Type</label>
-        <select class="form-control" id="states_type" required [(ngModel)]="cafile.states_type" name="states_type">
-          <option *ngFor="let states_type of states_types">{{states_type}}</option>
+        <select class="form-control" id="type" required [(ngModel)]="cafile.type" name="type">
+          <option *ngFor="let states_type of states_types" [value]="states_type">{{states_type}}</option>
         </select>
       </div>
       <div class="col-xs-6 form-group">
@@ -61,7 +61,7 @@
     <div class="row">
       <div class="col-xs-6 form-grop">
         <label>Neighbor Name</label>
-        <select class="form-control" id="neighborhood_name" required [(ngModel)]="cafile.neighborhood_name" name="neighborhood_name" #nbhd_name="ngModel">
+        <select class="form-control" id="nbhd_name" required [(ngModel)]="cafile.nbhd_name" name="nbhd_name" #nbhd_name="ngModel">
           <option *ngFor="let neighborhood_name of neighborhood_names" [value]="neighborhood_name">{{neighborhood_name}}</option>
         </select>
       </div>

@@ -57,7 +57,7 @@ export class ProjectCreateComponent implements OnInit {
   }
 
   getCurrentNeighborPattern(){
-    return this.nbhds_patterns[this.cafile.neighborhood_name];
+    return this.nbhds_patterns[this.cafile.nbhd_name];
   }
 
   createProject(): void{
@@ -75,7 +75,7 @@ export class ProjectCreateComponent implements OnInit {
   }
 
   onError(error: any) : void {
-    console.log("An error has ocurred !!");
+    console.log("An error has ocurred on the server side !!");
     console.log(error);
   }
 
