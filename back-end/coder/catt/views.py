@@ -84,6 +84,10 @@ class TemplateList(TemplateView):
             )
             new_file.save()
 
+        data = {
+            'success':'The project was created susccessfully'
+        }
+
         return JsonResponse(data)
 
 

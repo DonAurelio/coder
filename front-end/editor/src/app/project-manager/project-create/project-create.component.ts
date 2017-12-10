@@ -81,15 +81,29 @@ export class ProjectCreateComponent implements OnInit {
 
   onSuccess(data: Object) : void {
     console.log(data);
-    this.onProjectCreated.emit(true);
+    // The service is available and performs its work successfully
+    if(data['success']){
+      this.message.success(data['success']);
+      this.onProjectCreated.emit(true);
+    // The server is availabe but it doesn't perform its work
+    // successfully
+    }else if(data['error']){
+      this.message.error(data['error'])
+    }else{
+    // The server do not send its data on this format
+    /*
+    {
+      'success':'', when the server is available and perform its work correctly.
+      'error':'', otherwise
+      'data':'',
+    }
+    */
+    }
   }
 
   onError(error: any) : void {
-    this.message.type = 'Error';
-    this.message.css = 'alert alert-warning';
-    this.message.text = 'an error has ocurred on the server side !!';
-    this.message.hidden = false;
-    console.log("an error has ocurred on the server side !!");
+    this.message.error('an error has ocurred on the server side or probably it is not running !!');
+    //console.log("an error has ocurred on the server side or probably it is not running !!");
   }
 
 }
