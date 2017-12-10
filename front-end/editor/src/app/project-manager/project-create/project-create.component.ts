@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { Cafile } from '../../models/cafile';
+import { Project } from '../../models/project';
 
 @Component({
   selector: 'app-project-create',
@@ -14,10 +15,12 @@ export class ProjectCreateComponent implements OnInit {
   to update beacuse a new project was added to the database */
   @Output() onProjectCreated = new EventEmitter<boolean>();
 
-  // The default values for the cafile fields 
+  // The default values for the project
+  project: Project;
+  // The default values for the cafile fields in the  settings section
   cafile : Cafile;
-  // List of available pattern names
-  patterns_name : string[];
+  // List of available templates
+  template_names : string[];
   // List of available states type 
   states_types : string[];
   // List of available celular automata neighbors pattern
@@ -25,8 +28,10 @@ export class ProjectCreateComponent implements OnInit {
   nbhds_patterns: {};
 
   constructor(private projectService: ProjectService) {
+    this.project = new Project('','','','stencil');
+    this.template_names = ['stencil'];
+  
     this.cafile = new Cafile(20,20,'int',100,'neumann');
-    this.patterns_name = ['stencil','other'];
     this.states_types = ['int','bool','float'];
     this.neighborhood_names = ['neumann','moore'];
 

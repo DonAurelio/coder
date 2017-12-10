@@ -2,25 +2,25 @@
   <form (ngSubmit)="createProject(createProjectForm.value)" #createProjectForm="ngForm">
     <h3>Create Project</h3>
     <hr>
-    <div class="form-group row">
-      <label class="col-sm-2">Name</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="name" placeholder="Some project name .." name="name" ngModel>
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" class="form-control" id="pname" required [(ngModel)]="project.name" name="pname" #pname="ngModel">
+      <div [hidden]="pname.valid || pname.pristine" class="alert alert-danger">
+        A project name is required
       </div>
     </div>
-    <div class="form-group row">
-      <label class="col-sm-2">Description</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="description" placeholder="Some description .." name="description" ngModel>
+    <div class="form-group">
+      <label>Description</label>
+      <input type="text" class="form-control" id="description" required [(ngModel)]="project.description" name="pdescrip" #pdescrip=ngModel>
+      <div [hidden]="pdescrip.valid || pdescrip.pristine" class="alert alert-danger">
+        A project brew description is required
       </div>
     </div>
-    <div class="form-group row">
-      <label class="col-sm-2">Template</label>
-      <div class="col-sm-10">
-        <select class="form-control" id="type" name="type">
-          <option>Default select</option>
-        </select>
-      </div>
+    <div class="form-group">
+      <label>Template</label>
+      <select class="form-control" id="base_template" required [(ngModel)]="project.base_template" name="base_template">
+        <option *ngFor="let template_name of template_names" [value]="template_name">{{template_name}}</option>
+      </select>
     </div>
     <p>&nbsp;</p>
     <!-- Cellular Automata Project settings-->
@@ -80,7 +80,7 @@
     <div class="row ">
       <div class="col-xs-3 form-group">
         <label><br></label>
-        <button type="submit" class="form-control btn btn-primary" [disabled]="!cafileForm.form.valid">Create</button>
+        <button type="submit" class="form-control btn btn-primary" [disabled]="!createProjectForm.form.valid">Create</button>
       </div>
     </div>
   </form>
