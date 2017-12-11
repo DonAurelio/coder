@@ -13,20 +13,33 @@ import { ProjectService } from '../services/project.service';
 })
 export class CodeEditorComponent implements OnInit, OnDestroy {
 
-  project_id: any;
+  /* To get the project id from the current url */
   params: any;
 
+  /* To keep the project id */
+  project_id: any;
+
+  /* The current project data */
   project: Project;
+
+  /* The file belonging to the project */
   files: Observable<File[]>;
+
+  /* The selected file */
   selectedFile: File;
+
+  /* Code editor right hand editor text */
   preview_text: string;
 
+  /* Console text area text */
+  textarea_log_text: string;
 
   constructor(private activatedRoute: ActivatedRoute, 
     private fileService: FileService, private projectService: ProjectService ) {
-      this.project = new Project(0,'no name','no description','no type');
-      this.selectedFile = new File(0,'somefile','somefiletype','example text');
+      this.project = new Project(undefined,'no name','no description','no type');
+      this.selectedFile = new File(undefined,'somefile','somefiletype','example text');
       this.preview_text = "some preview text";
+      this.textarea_log_text = "Welcome to web coder !!\n";
   }
 
   ngOnInit() {
@@ -58,12 +71,16 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     this.selectedFile = file;
   }
 
-  /* Save changes from the current selected file in the api */
-  saveChanges(): void {
+  /* Send changes from the current selected file to the API */
+  onSaveFile(): void {
     this.fileService.updateFile(this.selectedFile).subscribe(
-      success => console.log("The file was saved successfully !!"),
-      error => console.log("Some error has ocurred !!"),
+      success => this.appendLogText("The file was saved successfully !!"),
+      error => this.appendLogText("Some error has ocurred !!"),
     );
+  }
+
+  appendLogText(text:string): void {
+    this.textarea_log_text += text + '\n';
   }
 
 }

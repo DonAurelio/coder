@@ -61,7 +61,7 @@ class TemplateList(TemplateView):
         # data regarding the requested template
         resource = Resource.objects.get(name='templates')
         url = resource.endpoint_url(arg=project.base_template)
-        catt_service_response = requests.post(url,data=cafile.data)
+        catt_service_response = requests.post(url,json=cafile.data)
         catt_service_data = catt_service_response.json()
 
         # If the catt service us availabe we save the project.      
