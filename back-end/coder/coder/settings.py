@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Apps
     'project.apps.ProjectConfig',
     'catt.apps.CattConfig',
+    'pragcc.apps.PragccConfig',
     # Cors
     'corsheaders',
 ]

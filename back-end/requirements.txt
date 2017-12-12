@@ -1,6 +1,12 @@
+certifi==2017.11.5
+chardet==3.0.4
 Django==1.11.4
+django-cors-headers==2.1.0
 django-tastypie==0.14.0
+idna==2.6
 python-dateutil==2.6.1
 python-mimeparse==1.6.0
 pytz==2017.2
+requests==2.18.4
 six==1.11.0
+urllib3==1.22

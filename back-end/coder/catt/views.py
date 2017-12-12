@@ -2,82 +2,67 @@ from django.http import JsonResponse
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from .models import Resource, Cafile
+
+from . import models
+import project
+
 import requests
 import json
-import project as project_app
-
-
-def exception_handler(function):
-    def wrapper(self,request,*args,**kwargs):
-        
-        try:
-            json_response =  function(self,request,*args,**kwargs)
-
-        except requests.exceptions.ConnectionError:
-            data = {
-                'error':'Catt external service not available.'
-            }
-            json_response = JsonResponse(data)
-        
-        return json_response
-
-    return wrapper
-
+ 
 
 class TemplateList(TemplateView):
+    """List CAs available templates and allows CAs projects creation."""
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        # To aviod checking the CSRF token when posting data to the server 
+        """Aviod checking the CSRF token when posting data to the server."""
         return super(TemplateList, self).dispatch(request, *args, **kwargs)
 
-    @exception_handler
     def get(self,request,*args,**kwargs):
-
-        resource = Resource.objects.get(name='templates')
+        """Return a list of available parallel programming C99 templates."""
+        
+        resource = models.Resource.objects.get(name='templates')
         response = requests.get(resource.endpoint_url())
         data = response.json()
         
         return JsonResponse(data)
 
-    @exception_handler
     def post(self,request,*args,**kwargs):
+        """Creates a CA project with the given project settings.
+
+        Given a project and a cafile, a project is crated in
+        the data base and all are created two files associated
+        with this project. **.c** and ***parallel.yml** files.
+        """
 
         # Getting the data given by the front-end
         data = json.loads(request.body.decode("utf-8"))
         project_data = data['project']
         cafile_data = data['cafile']
 
-        project = project_app.models.Project(
+        project_obj = project_app.models.Project(
             name=project_data['name'],
             description=project_data['description'],
             base_template=project_data['base_template']
         )
 
-        cafile = Cafile(**cafile_data)
+        cafile = models.Cafile(**cafile_data)
 
         # Calling Catt external service to resquest 
         # data regarding the requested template
-        resource = Resource.objects.get(name='templates')
-        url = resource.endpoint_url(arg=project.base_template)
+        resource = models.Resource.objects.get(name='templates')
+        url = resource.endpoint_url(arg=project_obj.base_template)
+
         catt_service_response = requests.post(url,json=cafile.data)
         catt_service_data = catt_service_response.json()
 
         # If the catt service us availabe we save the project.      
-        project.save()
-
-        # and we create files with the data returned by catt
-        # service.
-
-        # catt_service_data['success']
-        # catt_service_data['error']
-        # catt_service_data['data']
+        project_obj.save()
 
         files = catt_service_data['data']['files']
         for file in files:
-            new_file = project_app.models.File(
-                project=project,
+            new_file = project.models.File(
+                project=project_obj,
                 name=file['name'],
                 ftype=file['type'],
                 text=file['text']
@@ -85,16 +70,17 @@ class TemplateList(TemplateView):
             new_file.save()
 
         data = {
-            'success':'The project was created susccessfully'
+            'message':'The project was created susccessfully'
         }
 
         return JsonResponse(data)
 
 
 class TemplateDetail(TemplateView):
+    """Gives a detail of a given CA C99 parallel programming template."""
 
-    @exception_handler
     def get(self,request,*args,**kwargs):
+        """Retunrs a detail of a given CA C99 template."""
 
         template_name = kwargs['name']
         resource = Resource.objects.get(name='templates')

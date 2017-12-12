@@ -1,18 +1,18 @@
 from django.db import models
 import requests
 
+
 class Resource(models.Model):
     name = models.CharField(max_length=100)
     url = models.URLField()
 
-    def status(self):
+    def check_status(self):
         status = ''
         try:
             url = self.url + self.name
-            response = requests.get(url)
+            response = requests.head(url)
             code = response.status_code
-            status = 'Online' if code is 200 \
-            else 'Online with erros'
+            status = 'Online' if code is 200 else 'Online with erros'
 
         except requests.exceptions.ConnectionError as e:
              status = 'Offline'
