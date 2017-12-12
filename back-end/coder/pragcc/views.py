@@ -15,7 +15,7 @@ class OpenMP(TemplateView):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         """To aviod checking the CSRF token when posting data to the server."""
-        return super(OpenMPAnnotation, self).dispatch(request, *args, **kwargs)
+        return super(OpenMP, self).dispatch(request, *args, **kwargs)
 
     def post(self,request,*args,**kwargs):
         """Parallize annotate the given file with OpenMP compiler directives.
@@ -31,20 +31,33 @@ class OpenMP(TemplateView):
         file_id = kwargs['file_id']
 
         # Looking for the file we want to parallelize
-        file_obj = project.models.File.get(id=file_id)
+        file_obj = project.models.File.objects.get(id=file_id)
 
-        file_obj = project.models.File(
-            project=project_obj,
-            name='Test file',
-            ftype='c99',
-            text='Some test !!!!'
-        )
-        file_obj.save()
-        project_obj.add_file(file_obj)
-        project_obj.save()
+        ftype = file_obj.ftype
+        name = file_obj.name
 
-        {
-            'message':'The file was parallelized succesfully'
-        }
+        # Checking if the file can be parrallelized
+        is_a_cfile = '.c' in name and 'c99' in ftype
+        was_parrallelized = 'omp_' in name or 'acc_' in name
+
+        data = {}
+        if is_a_cfile and not was_parrallelized:
+
+            file_obj = project.models.File(
+                project=file_obj.project,
+                name='omp_file.c',
+                ftype='c99',
+                text='Some test !!!!'
+            )
+            file_obj.save()
+
+            data['message'] = "The file '%s' \
+            was parallelized succesfully" % name
+
+        else:
+            data['message'] = "The file '%s' can't be parallelized \
+            probably it is not a c99 source code or it was already \
+            parallelized." % name   
+
 
         return JsonResponse(data)
