@@ -16,7 +16,7 @@
 To fulfill other purposes, two additional services have been added. The **catt** and **pragcc** services. The idea of the first service is to provide templates of C99 code that can be easily parallelizable; The second one is a kind of annotator, which writes down a C99 code with OpenMP and OpenACC compiler directives. You can play with these services through the following API end-points.
 
 
-# Catt Service
+## Catt Service
 
 | HTTP Method | URI | Action |
 |---|---|---|
@@ -24,7 +24,7 @@ To fulfill other purposes, two additional services have been added. The **catt**
 | GET | http://[hostname]/api/catt/templates/[template_name] | Retrieve a template detail |
 | POST | http://[hostname]/api/catt/templates | Create a new cellular automata project |
 
-# Pragcc Service
+## Pragcc Service
 
 | HTTP Method | URI | Action |
 |---|---|---|
