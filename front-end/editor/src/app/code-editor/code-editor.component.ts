@@ -42,6 +42,11 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
       this.textarea_log_text = "Welcome to web coder !!\n";
   }
 
+  /**
+   * Whe the component is initialized this method is called
+   * to obtain the project id arguments pased to this 
+   * component by URL.
+   */
   ngOnInit() {
     /* Getting the project id from the url */
     this.params = this.activatedRoute.params.subscribe(
@@ -49,6 +54,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     );
     this.loadProject();
     this.loadFiles();
+
   }
 
   ngOnDestroy(){
@@ -58,8 +64,14 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   loadProject(): void {
     this.projectService.getProjectById(this.project_id).subscribe(
       response => this.project = response,
-      error => console.log("The project can not be loaded !!"),
-      () => console.log("The project was loadded successfully !!")
+      error => {
+        this.appendLogText("The project can not be loaded !!");
+        console.log("The project can not be loaded !!");
+        console.log(error);
+      },
+      () => {
+        this.appendLogText("The project was loadded successfully !!")
+      }
     );
   }
 
@@ -75,12 +87,30 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   onSaveFile(): void {
     this.fileService.updateFile(this.selectedFile).subscribe(
       success => this.appendLogText("The file was saved successfully !!"),
-      error => this.appendLogText("Some error has ocurred !!"),
+      error => {
+        if(error.status == 0){
+          this.appendLogText('The API server is not running !!');
+        }else if(error.status == 404){
+          this.appendLogText('The API URL is not correct !!');
+        }else{
+          this.appendLogText('Some error has ocurred !!');
+          console.log('Some error has ocurred !!');
+          console.log(error);
+        }
+      },
     );
   }
 
   appendLogText(text:string): void {
     this.textarea_log_text += text + '\n';
+    // To make the scroll moves down whe messages fill all text area heigh
+    var text_area_element = document.getElementById('text-area');
+    text_area_element.scrollTop = text_area_element.scrollHeight;   
   }
+
+  onChangeText(event: any): void {
+    console.log('chaning');
+    console.log(event);
+  } 
 
 }
