@@ -11,24 +11,37 @@ import { Message } from '../../models/message';
 })
 export class ProjectCreateComponent implements OnInit {
 
-  /* 
-  This output is used to notify project list component that it needs
-  to update beacuse a new project was added to the database */
+  /**
+   * This output is used to notify project list component that it needs
+   * to update beacuse a new project was added to the database.
+   */
   @Output() onProjectCreated = new EventEmitter<boolean>();
 
-  // The default values for the project
+  /**
+   * The default values for the project form.
+   */
   project: Project;
-  // The default values for the cafile fields in the  settings section
+  /**
+   * The default values for the cafile fields in the settings section
+   */ 
   cafile : Cafile;
-  // List of available templates
+  /**
+   * List of available templates.
+   */
   template_names : string[];
-  // List of available states type 
+  /**
+   * List of available states type.
+   */ 
   states_types : string[];
-  // List of available celular automata neighbors pattern
+  /**
+   * List of available celular automata neighborhood pattern.
+   */
   neighborhood_names: string[];
   nbhds_patterns: {};
 
-  // To display informative message regarding project creation process 
+  /**
+   * To display informative message regarding project creation process 
+   */
   message : Message;
 
   constructor(private cattService: CattService) {
@@ -69,41 +82,25 @@ export class ProjectCreateComponent implements OnInit {
     return this.nbhds_patterns[this.cafile.nbhd_name];
   }
 
+  /**
+   * Creates a cellular automata project 
+   * on the API database.
+   */
   createProject(): void{
     this.cattService.addProject(this.project,this.cafile)
     .subscribe(
       // Successful responses call the first callback.
-      data => this.onSuccess(data),
+      response => {
+        console.log(response);
+        this.message.success(response['message']);
+      },
       // Errors will call this callback instead.
-      error => this.onError(error)
+      error => {
+        console.log(error);
+        this.message.error(error['message'])
+      },
+      // If the project creation was sucessfull
+      () => console.log('The project creation was completed')
     );
   }
-
-  onSuccess(data: Object) : void {
-    console.log(data);
-    // The service is available and performs its work successfully
-    if(data['success']){
-      this.message.success(data['success']);
-      this.onProjectCreated.emit(true);
-    // The server is availabe but it doesn't perform its work
-    // successfully
-    }else if(data['error']){
-      this.message.error(data['error'])
-    }else{
-    // The server do not send its data on this format
-    /*
-    {
-      'success':'', when the server is available and perform its work correctly.
-      'error':'', otherwise
-      'data':'',
-    }
-    */
-    }
-  }
-
-  onError(error: any) : void {
-    this.message.error('an error has ocurred on the server side or probably it is not running !!');
-    //console.log("an error has ocurred on the server side or probably it is not running !!");
-  }
-
 }

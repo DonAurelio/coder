@@ -30,8 +30,15 @@ export class CattService {
       'cafile':cafile,
       'project':project
     }
+    // return this.http.post(url,data)
+    // .map((response: Response) => response.json())
+    // .catch((error: any)=> Observable.throw(error.json().error || { message:" Server error !! "}));
+
     return this.http.post(url,data)
     .map((response: Response) => response.json())
-    .catch((error: any)=> Observable.throw(error.json().error || { message:" Server error !! "}));
+    .catch((error: any)=> Observable.throw(error.json() || { message:" Server error !! "}));
+
+    // return this.http.post(url,data)
+    // .map((response: Response) => response.json());
   }
 }

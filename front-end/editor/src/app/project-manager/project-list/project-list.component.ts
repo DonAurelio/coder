@@ -14,7 +14,9 @@ export class ProjectListComponent implements OnInit {
   /**
    * List of available projects
    */
-  projects : Observable<Project[]>;
+  // if you use observables add 'async' to the ngFor directive
+  // projects : Observable<Project[]>; 
+  projects: Project[];
   /**
    * The selected project
    */
@@ -32,7 +34,13 @@ export class ProjectListComponent implements OnInit {
    * Load the project list from the project service
    */
   loadProjects(){
-    this.projects = this.projectService.getProjects();
+    // observables approach
+    // this.projects = this.projectService.getProjects();
+    this.projectService.getProjects().subscribe(
+      response => {console.log(response); this.projects = response;},
+      error => console.log('The projects list can not be loaded',error),
+      () => console.log('successfull message')
+    );
   }
 
   /**
