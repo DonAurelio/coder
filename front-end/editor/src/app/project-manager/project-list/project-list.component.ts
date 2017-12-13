@@ -3,6 +3,7 @@ import { Project } from '../../models/project';
 import { ProjectService } from '../../services/project.service';
 import { Observable } from 'rxjs/Observable';
 import { Router } from "@angular/router";
+import { Message } from '../../models/message';
 
 @Component({
   selector: 'app-project-list',
@@ -22,8 +23,15 @@ export class ProjectListComponent implements OnInit {
    */
   selectedProject: Project;
 
-  constructor(private projectService: ProjectService, private router: Router) { 
+  /**
+   * To display informative message regarding project creation process 
+   */
+  message : Message;
 
+  constructor(private projectService: ProjectService, private router: Router) { 
+    this.message = new Message(
+      'Success','alert alert-warning','',true
+    );
   }
 
   ngOnInit() {
@@ -38,8 +46,12 @@ export class ProjectListComponent implements OnInit {
     // this.projects = this.projectService.getProjects();
     this.projectService.getProjects().subscribe(
       response => {console.log(response); this.projects = response;},
-      error => console.log('The projects list can not be loaded',error),
-      () => console.log('successfull message')
+      error => {
+        console.log('The projects list can not be loaded');
+        console.log(error);
+        this.message.error('The projects list can not be loaded');
+      },
+      () => console.log('The projects list was loaded successfully')
     );
   }
 

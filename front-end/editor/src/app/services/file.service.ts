@@ -9,14 +9,13 @@ import { File } from "../models/file";
 @Injectable()
 export class FileService {
 
-
   // the API base url 
   api: string;
   // the URL of the resource we require from the api
   resource: string;
 
   constructor(private http: Http) { 
-    this.api = 'http://localhost:8000/api/project';
+    this.api = 'http://localhost:8000/api/editor';
     this.resource = 'files';
   }
 
