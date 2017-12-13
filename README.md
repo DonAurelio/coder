@@ -15,8 +15,13 @@
 
 To fulfill other purposes, two additional services have been added. The **catt** and **pragcc** services. The idea of the first service is to provide templates of C99 code that can be easily parallelizable; The second one is a kind of annotator, which writes down a C99 code with OpenMP and OpenACC compiler directives. You can play with these services through the following API end-points.
 
+Do you want to play with the other services?. As mentioned earlier, **Coder** was created to be extensible, so the other services should be implemented as external to this application, so **Coder** serves as an interface to interact with those external services and use their functinalities to improve the code edition. Before interacting with external services through **Coder** API, you must first bring those external services to life.
 
-# Catt Service
+## Catt Service
+
+* [To settup Catt external service](https://github.com/DonAurelio/catt)
+
+* To interact with Catt through Coder you can use the following end-points
 
 | HTTP Method | URI | Action |
 |---|---|---|
@@ -24,7 +29,11 @@ To fulfill other purposes, two additional services have been added. The **catt**
 | GET | http://[hostname]/api/catt/templates/[template_name] | Retrieve a template detail |
 | POST | http://[hostname]/api/catt/templates | Create a new cellular automata project |
 
-# Pragcc Service
+## Pragcc Service
+
+* [To settup Pragcc external service](https://github.com/DonAurelio/pragcc)
+
+* To interact with Pragcc through Coder you can use the following end-points
 
 | HTTP Method | URI | Action |
 |---|---|---|
@@ -32,9 +41,9 @@ To fulfill other purposes, two additional services have been added. The **catt**
 | POST | http://[hostname]/api/pragcc/compiler/compile/files/[file_id] | Chechk if the file with id file_id can be compiled successfully |
 
 
-# Deployment with Docker
+## Deploy Coder with Docker
 
-Perform the following commands to build the **catt** image, then to run the **catt** API in a container. These command need to be 
+Perform the following commands to build the **coder** docker image, then to run the **coder** API in a container. These command need to be 
 performed form the catt project root directory.
 
 ```sh
@@ -42,8 +51,13 @@ docker build -t coder-back .
 docker run -d -v ${PWD}:/usr/src/app --name  coder-back -p 8000:8000  coder-back
 ```
 
-# Requirements for the back-end
+## Requirements for the back-end
 
 * [django-cors-headers](https://github.com/ottoyiu/django-cors-headers)
 
 * [always_return_data](http://django-tastypie.readthedocs.io/en/latest/resources.html#always-return-data)
+
+
+# The Front-End
+
+!Constructing¡
