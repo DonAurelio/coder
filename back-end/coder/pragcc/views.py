@@ -85,9 +85,11 @@ class OpenMP(TemplateView):
             status = response.status_code
             if status == 400:
                 message = {
-                    'message':"The file '%s' can't be compiled\
-                    correctly please look for errors before try\
-                    to parallelizeit" % file.name
+                    'message':(
+                        "The file '%s' can't be compiled "
+                        "correctly, please look for errors before try "
+                        "to parallelize it"
+                    ) % file.name
                 }
 
                 return JsonResponse(message,status=status)
@@ -105,35 +107,40 @@ class OpenMP(TemplateView):
                 # to the openmp resource in the pragcc service.
                 resource = models.Resource.objects.get(name='openmp')
                 response = requests.post(resource.endpoint_url(),json=data)
-                data = response.json()
 
-            # print('DATA',data)
-            # code_data = data['data']
-            # code_data['project'] = project_obj
+                if response.status_code == 200:
+                    code_data = response.json()
+                
+                    # The update_or_create method tries to fetch an object 
+                    # from database based on the given kwargs. if a match 
+                    # is found, it updates the field passed in the defaults
+                    # dictionary.
+
+                    search = {
+                        'project':file.project,
+                        'name':code_data['name']
+                    }
+
+                    obj, created = project.models.File.update_or_create(
+                        defaults=code_data, **search
+                    )
+
+                    obj.save()
+                    message = {
+                        'message':"A file '%s' was created\
+                        on the current project" % obj.name
+                    }
+
+                    return JsonResponse(message,status=200)
+
+                else:
+                    message = response.json()
+                    status = response.status_code
+                    return JsonResponse(message,status=status)
 
 
-            # The update_or_create method tries to fetch an object 
-            # from database based on the given kwargs. if a match 
-            # is found, it updates the field passed in the defaults
-            # dictionary.
-
-            # search = {
-            #     'project':code_data['project'],
-            #     'name':code_data['name']
-            # }
-            # obj, created = project.models.File.update_or_create(
-            #     defaults=code_data, **search
-            # )
-
-            # obj.save()
-
-            data['message'] = "The file '%s' \
-            was parallelized succesfully" % ''
-
-        else:
-            data['message'] = "The file '%s' can't be parallelized \
-            probably it is not a c99 source code or it was already \
-            parallelized." % ''
-
-
-        return JsonResponse(data)
+        message = { 
+            'message': "The file '%s' is not parallelizable." % file.text
+        }
+        status = 400
+        return JsonResponse(message,status=status)
