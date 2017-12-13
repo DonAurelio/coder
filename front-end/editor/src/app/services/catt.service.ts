@@ -12,7 +12,7 @@ export class CattService {
   api: string;
 
   constructor(private http: Http) {
-    this.api = 'http://localhost:8000/external-service/catt';
+    this.api = 'http://localhost:8000/api/catt';
   }
 
   /**
@@ -35,10 +35,7 @@ export class CattService {
     // .catch((error: any)=> Observable.throw(error.json().error || { message:" Server error !! "}));
 
     return this.http.post(url,data)
-    .map((response: Response) => response.json())
-    .catch((error: any)=> Observable.throw(error.json() || { message:" Server error !! "}));
+    .map((response: Response) => response.json());
 
-    // return this.http.post(url,data)
-    // .map((response: Response) => response.json());
   }
 }

@@ -91,16 +91,23 @@ export class ProjectCreateComponent implements OnInit {
     .subscribe(
       // Successful responses call the first callback.
       response => {
+        console.log('success man');
         console.log(response);
-        this.message.success(response['message']);
       },
       // Errors will call this callback instead.
       error => {
-        console.log(error);
-        this.message.error(error['message'])
+        if(error.status == 0){
+          this.message.error('The API server is not running !!');
+        }else if(error.status == 404){
+          this.message.error('The API URL is not correct !!');
+        }else{
+          this.message.error('Some error has ocurred !!');
+          console.log('Some error has ocurred !!');
+          console.log(error);
+        }
       },
-      // If the project creation was sucessfull
-      () => console.log('The project creation was completed')
+      // If there are not errors this function is called finally
+      () => this.message.success('The project was created successfully !!')
     );
   }
 }

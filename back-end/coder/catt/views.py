@@ -40,7 +40,7 @@ class TemplateList(TemplateView):
         project_data = data['project']
         cafile_data = data['cafile']
 
-        project_obj = project_app.models.Project(
+        project_obj = project.models.Project(
             name=project_data['name'],
             description=project_data['description'],
             base_template=project_data['base_template']
@@ -61,12 +61,8 @@ class TemplateList(TemplateView):
 
         files = catt_service_data['data']['files']
         for file in files:
-            new_file = project.models.File(
-                project=project_obj,
-                name=file['name'],
-                ftype=file['type'],
-                text=file['text']
-            )
+            file['project'] = project_obj
+            new_file = project.models.File(**file)
             new_file.save()
 
         data = {
