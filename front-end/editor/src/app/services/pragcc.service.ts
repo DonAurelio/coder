@@ -25,7 +25,7 @@ export class PragccService {
     const resource = 'templates';
     const url = `${this.api}/${resource}`;
     var data = {
-      'cafile':cafile,
+      'cafile': Cafile,
       'project':project
     }
     return this.http.post(url,data)

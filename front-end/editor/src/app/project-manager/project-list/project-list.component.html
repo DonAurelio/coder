@@ -1,7 +1,7 @@
-<div class="well well-sm col-md-12">
+<div class="well well-sm col-md-12" style="min-height: 200px;">
   <h3>Projects</h3>
   <hr>
-  <div class="list-group pre-scrollable">
+  <div class="list-group pre-scrollable" style="min-height: 200px;">
     <a class="list-group-item list-group-item-action flex-column align-items-start" 
     *ngFor="let project of projects | async" 
     (click)="onSelect(project)"

@@ -7,14 +7,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { AceEditorModule } from 'ng2-ace-editor';
 
 import { CattService } from './services/catt.service';
-import { CafileService } from './services/cafile.service';
 import { ProjectService } from './services/project.service';
 import { FileService } from './services/file.service';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar.component';
-import { CaeditorComponent } from './caeditor/caeditor.component';
-import { CafileFormComponent } from './caeditor/cafile-form/cafile-form.component';
 import { ProjectManagerComponent } from './project-manager/project-manager.component';
 import { ProjectListComponent } from './project-manager/project-list/project-list.component';
 import { ProjectCreateComponent } from './project-manager/project-create/project-create.component';
@@ -31,8 +28,6 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     NavbarComponent,
-    CaeditorComponent,
-    CafileFormComponent,
     ProjectManagerComponent,
     ProjectListComponent,
     ProjectCreateComponent,
@@ -45,7 +40,7 @@ const appRoutes: Routes = [
     HttpModule,
     AceEditorModule
   ],
-  providers: [CafileService,ProjectService,FileService,CattService],
+  providers: [ProjectService,FileService,CattService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
