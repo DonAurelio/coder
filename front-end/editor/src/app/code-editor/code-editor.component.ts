@@ -110,7 +110,6 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
           this.appendLogText('The API server is not running !!');
         }else if(error.status == 400){
           this.appendLogText('The code has some errors !!');
-          console.log(error.text());
           this.appendLogText(error.text());
         }else{
           this.appendLogText('Some error has ocurred !!');

@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -42,8 +42,14 @@ class GccCompiler(TemplateView):
             # contain a descriptive error message.
             if status == 400:
                 message = data['message']
-                json_response = JsonResponse(message,status=400,safe=False)
-
+                
+                # We returns HttpResponse insted JsonResponse
+                # becasuse the JsonResponse parse the string adding 
+                # doule quote to the same string. This new string 
+                # can not be printed in the correct format in the 
+                # front end
+                # json_response = JsonResponse(message,status=400)
+                json_response = HttpResponse(message,status=400)
             else:
                 json_response = JsonResponse(data,status=status)
 
