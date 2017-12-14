@@ -70,7 +70,7 @@ export class ProjectCreateComponent implements OnInit {
     };
  
     this.message = new Message(
-      'Success','alert alert-warning','',true
+      'Success','alert alert-warning','','',true
     );
 
   }
@@ -91,7 +91,6 @@ export class ProjectCreateComponent implements OnInit {
     .subscribe(
       // Successful responses call the first callback.
       response => {
-        console.log('success man');
         console.log(response);
       },
       // Errors will call this callback instead.
@@ -107,7 +106,11 @@ export class ProjectCreateComponent implements OnInit {
         }
       },
       // If there are not errors this function is called finally
-      () => this.message.success('The project was created successfully !!')
+      () => {
+        this.message.success('The project was created successfully !!')
+        /* We tell to project-list component it needs to be updated */
+        this.onProjectCreated.emit(true);
+      }
     );
   }
 }

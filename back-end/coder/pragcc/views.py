@@ -138,14 +138,15 @@ class OpenMP(TemplateView):
                         'name':code_data['name']
                     }
 
-                    obj, created = project.models.File.update_or_create(
+                    obj, created = project.models.File.objects.update_or_create(
                         defaults=code_data, **search
                     )
 
                     obj.save()
                     message = {
-                        'message':"A file '%s' was created\
-                        on the current project" % obj.name
+                        'message':(
+                            "A file '%s' was created on the current project"
+                        ) % obj.name
                     }
 
                     return JsonResponse(message,status=200)
@@ -156,8 +157,5 @@ class OpenMP(TemplateView):
                     return JsonResponse(message,status=status)
 
 
-        message = { 
-            'message': "The file '%s' is not parallelizable." % file.text
-        }
-        status = 400
-        return JsonResponse(message,status=status)
+        message = "The file '%s' is not parallelizable." % file.name
+        return HttpResponse(message,status=400)

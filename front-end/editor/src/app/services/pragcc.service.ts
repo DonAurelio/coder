@@ -36,23 +36,4 @@ export class PragccService {
     return this.http.post(url,body)
     .map((response: Response) => response.json())
   }
-
-  /**
-   * The Pragcc service in the backend
-   * annotate the project .c file with 
-   * openmp compiler directives.
-   * @param project details of the current editing project
-   */
-  // annotateCCode(project: Object): Observable<Object>{
-  //   const resource = 'templates';
-  //   const url = `${this.api}/${resource}`;
-  //   var data = {
-  //     'cafile': Cafile,
-  //     'project':project
-  //   };
-  //   return this.http.post(url,data)
-  //   .map((response: Response) => response.json())
-  //   .catch((error: any)=> Observable.throw(error.json().error || { message:" Server error !! "}));
-  // }
-
 }

@@ -2,21 +2,19 @@
   <form (ngSubmit)="createProject()" #createProjectForm="ngForm">
     <h3>Create Cellular Automata Project</h3>
     <hr>
-    <div [hidden]="message.hidden" class="{{message.css}}">
-      <a class="close" (click)="message.toggle()">&times;</a>
-      <strong>{{message.type}}!</strong>  {{message.text}}
-    </div>
+    <p [hidden]="message.hidden" (click)="message.toggle()" class="{{message.inline_css}}"><strong>{{message.type}}!</strong>  {{message.text}}</p>
+    <p></p>
     <div class="form-group">
       <label>Name</label>
       <input type="text" class="form-control" id="pname" required [(ngModel)]="project.name" name="pname" #pname="ngModel">
-      <div [hidden]="pname.valid || pname.pristine" class="alert alert-danger">
+      <div [hidden]="pname.valid || pname.pristine" class="text-danger">
         A project name is required
       </div>
     </div>
     <div class="form-group">
       <label>Description</label>
       <input type="text" class="form-control" id="description" required [(ngModel)]="project.description" name="pdescrip" #pdescrip=ngModel>
-      <div [hidden]="pdescrip.valid || pdescrip.pristine" class="alert alert-danger">
+      <div [hidden]="pdescrip.valid || pdescrip.pristine" class="text-danger">
         A project brew description is required
       </div>
     </div>
@@ -35,14 +33,14 @@
       <div class="col-xs-6 form-group">
         <label>Matrix Number of Rows</label>
         <input type="number" class="form-control" value="20" id="rowdim" required [(ngModel)]="cafile.rowdim" name="rowdim" #rowdim="ngModel">
-        <div [hidden]="rowdim.valid || rowdim.pristine" class="alert alert-danger">
+        <div [hidden]="rowdim.valid || rowdim.pristine" class="text-danger">
           Number of rows is required
         </div>
       </div>
       <div class="col-xs-6 form-group">
         <label>Matrix Number of Cols</label>
         <input type="number" class="form-control" value="20" id="coldim" required [(ngModel)]="cafile.coldim" name="coldim" #coldim="ngModel">
-        <div [hidden]="coldim.valid || coldim.pristine" class="alert alert-danger">
+        <div [hidden]="coldim.valid || coldim.pristine" class="text-danger">
           Number of cols is required
         </div>
       </div>
@@ -57,7 +55,7 @@
       <div class="col-xs-6 form-group">
         <label>Number of Generations</label>
         <input type="number" class="form-control" value="20" id="matrix_cols_number" required [(ngModel)]="cafile.generations" name="generations" #generations="ngModel">
-        <div [hidden]="generations.valid || generations.pristine" class="alert alert-danger">
+        <div [hidden]="generations.valid || generations.pristine" class="text-danger">
           Number of generations is required
         </div>
       </div>
@@ -81,9 +79,9 @@
         </table>
       </div>
     </div>
-    <div class="row ">
-      <div class="col-xs-3 form-group">
-        <label><br></label>
+    <div class="row">
+      <div class="col-md-2 form-group">
+        <!-- <label><br></label> -->
         <button type="submit" class="form-control btn btn-primary" [disabled]="!createProjectForm.form.valid">Create</button>
       </div>
     </div>

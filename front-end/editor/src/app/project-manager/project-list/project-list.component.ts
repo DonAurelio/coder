@@ -30,7 +30,7 @@ export class ProjectListComponent implements OnInit {
 
   constructor(private projectService: ProjectService, private router: Router) { 
     this.message = new Message(
-      'Success','alert alert-warning','',true
+      'Success','alert alert-warning','','',true
     );
   }
 
@@ -51,7 +51,12 @@ export class ProjectListComponent implements OnInit {
         console.log(error);
         this.message.error('The projects list can not be loaded');
       },
-      () => console.log('The projects list was loaded successfully')
+      () => {
+        console.log('The projects list was loaded successfully');
+        this.message.hidden = true;
+        if(this.projects.length == 0)
+          this.message.info('Its seems that you have not created projects yet.');
+      }
     );
   }
 

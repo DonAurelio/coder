@@ -32,6 +32,11 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   /* Code editor right hand editor text */
   preview_text: string;
 
+  /**
+   * The editor highlighting mode 
+   */
+  editor_mode: string;
+
   /* Console text area text */
   textarea_log_text: string;
 
@@ -41,6 +46,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
       this.selectedFile = new File(undefined,undefined,'somefile','somefiletype','example text');
       this.preview_text = "some preview text";
       this.textarea_log_text = "Welcome to web coder !!\n";
+      this.editor_mode = 'c_cpp';
   }
 
   /**
@@ -82,6 +88,12 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
 
   setSelectedFile(file: File): void {
     this.selectedFile = file;
+    /* Changing the editor highlighting mode */
+    if(file.ftype == 'yml')
+      this.editor_mode = 'yaml';
+    else{
+    this.editor_mode ='c_cpp';
+    }
   }
 
   /* Send changes from the current selected file to the API */
@@ -97,7 +109,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     this.pragccService.compileFile(this.selectedFile).subscribe(
       response => console.log(response),
       error => this.errorHandler(error),
-      () => console.log('The compilation was successfull !!')
+      () => this.appendLogText('The compilation was successfull !!')
     );
   }
 

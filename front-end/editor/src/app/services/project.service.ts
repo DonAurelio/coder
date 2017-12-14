@@ -54,7 +54,7 @@ export class ProjectService {
    * Delete the project from the API database
    */
   deleteProject(project: Object): Observable<Object>{
-    var url = `${this.api}/${this.resource}/${project["id"]}`;
+    var url = `${this.api}/${this.resource}/${project["id"]}/`;
     return this.http.delete(url);
   }
 

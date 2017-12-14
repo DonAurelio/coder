@@ -29,7 +29,7 @@
         <div class="col-md-6 nopadding">
             <div ace-editor
             [(text)]="selectedFile.text"
-            [mode]="'c_cpp'"
+            [(mode)]="editor_mode"
             [theme]="'eclipse'"
             [options]="options"
             [readOnly]="false"
