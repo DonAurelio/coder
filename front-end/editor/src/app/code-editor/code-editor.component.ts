@@ -30,7 +30,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   selectedFile: File;
 
   /* Code editor right hand editor text */
-  preview_text: string;
+  previewFile: File;
 
   /**
    * The editor highlighting mode 
@@ -41,10 +41,9 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   textarea_log_text: string;
 
   constructor(private activatedRoute: ActivatedRoute,private fileService: FileService, private projectService: ProjectService, private pragccService: PragccService) {
-      
       this.project = new Project(undefined,'no name','no description','no type');
-      this.selectedFile = new File(undefined,undefined,'somefile','somefiletype','example text');
-      this.preview_text = "some preview text";
+      this.selectedFile = new File(undefined,undefined,'somefile','somefiletype','');
+      this.previewFile = new File(undefined,undefined,'somefile','somefiletype','');
       this.textarea_log_text = "Welcome to web coder !!\n";
       this.editor_mode = 'c_cpp';
   }
@@ -84,6 +83,16 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
 
   loadFiles(): void {
     this.files = this.fileService.getFilesFromProject(this.project_id);
+    this.setPreviewFile();
+  }
+
+  setPreviewFile(): void {
+    this.files.forEach(files =>{
+      files.forEach(file => {
+        if(file.name == 'omp.c')
+          this.previewFile = file;
+      });
+    });
   }
 
   setSelectedFile(file: File): void {
@@ -92,7 +101,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     if(file.ftype == 'yml')
       this.editor_mode = 'yaml';
     else{
-    this.editor_mode ='c_cpp';
+      this.editor_mode ='c_cpp';
     }
   }
 
@@ -121,7 +130,12 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     this.pragccService.annotateOpenMP(this.selectedFile).subscribe(
       response => console.log(response),
       error => this.errorHandler(error),
-      () => this.appendLogText('Code parallelization successfull !!')
+      () => {
+        /* We tell he user the paralleization was succesfull*/
+        this.appendLogText('Code parallelization successfull !!');
+        /* Then we reload the files in the file selector */
+        this.loadFiles();
+      }
     );
   }
 

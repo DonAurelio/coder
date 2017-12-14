@@ -23,7 +23,7 @@
   <div id="content">
     <div class="panel panel-primary">
       <div class="panel-heading">
-
+         <small *ngIf="selectedFile.id != undefined">{{ selectedFile.name }}</small>
       </div>
       <div class="panel-body nopadding">
         <div class="col-md-6 nopadding">
@@ -39,7 +39,7 @@
         </div>
         <div class="col-md-6 nopadding">
             <div ace-editor
-            [(text)]="preview_text"
+            [(text)]="previewFile.text"
             [mode]="'c_cpp'"
             [theme]="'eclipse'"
             [options]="options"
