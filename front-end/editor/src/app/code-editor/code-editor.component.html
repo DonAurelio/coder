@@ -53,7 +53,7 @@
         <div class="btn-group" role="group" aria-label="...">
             <button type="button" class="btn btn-primary" (click)="onSaveFile()" [disabled]="!selectedFile.id"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>  Save</button>
             <button type="button" class="btn btn-success" (click)="onCompileFile()" [disabled]="!selectedFile.id"><span class="glyphicon glyphicon-console" aria-hidden="true"></span>  Compile</button>
-            <button type="button" class="btn btn-warning" [disabled]="!selectedFile.id">Dawncc</button>
+            <button type="button" class="btn btn-warning" (click)="onDawnCC()" [disabled]="!selectedFile.id">Dawncc</button>
           
             <div class="btn-group" role="group">
               <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [disabled]="!selectedFile.id">
@@ -61,8 +61,8 @@
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu">
-                <li><a href="#">OpenMP</a></li>
-                <li><a href="#">OpenACC</a></li>
+                <li><a (click)="onPragccOpenMP()">OpenMP</a></li>
+                <li><a>OpenACC</a></li>
               </ul>
             </div>
           </div>

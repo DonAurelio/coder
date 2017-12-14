@@ -25,7 +25,17 @@ export class PragccService {
     var body = {};
     return this.http.post(url,body)
     .map((response: Response) => response.json());
-  } 
+  }
+
+  annotateOpenMP(file: File): Observable<Object> {
+    var resource = 'openmp';
+    var action = 'parallelize';
+    var target = `files/${file.id}`;
+    var url = `${this.api}/${resource}/${action}/${target}`;
+    var body = {};
+    return this.http.post(url,body)
+    .map((response: Response) => response.json())
+  }
 
   /**
    * The Pragcc service in the backend

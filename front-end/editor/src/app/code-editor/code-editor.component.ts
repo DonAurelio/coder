@@ -87,42 +87,48 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   /* Send changes from the current selected file to the API */
   onSaveFile(): void {
     this.fileService.updateFile(this.selectedFile).subscribe(
-      success => this.appendLogText("The file was saved successfully !!"),
-      error => {
-        if(error.status == 0){
-          this.appendLogText('The API server is not running !!');
-        }else if(error.status == 404){
-          this.appendLogText('The API URL is not correct !!');
-        }else{
-          this.appendLogText('Some error has ocurred !!');
-          console.log('Some error has ocurred !!');
-          console.log(error);
-        }
-      },
+      response => console.log(response),
+      error => this.errorHandler(error),
+      () => this.appendLogText("The file was saved successfully !!")
     );
   }
 
   onCompileFile(): void {
     this.pragccService.compileFile(this.selectedFile).subscribe(
       response => console.log(response),
-      error => {
-        if(error.status == 0){
-          this.appendLogText('The API server is not running !!');
-        }else if(error.status == 400){
-          this.appendLogText('The code has some errors !!');
-          this.appendLogText(error.text());
-        }else{
-          this.appendLogText('Some error has ocurred !!');
-          console.log('Some error has ocurred !!');
-          console.log(error);
-        }
-      },
+      error => this.errorHandler(error),
       () => console.log('The compilation was successfull !!')
     );
   }
 
+  onDawnCC() : void {
+    this.appendLogText('This feature is not available yet !!');
+  }
+
+  onPragccOpenMP(): void {
+    this.pragccService.annotateOpenMP(this.selectedFile).subscribe(
+      response => console.log(response),
+      error => this.errorHandler(error),
+      () => this.appendLogText('Code parallelization successfull !!')
+    );
+  }
+
+  errorHandler(error): void {
+    if(error.status == 0){
+      this.appendLogText('The API server is not running !!');
+    }else if(error.status == 400){
+      //this.appendLogText('The code has some errors !!');
+      this.appendLogText(error.text());
+    }else{
+      this.appendLogText('An unknown error has ocurred !!');
+      console.log('An unknown error has ocurred !!');
+      console.log(error);
+    }
+  }
+
   appendLogText(text:string): void {
-    this.textarea_log_text += text + '\n';
+    // this.textarea_log_text += text + '\n';
+    this.textarea_log_text = text + '\n';
     // To make the scroll moves down whe messages fill all text area heigh
     var text_area_element = document.getElementById('text-area');
     text_area_element.scrollTop = text_area_element.scrollHeight;   

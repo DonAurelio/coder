@@ -97,15 +97,19 @@ class OpenMP(TemplateView):
 
             status = response.status_code
             if status == 400:
-                message = {
-                    'message':(
-                        "The file '%s' can't be compiled "
-                        "correctly, please look for errors before try "
-                        "to parallelize it"
-                    ) % file.name
-                }
+                message = (
+                    "The file '%s' can't be compiled "
+                    "correctly, please look for errors before try "
+                    "to parallelize it"
+                ) % file.name
 
-                return JsonResponse(message,status=status)
+                # We returns HttpResponse insted JsonResponse
+                # becasuse the JsonResponse parse the string adding 
+                # doule quote to the same string. This new string 
+                # can not be printed in the correct format in the 
+                # front end
+                # return JsonResponse(message,status=status)
+                return HttpResponse(message,status=status)
 
             elif status == 200:
                 # Getting the parallel file from the project
