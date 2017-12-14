@@ -9,6 +9,7 @@ import { AceEditorModule } from 'ng2-ace-editor';
 import { CattService } from './services/catt.service';
 import { ProjectService } from './services/project.service';
 import { FileService } from './services/file.service';
+import { PragccService } from './services/pragcc.service';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar.component';
@@ -40,7 +41,7 @@ const appRoutes: Routes = [
     HttpModule,
     AceEditorModule
   ],
-  providers: [ProjectService,FileService,CattService],
+  providers: [ProjectService,FileService,CattService,PragccService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

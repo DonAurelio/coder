@@ -5,6 +5,7 @@ import { File } from '../models/file';
 import { FileService } from '../services/file.service';
 import { Project } from '../models/project';
 import { ProjectService } from '../services/project.service';
+import { PragccService } from '../services/pragcc.service';
 
 @Component({
   selector: 'app-code-editor',
@@ -34,10 +35,10 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   /* Console text area text */
   textarea_log_text: string;
 
-  constructor(private activatedRoute: ActivatedRoute, 
-    private fileService: FileService, private projectService: ProjectService ) {
+  constructor(private activatedRoute: ActivatedRoute,private fileService: FileService, private projectService: ProjectService, private pragccService: PragccService) {
+      
       this.project = new Project(undefined,'no name','no description','no type');
-      this.selectedFile = new File(undefined,'somefile','somefiletype','example text');
+      this.selectedFile = new File(undefined,undefined,'somefile','somefiletype','example text');
       this.preview_text = "some preview text";
       this.textarea_log_text = "Welcome to web coder !!\n";
   }
@@ -101,6 +102,26 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     );
   }
 
+  onCompileFile(): void {
+    this.pragccService.compileFile(this.selectedFile).subscribe(
+      response => console.log(response),
+      error => {
+        if(error.status == 0){
+          this.appendLogText('The API server is not running !!');
+        }else if(error.status == 400){
+          this.appendLogText('The code has some errors !!');
+          console.log(error.text());
+          this.appendLogText(error.text());
+        }else{
+          this.appendLogText('Some error has ocurred !!');
+          console.log('Some error has ocurred !!');
+          console.log(error);
+        }
+      },
+      () => console.log('The compilation was successfull !!')
+    );
+  }
+
   appendLogText(text:string): void {
     this.textarea_log_text += text + '\n';
     // To make the scroll moves down whe messages fill all text area heigh
@@ -108,9 +129,5 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     text_area_element.scrollTop = text_area_element.scrollHeight;   
   }
 
-  onChangeText(event: any): void {
-    console.log('chaning');
-    console.log(event);
-  } 
 
 }

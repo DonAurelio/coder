@@ -35,10 +35,17 @@ class GccCompiler(TemplateView):
             # If the file can be compiled successfully, the remote service
             # returns a 200 status code, otherwise, it returns 400  
             # indicating the user has a mistake in the code.
-            message = response.json()
+            data = response.json()
             status = response.status_code
 
-            json_response = JsonResponse(message,status=status)
+            # When the error code is 400 the body of the response must 
+            # contain a descriptive error message.
+            if status == 400:
+                message = data['message']
+                json_response = JsonResponse(message,status=400,safe=False)
+
+            else:
+                json_response = JsonResponse(data,status=status)
 
         else:
             message = {
