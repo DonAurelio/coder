@@ -23,9 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '0p6cu%4z8!=tlrhl#ssy8ox)$#aaq8n4x%wu9g0xcd-w$01&9+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-# ALLOWED_HOSTS = []
+# When DEBUG = False, Django doesn’t work at all without a suitable 
+# value for ALLOWED_HOSTS.
 ALLOWED_HOSTS = ["*"]
 
 
@@ -84,6 +85,12 @@ WSGI_APPLICATION = 'coder.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# Database connection parameters are probably different in development
+# and in production. Database passwords are very sensitive. You should 
+# protect them exactly like SECRET_KEY. For maximum security, make sure 
+# database servers only accept connections from your application servers.
+# If you haven’t set up backups for your database, do it right now!
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -129,6 +136,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Static files are automatically served by the development server. In production,
+# you must define a STATIC_ROOT directory where collectstatic will copy them.
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Cors
 CORS_ORIGIN_ALLOW_ALL = True
