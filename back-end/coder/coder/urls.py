@@ -29,6 +29,6 @@ urlpatterns = [
 
     # Interfaces to communicate with external 
     # Service Providers
-    url(r'^api/catt/', include('catt.urls')),
+    url(r'^api/parallel_templates/', include('parallel_templates.urls')),
     url(r'^api/pragcc/', include('pragcc.urls')),
 ]
