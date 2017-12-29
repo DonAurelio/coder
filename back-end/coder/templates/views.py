@@ -3,8 +3,8 @@ from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-from . import models
-import project
+from providers.models import Service, Resource
+from project.models import Project, File
 
 import requests
 import json
@@ -23,17 +23,31 @@ class TemplateList(TemplateView):
         """Return a list of available parallel programming C99 templates."""
         
         try:
-            resource = models.Resource.objects.get(name='templates')
+            service = Service.objects.get(name='template')
+            resource = service.resource_set.get(name='templates')
+
             response = requests.get(resource.url())
             data = response.json()
+
             return JsonResponse(data,safe=False)
 
-        except models.Resource.DoesNotExist:
+        except Service.DoesNotExist:
 
             data = {
                 'message': (
-                "templates resource does not exists in the data base"
+                "template service is not in service providers,"
+                " please add it to service providers in the database."
                 )
+            }
+            return JsonResponse(data,status=404)
+
+        except Resource.DoesNotExist:
+
+            data = {
+                'message': (
+                "%s is not a resource of %s service, "
+                " please add it as a resource."
+                ) % ('templates','Parallel Templates')
             }
             return JsonResponse(data,status=404)
 
@@ -61,12 +75,11 @@ class TemplateList(TemplateView):
         context_data = data['context']
 
         project_data.pop('id', None) 
-        project_obj = project.models.Project(**project_data)
-
+        project_obj = Project(**project_data)
 
         try:
-            # Getting templates resource
-            resource = models.Resource.objects.get(name='templates')
+            service = Service.objects.get(name='template')
+            resource = service.resource_set.get(name='templates')
 
             data = {
                 'name':'context.yml',
@@ -86,7 +99,7 @@ class TemplateList(TemplateView):
             files = service_data
             for file in files:
                 file['project'] = project_obj
-                new_file = project.models.File(**file)
+                new_file = File(**file)
                 new_file.save()
 
             data = {
@@ -94,6 +107,16 @@ class TemplateList(TemplateView):
             }
 
             return JsonResponse(data)            
+
+        except Service.DoesNotExist:
+
+            data = {
+                'message': (
+                "template service is not in service providers,"
+                " please add it to service providers in the database."
+                )
+            }
+            return JsonResponse(data,status=404)
 
         except models.Resource.DoesNotExist:
 
@@ -111,7 +134,6 @@ class TemplateList(TemplateView):
                 )
             }
             return JsonResponse(data,status=404)
-
 
 
 class TemplateDetail(TemplateView):

@@ -1,9 +1,9 @@
-export class Cafile {
+export class Context {
   constructor( public rowdim: number, public coldim: number,public type: string, public generations: number, public nbhd_name: string) {
   
   }
 
-  getData(): Object {
+  data(): Object {
 
     var neumann = {
       up: [-1,1],

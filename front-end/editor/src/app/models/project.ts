@@ -1,5 +1,5 @@
 export class Project {
-  constructor(public id: any, public name:string, public description:string, public base_template:string){
+  constructor( public name:any, public description:string, public base_template:string){
 
   }
 }

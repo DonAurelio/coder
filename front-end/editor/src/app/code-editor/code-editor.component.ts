@@ -41,7 +41,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   textarea_log_text: string;
 
   constructor(private activatedRoute: ActivatedRoute,private fileService: FileService, private projectService: ProjectService, private pragccService: PragccService) {
-      this.project = new Project(undefined,'no name','no description','no type');
+      this.project = new Project(undefined,'no description','no type');
       this.selectedFile = new File(undefined,undefined,'somefile','somefiletype','');
       this.previewFile = new File(undefined,undefined,'somefile','somefiletype','');
       this.textarea_log_text = "Welcome to web coder !!\n";

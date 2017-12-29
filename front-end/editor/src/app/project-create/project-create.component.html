@@ -32,14 +32,14 @@
     <div class="row">
       <div class="col-xs-6 form-group">
         <label>Matrix Number of Rows</label>
-        <input type="number" class="form-control" value="20" id="rowdim" required [(ngModel)]="cafile.rowdim" name="rowdim" #rowdim="ngModel">
+        <input type="number" class="form-control" value="20" id="rowdim" required [(ngModel)]="context.rowdim" name="rowdim" #rowdim="ngModel">
         <div [hidden]="rowdim.valid || rowdim.pristine" class="text-danger">
           Number of rows is required
         </div>
       </div>
       <div class="col-xs-6 form-group">
         <label>Matrix Number of Cols</label>
-        <input type="number" class="form-control" value="20" id="coldim" required [(ngModel)]="cafile.coldim" name="coldim" #coldim="ngModel">
+        <input type="number" class="form-control" value="20" id="coldim" required [(ngModel)]="context.coldim" name="coldim" #coldim="ngModel">
         <div [hidden]="coldim.valid || coldim.pristine" class="text-danger">
           Number of cols is required
         </div>
@@ -48,13 +48,13 @@
     <div class="row">
       <div class="col-xs-6 form-group">
         <label>States Type</label>
-        <select class="form-control" id="type" required [(ngModel)]="cafile.type" name="type">
+        <select class="form-control" id="type" required [(ngModel)]="context.type" name="type">
           <option *ngFor="let states_type of states_types" [value]="states_type">{{states_type}}</option>
         </select>
       </div>
       <div class="col-xs-6 form-group">
         <label>Number of Generations</label>
-        <input type="number" class="form-control" value="20" id="matrix_cols_number" required [(ngModel)]="cafile.generations" name="generations" #generations="ngModel">
+        <input type="number" class="form-control" value="20" id="matrix_cols_number" required [(ngModel)]="context.generations" name="generations" #generations="ngModel">
         <div [hidden]="generations.valid || generations.pristine" class="text-danger">
           Number of generations is required
         </div>
@@ -63,7 +63,7 @@
     <div class="row">
       <div class="col-xs-6 form-grop">
         <label>Neighbor Name</label>
-        <select class="form-control" id="nbhd_name" required [(ngModel)]="cafile.nbhd_name" name="nbhd_name" #nbhd_name="ngModel">
+        <select class="form-control" id="nbhd_name" required [(ngModel)]="context.nbhd_name" name="nbhd_name" #nbhd_name="ngModel">
           <option *ngFor="let neighborhood_name of neighborhood_names" [value]="neighborhood_name">{{neighborhood_name}}</option>
         </select>
       </div>

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Project } from '../../models/project';
-import { ProjectService } from '../../services/project.service';
+import { Project } from '../models/project';
+import { ProjectService } from '../services/project.service';
 import { Observable } from 'rxjs/Observable';
 import { Router } from "@angular/router";
-import { Message } from '../../models/message';
+import { Message } from '../models/message';
 
 @Component({
   selector: 'app-project-list',
@@ -45,7 +45,9 @@ export class ProjectListComponent implements OnInit {
     // observables approach
     // this.projects = this.projectService.getProjects();
     this.projectService.getProjects().subscribe(
-      response => {console.log(response); this.projects = response;},
+      response => {
+        console.log(response);
+        this.projects = response;},
       error => {
         console.log('The projects list can not be loaded');
         console.log(error);
@@ -84,7 +86,7 @@ export class ProjectListComponent implements OnInit {
    * @param event an event value 
    */
   openProject(event:any): void {
-    this.router.navigate([`/project/edit/${this.selectedProject.id}`]);
+    this.router.navigate([`/project/edit/${this.selectedProject.name}`]);
   }
 
   /**
@@ -95,7 +97,10 @@ export class ProjectListComponent implements OnInit {
     var response: Object;
     this.projectService.deleteProject(this.selectedProject).subscribe(
       response => response = response,
-      error => console.log("The project can not be deleted, probably it was already deleted. !!"),
+      error => {
+        console.log("The project can not be deleted, probably it was already deleted. !!")
+        console.log(error);
+      },
       
       /* If the delection was successfull, refresh the projects list */
       () => { 

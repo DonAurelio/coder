@@ -1,8 +1,8 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { ParallelTemplateService } from '../../services/parallel-templates.service';
-import { Cafile } from '../../models/cafile';
-import { Project } from '../../models/project';
-import { Message } from '../../models/message';
+import { TemplateService } from '../services/templates.service';
+import { Context } from '../models/context';
+import { Project } from '../models/project';
+import { Message } from '../models/message';
 
 @Component({
   selector: 'app-project-create',
@@ -22,9 +22,9 @@ export class ProjectCreateComponent implements OnInit {
    */
   project: Project;
   /**
-   * The default values for the cafile fields in the settings section
+   * The default values for the fields in the settings section
    */ 
-  cafile : Cafile;
+  context : Context;
   /**
    * List of available templates.
    */
@@ -44,11 +44,11 @@ export class ProjectCreateComponent implements OnInit {
    */
   message : Message;
 
-  constructor(private parallelTemplateService: ParallelTemplateService) {
-    this.project = new Project('','','','stencil');
+  constructor(private templateService: TemplateService) {
+    this.project = new Project(undefined,'','stencil');
     this.template_names = ['stencil'];
   
-    this.cafile = new Cafile(20,20,'int',100,'neumann');
+    this.context = new Context(20,20,'int',100,'neumann');
     this.states_types = ['int','bool','float'];
     this.neighborhood_names = ['neumann','moore'];
 
@@ -79,7 +79,7 @@ export class ProjectCreateComponent implements OnInit {
   }
 
   getCurrentNeighborPattern(){
-    return this.nbhds_patterns[this.cafile.nbhd_name];
+    return this.nbhds_patterns[this.context.nbhd_name];
   }
 
   /**
@@ -87,7 +87,7 @@ export class ProjectCreateComponent implements OnInit {
    * on the API database.
    */
   createProject(): void{
-    this.parallelTemplateService.addProject(this.project,this.cafile)
+    this.templateService.addProject(this.project,this.context)
     .subscribe(
       // Successful responses call the first callback.
       response => {
@@ -97,12 +97,13 @@ export class ProjectCreateComponent implements OnInit {
       error => {
         if(error.status == 0){
           this.message.error('The API server is not running !!');
-        }else if(error.status == 404){
-          this.message.error('The API URL is not correct !!');
+        }else if(error.status == 500){
+          this.message.error('An error occurred on the server side !!');
+          console.log('An error occurred on the server side !!');
         }else{
           this.message.error('Some error has ocurred !!');
           console.log('Some error has ocurred !!');
-          console.log(error);
+          // console.log(error);
         }
       },
       // If there are not errors this function is called finally

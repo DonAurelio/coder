@@ -3,7 +3,7 @@ from .models import Project, File
 
 class ProjectAdmin(admin.ModelAdmin):
     fields = ('name','description','base_template')
-    list_display = ('id','name','description','base_template')
+    list_display = ('name','description','base_template')
 
 admin.site.register(Project, ProjectAdmin)
 

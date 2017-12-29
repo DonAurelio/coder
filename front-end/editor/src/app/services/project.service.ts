@@ -14,7 +14,7 @@ export class ProjectService {
   resource: string;
 
   constructor(private http: Http) { 
-    this.api = 'http://localhost:8000/api/editor';
+    this.api = 'http://localhost:8000/api/project';
     this.resource = 'projects';
   }
 
@@ -54,7 +54,7 @@ export class ProjectService {
    * Delete the project from the API database
    */
   deleteProject(project: Object): Observable<Object>{
-    var url = `${this.api}/${this.resource}/${project["id"]}/`;
+    var url = `${this.api}/${this.resource}/${project["name"]}/`;
     return this.http.delete(url);
   }
 

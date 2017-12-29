@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.conf.urls import include
 from django.contrib import admin
-from project.urls import api
+from project.api import api as project_api
 
 
 urlpatterns = [
@@ -24,11 +24,11 @@ urlpatterns = [
     # Django common urls
     url(r'^admin/', admin.site.urls),
 
-    # Local services urls 
-    url(r'^api/', include(api.urls)),
+    # APIS URLS
+    url(r'^api/', include(project_api.urls)),
 
     # Interfaces to communicate with external 
     # Service Providers
-    url(r'^api/parallel_templates/', include('parallel_templates.urls')),
+    url(r'^api/template/', include('templates.urls')),
     url(r'^api/pragcc/', include('pragcc.urls')),
 ]

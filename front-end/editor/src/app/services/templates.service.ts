@@ -3,16 +3,16 @@ import { Http, Response } from '@angular/http';
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Rx';
 import { Project } from '../models/project';
-import { Cafile } from '../models/cafile';
+import { Context } from '../models/context';
 
 @Injectable()
-export class ParallelTemplateService {
+export class TemplateService {
 
   // The url to the catt service
   api: string;
 
   constructor(private http: Http) {
-    this.api = 'http://localhost:8000/api/parallel_templates';
+    this.api = 'http://localhost:8000/api/template';
   }
 
   /**
@@ -23,11 +23,11 @@ export class ParallelTemplateService {
    * @param project details of the project
    * @param cafile settings to the ceelular automata template
    */
-  addProject(project: Object, cafile:Cafile): Observable<Object>{
+  addProject(project: Object, context:Context): Observable<Object>{
     const resource = 'templates';
     const url = `${this.api}/${resource}`;
     var data = {
-      'context': cafile.getData(),
+      'context': context.data(),
       'project': project
     }
     // return this.http.post(url,data)

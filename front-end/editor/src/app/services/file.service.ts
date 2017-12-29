@@ -15,7 +15,7 @@ export class FileService {
   resource: string;
 
   constructor(private http: Http) { 
-    this.api = 'http://localhost:8000/api/editor';
+    this.api = 'http://localhost:8000/api/project';
     this.resource = 'files';
   }
 
