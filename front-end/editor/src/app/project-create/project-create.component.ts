@@ -97,13 +97,10 @@ export class ProjectCreateComponent implements OnInit {
       error => {
         if(error.status == 0){
           this.message.error('The API server is not running !!');
-        }else if(error.status == 500){
-          this.message.error('An error occurred on the server side !!');
-          console.log('An error occurred on the server side !!');
         }else{
-          this.message.error('Some error has ocurred !!');
+          this.message.error(error.text());
           console.log('Some error has ocurred !!');
-          // console.log(error);
+          console.log(error);
         }
       },
       // If there are not errors this function is called finally

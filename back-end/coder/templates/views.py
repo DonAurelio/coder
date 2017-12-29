@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.db import IntegrityError
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -32,32 +33,30 @@ class TemplateList(TemplateView):
             return JsonResponse(data,safe=False)
 
         except Service.DoesNotExist:
-
-            data = {
-                'message': (
+            
+            message = (
                 "template service is not in service providers,"
                 " please add it to service providers in the database."
-                )
-            }
-            return JsonResponse(data,status=404)
+            )
+
+            return JsonResponse(message,status=404,safe=False)
 
         except Resource.DoesNotExist:
 
-            data = {
-                'message': (
+            message = (
                 "%s is not a resource of %s service, "
                 " please add it as a resource."
-                ) % ('templates','Parallel Templates')
-            }
-            return JsonResponse(data,status=404)
+            ) % ('templates','Parallel Templates')
+
+            return JsonResponse(message,status=404)
 
         except requests.exceptions.ConnectionError:           
-            data = {
-                'message': (
+            
+            message = (
                 "Parallel Templates service is not available"
-                )
-            }
-            return JsonResponse(data,status=404)
+            )
+            
+            return JsonResponse(message,status=404,safe=False)
 
 
 
@@ -110,30 +109,35 @@ class TemplateList(TemplateView):
 
         except Service.DoesNotExist:
 
-            data = {
-                'message': (
+            message = (
                 "template service is not in service providers,"
                 " please add it to service providers in the database."
-                )
-            }
-            return JsonResponse(data,status=404)
+            )
+            
+            return JsonResponse(message,status=503,safe=False)
 
-        except models.Resource.DoesNotExist:
+        except Resource.DoesNotExist:
 
-            data = {
-                'message': (
+            message = (
                 "templates resource does not exists in the data base"
-                )
-            }
-            return JsonResponse(data,status=404)
+            )
+            
+            return JsonResponse(message,status=503,safe=False)
 
         except requests.exceptions.ConnectionError:           
-            data = {
-                'message': (
+
+            message = (
                 "Parallel Templates service is not available"
-                )
-            }
-            return JsonResponse(data,status=404)
+            )
+
+            return JsonResponse(message,status=503,safe=False)
+
+        except IntegrityError:
+            message = (
+                "The project %s already exists" % project_obj.name
+            )
+
+            return JsonResponse(message,status=400,safe=False)
 
 
 class TemplateDetail(TemplateView):
