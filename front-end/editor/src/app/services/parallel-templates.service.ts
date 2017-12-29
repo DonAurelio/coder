@@ -6,13 +6,13 @@ import { Project } from '../models/project';
 import { Cafile } from '../models/cafile';
 
 @Injectable()
-export class CattService {
+export class ParallelTemplateService {
 
   // The url to the catt service
   api: string;
 
   constructor(private http: Http) {
-    this.api = 'http://localhost:8000/api/catt';
+    this.api = 'http://localhost:8000/api/parallel_templates';
   }
 
   /**
@@ -23,12 +23,12 @@ export class CattService {
    * @param project details of the project
    * @param cafile settings to the ceelular automata template
    */
-  addProject(project: Object, cafile:Object): Observable<Object>{
+  addProject(project: Object, cafile:Cafile): Observable<Object>{
     const resource = 'templates';
     const url = `${this.api}/${resource}`;
     var data = {
-      'cafile':cafile,
-      'project':project
+      'context': cafile.getData(),
+      'project': project
     }
     // return this.http.post(url,data)
     // .map((response: Response) => response.json())

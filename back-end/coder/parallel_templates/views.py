@@ -8,6 +8,7 @@ import project
 
 import requests
 import json
+import yaml
  
 
 class TemplateList(TemplateView):
@@ -15,17 +16,36 @@ class TemplateList(TemplateView):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        """Aviod checking the CSRF token when posting data to the server."""
+        """Aviod the CSRF token checking when posting data to the server."""
         return super(TemplateList, self).dispatch(request, *args, **kwargs)
 
     def get(self,request,*args,**kwargs):
         """Return a list of available parallel programming C99 templates."""
         
-        resource = models.Resource.objects.get(name='templates')
-        response = requests.get(resource.endpoint_url())
-        data = response.json()
-        
-        return JsonResponse(data)
+        try:
+            resource = models.Resource.objects.get(name='templates')
+            response = requests.get(resource.url())
+            data = response.json()
+            return JsonResponse(data,safe=False)
+
+        except models.Resource.DoesNotExist:
+
+            data = {
+                'message': (
+                "templates resource does not exists in the data base"
+                )
+            }
+            return JsonResponse(data,status=404)
+
+        except requests.exceptions.ConnectionError:           
+            data = {
+                'message': (
+                "Parallel Templates service is not available"
+                )
+            }
+            return JsonResponse(data,status=404)
+
+
 
     def post(self,request,*args,**kwargs):
         """Creates a CA project with the given project settings.
@@ -38,38 +58,60 @@ class TemplateList(TemplateView):
         # Getting the data given by the front-end
         data = json.loads(request.body.decode("utf-8"))
         project_data = data['project']
-        cafile_data = data['cafile']
+        context_data = data['context']
 
-        project_obj = project.models.Project(
-            name=project_data['name'],
-            description=project_data['description'],
-            base_template=project_data['base_template']
-        )
+        project_data.pop('id', None) 
+        project_obj = project.models.Project(**project_data)
 
-        cafile = models.Cafile(**cafile_data)
 
-        # Calling Catt external service to resquest 
-        # data regarding the requested template
-        resource = models.Resource.objects.get(name='templates')
-        url = resource.endpoint_url(arg=project_obj.base_template)
+        try:
+            # Getting templates resource
+            resource = models.Resource.objects.get(name='templates')
 
-        catt_service_response = requests.post(url,json=cafile.data)
-        catt_service_data = catt_service_response.json()
+            data = {
+                'name':'context.yml',
+                'ftype': 'yml',
+                'text': yaml.dump(context_data)
+            }
 
-        # If the catt service us availabe we save the project.      
-        project_obj.save()
+            url = resource.url(project_obj.base_template)
+            service_response = requests.post(url,json=data)
+            service_data = service_response.json()
 
-        files = catt_service_data['data']['files']
-        for file in files:
-            file['project'] = project_obj
-            new_file = project.models.File(**file)
-            new_file.save()
+            # If the catt service us availabe we save the project.      
+            project_obj.save()
 
-        data = {
-            'message':'The project was created susccessfully'
-        }
+            # The service retuns a list of files, so we save them 
+            # into the data base
+            files = service_data
+            for file in files:
+                file['project'] = project_obj
+                new_file = project.models.File(**file)
+                new_file.save()
 
-        return JsonResponse(data)
+            data = {
+                'message':'The project was created susccessfully'
+            }
+
+            return JsonResponse(data)            
+
+        except models.Resource.DoesNotExist:
+
+            data = {
+                'message': (
+                "templates resource does not exists in the data base"
+                )
+            }
+            return JsonResponse(data,status=404)
+
+        except requests.exceptions.ConnectionError:           
+            data = {
+                'message': (
+                "Parallel Templates service is not available"
+                )
+            }
+            return JsonResponse(data,status=404)
+
 
 
 class TemplateDetail(TemplateView):

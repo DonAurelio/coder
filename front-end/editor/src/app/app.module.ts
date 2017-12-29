@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AceEditorModule } from 'ng2-ace-editor';
 
-import { CattService } from './services/catt.service';
+import { ParallelTemplateService } from './services/parallel-templates.service';
 import { ProjectService } from './services/project.service';
 import { FileService } from './services/file.service';
 import { PragccService } from './services/pragcc.service';
@@ -41,7 +41,7 @@ const appRoutes: Routes = [
     HttpModule,
     AceEditorModule
   ],
-  providers: [ProjectService,FileService,CattService,PragccService],
+  providers: [ProjectService,FileService,ParallelTemplateService,PragccService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

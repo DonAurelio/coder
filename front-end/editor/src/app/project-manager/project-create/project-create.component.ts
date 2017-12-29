@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { CattService } from '../../services/catt.service';
+import { ParallelTemplateService } from '../../services/parallel-templates.service';
 import { Cafile } from '../../models/cafile';
 import { Project } from '../../models/project';
 import { Message } from '../../models/message';
@@ -44,7 +44,7 @@ export class ProjectCreateComponent implements OnInit {
    */
   message : Message;
 
-  constructor(private cattService: CattService) {
+  constructor(private parallelTemplateService: ParallelTemplateService) {
     this.project = new Project('','','','stencil');
     this.template_names = ['stencil'];
   
@@ -87,7 +87,7 @@ export class ProjectCreateComponent implements OnInit {
    * on the API database.
    */
   createProject(): void{
-    this.cattService.addProject(this.project,this.cafile)
+    this.parallelTemplateService.addProject(this.project,this.cafile)
     .subscribe(
       // Successful responses call the first callback.
       response => {
