@@ -101,82 +101,101 @@ class OpenMP(TemplateView):
         Creates a new file annotated with OpenMP directives, if the
         given file is parallelizable.
         """
+        try:
 
-        # Getting the file id
-        file_id = kwargs['file_id']
+            # Getting the file id
+            file_id = kwargs['file_id']
 
-        # Looking for the file we want to parallelize
-        file = project.models.File.objects.get(id=file_id)
+            # Looking for the file we want to parallelize
+            file = File.objects.get(id=file_id)
 
-        if file.is_parallelizable:
+            # If parallel file does not exist, it can raise a
+            # Does not exists exception
+            parallel_file = file.project.get_file('parallel.yml')
 
-            # Before parallelze the file, we verify if it compiles
-            # using a remote service.
-            resource = models.Resource.objects.get(name='compiler')
-            data = { 'raw_c_code': file.text }
-            response = requests.post(resource.endpoint_url(),json=data)
-
-            status = response.status_code
-            if status == 400:
+            if not file.is_parallelizable:
                 message = (
-                    "The file '%s' can't be compiled "
-                    "correctly, please look for errors before try "
-                    "to parallelize it"
-                ) % file.name
+                    "the file '%s' is not parallelizable" % file.name
+                )
+                return JsonResponse(message,status=400,safe=False)
 
-                # We returns HttpResponse insted JsonResponse
-                # becasuse the JsonResponse parse the string adding 
-                # doule quote to the same string. This new string 
-                # can not be printed in the correct format in the 
-                # front end
-                # return JsonResponse(message,status=status)
-                return HttpResponse(message,status=status)
+            if not parallel_file:
+                message = (
+                    "This project does not have a parallel.yml file"
+                )
+                return JsonResponse(message,status=400,safe=False)
 
-            elif status == 200:
-                # Getting the parallel file from the project
-                parallel_file = file.project.get_file('parallel.yml')
+            service = Service.objects.get(name='pragcc')
+            resource = service.resource_set.get(name='openmp')
 
-                data = {
-                    'raw_parallel_file':parallel_file.text,
-                    'raw_c_code':file.text
+            data = {
+                'raw_parallel_file':parallel_file.text,
+                'raw_c_code':file.text
+            }
+
+            response = requests.post(resource.url(),json=data)
+            
+            # If the file can be compiled successfully, the remote service
+            # returns a 200 status code, otherwise, it returns 400  
+            # indicating the user has a mistake in the code.
+            data = response.json()
+            status = response.status_code
+
+
+            if response.status_code == 200:
+                # If the code was parallelized successfully
+                # the response contains the parallelized version
+                # of a file, so we keep it into the database
+
+                code_data = response.json()
+                
+                # The update_or_create method tries to fetch an object 
+                # from database based on the given kwargs. if a match 
+                # is found, it updates the field passed in the defaults
+                # dictionary.
+
+                search = {
+                    'project':file.project,
+                    'name':code_data['name']
                 }
 
-                # Sending the raw parallel file and raw c code
-                # to the openmp resource in the pragcc service.
-                resource = models.Resource.objects.get(name='openmp')
-                response = requests.post(resource.endpoint_url(),json=data)
+                obj, created = File.objects.update_or_create(
+                    defaults=code_data, **search
+                )
 
-                if response.status_code == 200:
-                    code_data = response.json()
-                
-                    # The update_or_create method tries to fetch an object 
-                    # from database based on the given kwargs. if a match 
-                    # is found, it updates the field passed in the defaults
-                    # dictionary.
+                obj.save()
 
-                    search = {
-                        'project':file.project,
-                        'name':code_data['name']
-                    }
+            return JsonResponse(data,status=status,safe=False)
 
-                    obj, created = project.models.File.objects.update_or_create(
-                        defaults=code_data, **search
-                    )
+        except Service.DoesNotExist:
 
-                    obj.save()
-                    message = {
-                        'message':(
-                            "A file '%s' was created on the current project"
-                        ) % obj.name
-                    }
+            message = (
+                "Pragcc service is not in service providers,"
+                " please add it to service providers in the database."
+            )
+            
+            return JsonResponse(message,status=503,safe=False)
 
-                    return JsonResponse(message,status=200)
+        except Resource.DoesNotExist:
 
-                else:
-                    message = response.json()
-                    status = response.status_code
-                    return JsonResponse(message,status=status)
+            message = (
+                "OpenMP resource does not exists in the data base"
+            )
+            
+            return JsonResponse(message,status=503,safe=False)
 
+        except File.DoesNotExist as e:
 
-        message = "The file '%s' is not parallelizable." % file.name
-        return HttpResponse(message,status=400)
+            message = (
+                "The file does not exists in the data base"
+            )
+            
+            return JsonResponse(message,status=503,safe=False)
+
+        except requests.exceptions.ConnectionError:           
+
+            message = (
+                "Pragcc service is not available"
+            )
+
+            return JsonResponse(message,status=503,safe=False)

@@ -55,7 +55,12 @@ class Project(models.Model):
 
     def get_file(self,name):
         """Returns a fila object with the given name."""
-        file = self.file_set.get(name=name)
+        try:
+            file = self.file_set.get(name=name)
+            return file
+        except File.DoesNotExist:
+            file = None
+
         return file
 
     def __str__(self):
