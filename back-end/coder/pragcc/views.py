@@ -3,8 +3,8 @@ from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-from . import models
-import project
+from project.models import File 
+from providers.models import Service, Resource
 
 import requests
 import json
@@ -20,17 +20,29 @@ class GccCompiler(TemplateView):
 
     def post(self, request, *args, **kwargs):
 
-        # Getting the id of the file to be compiled
-        file_id = kwargs['file_id']
+        try:
 
-        # Getting the file object from the database
-        file = project.models.File.objects.get(id=file_id)
+            # Getting the id of the file to be compiled
+            file_id = kwargs['file_id']
 
-        if file.is_compilable:
+            # Getting the file object from the database
+            file = File.objects.get(id=file_id)
 
-            resource = models.Resource.objects.get(name='compiler')
-            data = { 'raw_c_code': file.text }
-            response = requests.post(resource.endpoint_url(),json=data)
+            if not file.is_compilable:
+                message = (
+                    "the file '%s' is not compilable" % file.name
+                )
+                return JsonResponse(message,status=400)
+
+
+            service = Service.objects.get(name='pragcc')
+            resource = service.resource_set.get(name='compiler')
+
+            data = {
+                'raw_c_code': file.text
+            }
+
+            response = requests.post(resource.url(),json=data)
             
             # If the file can be compiled successfully, the remote service
             # returns a 200 status code, otherwise, it returns 400  
@@ -38,32 +50,41 @@ class GccCompiler(TemplateView):
             data = response.json()
             status = response.status_code
 
-            # When the error code is 400 the body of the response must 
-            # contain a descriptive error message.
-            if status == 400:
-                message = data['message']
-                
-                # We returns HttpResponse insted JsonResponse
-                # becasuse the JsonResponse parse the string adding 
-                # doule quote to the same string. This new string 
-                # can not be printed in the correct format in the 
-                # front end
-                # json_response = JsonResponse(message,status=400)
-                json_response = HttpResponse(message,status=400)
-            else:
-                json_response = JsonResponse(data,status=status)
 
-        else:
-            message = {
-                'message': "The file '%s' is not compilable" % file.name 
-            }
-            # The user looks for compile a file that is not compilable 
-            # as the user makes a mistake, we returns 400 status code. 
-            json_response = JsonResponse(message,status=400)
+            return JsonResponse(data,status=status,safe=False)
+            
+        except Service.DoesNotExist:
 
-        return json_response
+            message = (
+                "Pragcc service is not in service providers,"
+                " please add it to service providers in the database."
+            )
+            
+            return JsonResponse(message,status=503,safe=False)
 
+        except Resource.DoesNotExist:
 
+            message = (
+                "Compiler resource does not exists in the data base"
+            )
+            
+            return JsonResponse(message,status=503,safe=False)
+
+        except File.DoesNotExist:
+
+            message = (
+                "The file does not exists in the data base"
+            )
+            
+            return JsonResponse(message,status=503,safe=False)
+
+        except requests.exceptions.ConnectionError:           
+
+            message = (
+                "Pragcc service is not available"
+            )
+
+            return JsonResponse(message,status=503,safe=False)
 
 
 class OpenMP(TemplateView):

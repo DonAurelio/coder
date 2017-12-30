@@ -46,14 +46,14 @@ class TemplateList(TemplateView):
             message = (
                 "%s is not a resource of %s service, "
                 " please add it as a resource."
-            ) % ('templates','Parallel Templates')
+            ) % ('Templates','Template')
 
             return JsonResponse(message,status=404)
 
         except requests.exceptions.ConnectionError:           
             
             message = (
-                "Parallel Templates service is not available"
+                "Template service is not available"
             )
             
             return JsonResponse(message,status=404,safe=False)
@@ -127,7 +127,7 @@ class TemplateList(TemplateView):
         except requests.exceptions.ConnectionError:           
 
             message = (
-                "Parallel Templates service is not available"
+                "Template service is not available"
             )
 
             return JsonResponse(message,status=503,safe=False)
@@ -146,12 +146,37 @@ class TemplateDetail(TemplateView):
     def get(self,request,*args,**kwargs):
         """Retunrs a detail of a given CA C99 template."""
 
-        template_name = kwargs['name']
-        resource = Resource.objects.get(name='templates')
-        url = resource.endpoint_url(arg=template_name)
-        response = requests.get(url)
-        data = response.json()
+        try:
+            template_name = kwargs['name']
+            service = Service.objects.get(name='template')
+            resource = service.resource_set.get(name='templates')
+            response = requests.get(resource.url())
+            data = response.json()
 
-        return JsonResponse(data)
+            return JsonResponse(data,safe=False)
+            
+        except Service.DoesNotExist:
 
+            message = (
+                "Template service is not in service providers,"
+                " please add it to service providers in the database."
+            )
+            
+            return JsonResponse(message,status=503,safe=False)
 
+        except Resource.DoesNotExist:
+
+            message = (
+                "templates resource does not exists in the data base"
+            )
+            
+            return JsonResponse(message,status=503,safe=False)
+
+        except requests.exceptions.ConnectionError:           
+
+            message = (
+                "Template service is not available"
+            )
+
+            return JsonResponse(message,status=503,safe=False)
+        

@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Apps
     'project.apps.ProjectConfig',
-    'templates.apps.TemplatesConfig',
+    'template.apps.TemplateConfig',
     'pragcc.apps.PragccConfig',
     'providers.apps.ProvidersConfig',
     # Cors
