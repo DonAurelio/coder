@@ -45,7 +45,7 @@ class File(models.Model):
         
 class Project(models.Model):
     # Project name must be unique
-    name = models.CharField(max_length=200, primary_key=True)
+    name = models.CharField(max_length=200, unique=True)
     # A brew descition of the project
     description = models.TextField(null=True,blank=True)
     # The CA template from which this project was created

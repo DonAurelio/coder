@@ -86,7 +86,7 @@ export class ProjectListComponent implements OnInit {
    * @param event an event value 
    */
   openProject(event:any): void {
-    this.router.navigate([`/project/edit/${this.selectedProject.name}`]);
+    this.router.navigate([`/project/edit/${this.selectedProject.id}`]);
   }
 
   /**

@@ -32,7 +32,7 @@ class GccCompiler(TemplateView):
                 message = (
                     "the file '%s' is not compilable" % file.name
                 )
-                return JsonResponse(message,status=400)
+                return JsonResponse(message,status=400,safe=False)
 
 
             service = Service.objects.get(name='pragcc')
