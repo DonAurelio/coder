@@ -114,9 +114,12 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
         // this.appendLogText(response_body['message']);
       },
       error_body => {
-        // this.appendLogText(error_body.message);
-        this.appendLogText(error_body.error_message);
-        // console.log('onSaveFile Error',error_body.error);
+        // Django tastipye returns an error with the following format
+        // {'error_message':'.....', 'traceback': '....'}
+        // Handled errors in server follows this format
+        // {'message':'....','error':'.....'} 
+        this.appendLogText( error_body.error_message || error_body.message);
+        console.log('onSaveFile Error',error_body.message,error_body.error_message);
       },
       () => {
         // When no erros happend do some work here
@@ -135,8 +138,8 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
       },
       error_body => {
         // this.appendLogText(error_body.message);
-        this.appendLogText(error_body.error);
-        console.log('onCompileFile Error',error_body.error);
+        this.appendLogText(error_body.error || error_body.message );
+        // console.log('onCompileFile Error',error_body.error);
       },
       () => {
         // When no erros happend do some work here
