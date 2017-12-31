@@ -3,6 +3,10 @@ import { Http, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import { File } from "../models/file";
 
+/**
+ * Pragcc server deals with code compilation and 
+ * parallelization with OpenMP and OpenACC directives
+ */
 @Injectable()
 export class PragccService {
 

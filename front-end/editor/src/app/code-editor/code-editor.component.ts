@@ -110,30 +110,62 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   /* Send changes from the current selected file to the API */
   onSaveFile(): void {
     this.fileService.updateFile(this.selectedFile).subscribe(
-      response => this.responseHandler(response),
-      error => this.errorHandler(error),
-      () => this.appendLogText("The file was saved successfully !!")
-    );
-  }
-
-  onCompileFile(): void {
-    this.pragccService.compileFile(this.selectedFile).subscribe(
-      response => this.responseHandler(response),
-      error => this.errorHandler(error),
+      response_body => {
+        // this.appendLogText(response_body['message']);
+      },
+      error_body => {
+        // this.appendLogText(error_body.message);
+        this.appendLogText(error_body.error_message);
+        // console.log('onSaveFile Error',error_body.error);
+      },
       () => {
-        // When no erros happend perform some work 
+        // When no erros happend do some work here
+        this.appendLogText('The file was saved successfully !!');
       }
     );
   }
 
+  /**
+   * Perform file compilation in a remote server.
+   */
+  onCompileFile(): void {
+    this.pragccService.compileFile(this.selectedFile).subscribe(
+      response_body => {
+        this.appendLogText(response_body['message']);
+      },
+      error_body => {
+        // this.appendLogText(error_body.message);
+        this.appendLogText(error_body.error);
+        console.log('onCompileFile Error',error_body.error);
+      },
+      () => {
+        // When no erros happend do some work here
+      }
+    );
+  }
+
+  /**
+   * Perfoms file parallelization in a remote server
+   * NOT AVAILABLE YET
+   */
   onDawnCC() : void {
     this.appendLogText('This feature is not available yet !!');
   }
 
+  /**
+   * Perfoms file paralellization in a remote server, but 
+   * this tell the server to parallelize with OpenMP directives
+   */
   onOpenMP(): void {
     this.pragccService.annotateOpenMP(this.selectedFile).subscribe(
-      response => this.responseHandler(response),
-      error => this.errorHandler(error),
+      response_body => {
+        this.appendLogText(response_body['message']);
+      },
+      error_body => {
+        // this.appendLogText(error_body.message);
+        this.appendLogText(error_body.error);
+        console.log('onOpenMP Error',error_body.error);
+      },
       () => {
         /* We tell he user the paralleization was succesfull*/
         this.appendLogText('Code parallelization successfull !!');
@@ -143,27 +175,16 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     );
   }
 
-  responseHandler(response): void {
-    // this.appendLogText(response['message']);
-    console.log('response:',response);
-  }
-
-  errorHandler(error): void {
-    if(error.status == 0){
-      this.appendLogText('The API server is not running !!');
-    }else {
-      // this.appendLogText(error['message']);
-      // console.log('An error has ocurred !!');
-      console.log("error",error);
-    }
-  }
-
+  /**
+   * Allow display messages in the code editor console
+   * @param text The text to be displayed in the code editor console
+   */
   appendLogText(text:string): void {
     // this.textarea_log_text += text + '\n';
     this.textarea_log_text = text + '\n';
     // To make the scroll moves down whe messages fill all text area heigh
-    var text_area_element = document.getElementById('text-area');
-    text_area_element.scrollTop = text_area_element.scrollHeight;   
+    // var text_area_element = document.getElementById('text-area');
+    // text_area_element.scrollTop = text_area_element.scrollHeight;   
   }
 
 

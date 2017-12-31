@@ -50,11 +50,8 @@ class GccCompiler(TemplateView):
             # indicating the user has a mistake in the code.
             data = response.json()
             status = response.status_code
-            # print('DATA',data)
-            j =  JsonResponse(data,status=status)
 
-            print('RESPONSE', j.content, j.items())
-            return j
+            return JsonResponse(data,status=status)
             
         except Service.DoesNotExist:
 
