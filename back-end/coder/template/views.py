@@ -29,34 +29,41 @@ class TemplateList(TemplateView):
 
             response = requests.get(resource.url())
             data = response.json()
+            status = resource.status_code
 
-            return JsonResponse(data,safe=False)
+            return JsonResponse(data,status=status,safe=False)
 
         except Service.DoesNotExist:
             
-            message = (
-                "template service is not in service providers,"
-                " please add it to service providers in the database."
-            )
+            data = {
+                'message': (
+                    "template service is not in service providers,"
+                    " please add it to service providers in the database."
+                )
+            }
 
-            return JsonResponse(message,status=404,safe=False)
+            return JsonResponse(data,status=404)
 
         except Resource.DoesNotExist:
 
-            message = (
-                "%s is not a resource of %s service, "
-                " please add it as a resource."
-            ) % ('Templates','Template')
+            data = {
+                'message': (
+                    "%s is not a resource of %s service, "
+                    " please add it as a resource."
+                ) % ('Templates','Template')
+            }
 
-            return JsonResponse(message,status=404)
+            return JsonResponse(data,status=404)
 
-        except requests.exceptions.ConnectionError:           
+        except requests.exceptions.ConnectionError:
+
+            data = {
+                'message': (
+                    "Template service is not available"
+                )
+            }       
             
-            message = (
-                "Template service is not available"
-            )
-            
-            return JsonResponse(message,status=404,safe=False)
+            return JsonResponse(data,status=404)
 
 
 
@@ -109,35 +116,44 @@ class TemplateList(TemplateView):
 
         except Service.DoesNotExist:
 
-            message = (
-                "template service is not in service providers,"
-                " please add it to service providers in the database."
-            )
+            data = {
+                'message': (
+                    "template service is not in service providers,"
+                    " please add it to service providers in the database."
+                )
+            }
             
-            return JsonResponse(message,status=503,safe=False)
+            return JsonResponse(data,status=503)
 
         except Resource.DoesNotExist:
 
-            message = (
-                "templates resource does not exists in the data base"
-            )
+            data = {
+                'message': (
+                    "templates resource does not exists in the data base"
+                )        
+            }
             
-            return JsonResponse(message,status=503,safe=False)
+            return JsonResponse(data,status=503)
 
         except requests.exceptions.ConnectionError:           
 
-            message = (
-                "Template service is not available"
-            )
+            data = {
+                'message': (
+                    "Template service is not available"
+                )
+            }
 
-            return JsonResponse(message,status=503,safe=False)
+            return JsonResponse(data,status=503)
 
         except IntegrityError:
-            message = (
-                "The project %s already exists" % project_obj.name
-            )
 
-            return JsonResponse(message,status=400,safe=False)
+            data = {
+                'message': (
+                    "The project %s already exists" % project_obj.name
+                )
+            }
+
+            return JsonResponse(data,status=400)
 
 
 class TemplateDetail(TemplateView):
@@ -157,26 +173,32 @@ class TemplateDetail(TemplateView):
             
         except Service.DoesNotExist:
 
-            message = (
-                "Template service is not in service providers,"
-                " please add it to service providers in the database."
-            )
+            data = {
+                'message': (
+                    "Template service is not in service providers,"
+                    " please add it to service providers in the database."
+                )
+            }
             
-            return JsonResponse(message,status=503,safe=False)
+            return JsonResponse(data,status=503)
 
         except Resource.DoesNotExist:
 
-            message = (
-                "templates resource does not exists in the data base"
-            )
+            data = {
+                'message': (
+                    "templates resource does not exists in the data base"
+                )
+            }
             
-            return JsonResponse(message,status=503,safe=False)
+            return JsonResponse(data,status=503)
 
         except requests.exceptions.ConnectionError:           
 
-            message = (
-                "Template service is not available"
-            )
+            data = {
+                'message': (
+                    "Template service is not available"
+                )          
+            }
 
-            return JsonResponse(message,status=503,safe=False)
+            return JsonResponse(data,status=503,safe=False)
         

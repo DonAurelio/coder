@@ -89,21 +89,13 @@ export class ProjectCreateComponent implements OnInit {
   createProject(): void{
     this.templateService.addProject(this.project,this.context)
     .subscribe(
-      // Successful responses call the first callback.
-      response => {
-        console.log(response);
+      response_body => {
+        
       },
-      // Errors will call this callback instead.
-      error => {
-        if(error.status == 0){
-          this.message.error('The API server is not running !!');
-        }else{
-          this.message.error(error.text());
-          console.log('Some error has ocurred !!');
-          console.log(error);
-        }
+      error_body => {
+        this.message.error(error_body.message || error_body.error);
+        console.log('createProject Error',error_body.message);
       },
-      // If there are not errors this function is called finally
       () => {
         this.message.success('The project was created successfully !!')
         /* We tell to project-list component it needs to be updated */
