@@ -69,14 +69,16 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
 
   loadProject(): void {
     this.projectService.getProjectById(this.project_id).subscribe(
-      response => this.project = response,
+      response => {
+        this.project = response;
+      },
       error => {
         this.appendLogText("The project can not be loaded !!");
         console.log("The project can not be loaded !!");
         console.log(error);
       },
       () => {
-        this.appendLogText("The project was loadded successfully !!")
+        this.appendLogText("The project was loadded successfully !!");
       }
     );
   }
@@ -118,7 +120,9 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     this.pragccService.compileFile(this.selectedFile).subscribe(
       response => this.responseHandler(response),
       error => this.errorHandler(error),
-      () => this.appendLogText('The compilation was successfull !!')
+      () => {
+        // When no erros happend perform some work 
+      }
     );
   }
 
@@ -126,7 +130,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     this.appendLogText('This feature is not available yet !!');
   }
 
-  onPragccOpenMP(): void {
+  onOpenMP(): void {
     this.pragccService.annotateOpenMP(this.selectedFile).subscribe(
       response => this.responseHandler(response),
       error => this.errorHandler(error),
@@ -140,6 +144,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   }
 
   responseHandler(response): void {
+    // this.appendLogText(response['message']);
     console.log('response:',response);
   }
 
@@ -147,9 +152,9 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     if(error.status == 0){
       this.appendLogText('The API server is not running !!');
     }else {
-      this.appendLogText(error.text());
-      console.log('An error has ocurred !!');
-      console.log(error);
+      // this.appendLogText(error['message']);
+      // console.log('An error has ocurred !!');
+      console.log("error",error);
     }
   }
 

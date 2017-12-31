@@ -29,10 +29,11 @@ class GccCompiler(TemplateView):
             file = File.objects.get(id=file_id)
 
             if not file.is_compilable:
-                message = (
-                    "the file '%s' is not compilable" % file.name
-                )
-                return JsonResponse(message,status=400,safe=False)
+                data = {
+                    'message': "the file '%s' is not compilable" % file.name
+                }
+
+                return JsonResponse(data,status=400,safe=False)
 
 
             service = Service.objects.get(name='pragcc')
@@ -49,16 +50,11 @@ class GccCompiler(TemplateView):
             # indicating the user has a mistake in the code.
             data = response.json()
             status = response.status_code
+            # print('DATA',data)
+            j =  JsonResponse(data,status=status)
 
-            # When error code is not 200, it means there is a 
-            # mistake so the body of the response come with 
-            # descriptive text, but that test is not parsed 
-            # in a good format with Json response, so we return 
-            # instead http response
-            if status != 200:
-                return HttpResponse(data,status=status)
-
-            return JsonResponse(data,status=status,safe=False)
+            print('RESPONSE', j.content, j.items())
+            return j
             
         except Service.DoesNotExist:
 
@@ -180,6 +176,7 @@ class OpenMP(TemplateView):
             # in a good format with Json response, so we return 
             # instead http response
             if status != 200:
+                print(data)
                 return HttpResponse(data,status=status)
                 
             # If the code was parallelized successfully
