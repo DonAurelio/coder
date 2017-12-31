@@ -55,60 +55,45 @@ class GccCompiler(TemplateView):
             
         except Service.DoesNotExist:
 
-            message = (
-                "Pragcc service is not in service providers,"
-                " please add it to service providers in the database."
-            )
-            
-            # When error code is not 200, it means there is a 
-            # mistake so the body of the response come with 
-            # descriptive text, but that test is not parsed 
-            # in a good format with Json response, so we return 
-            # instead http response
-            # return JsonResponse(message,status=503,safe=False)
-            return HttpResponse(message,status=503)
+            data = {
+                'message': (
+                    "Pragcc service is not in service providers,"
+                    " please add it to service providers in the database."
+                )
+            }
+
+            return JsonResponse(data,status=503)
+
 
         except Resource.DoesNotExist:
 
-            message = (
-                "Compiler resource does not exists in the data base"
-            )
-            
-            # When error code is not 200, it means there is a 
-            # mistake so the body of the response come with 
-            # descriptive text, but that test is not parsed 
-            # in a good format with Json response, so we return 
-            # instead http response
-            # return JsonResponse(message,status=503,safe=False)
-            return HttpResponse(message,status=503)
+            data = {
+                'message': (
+                    "Compiler resource does not exists in the data base"
+                )
+            }
+
+            return JsonResponse(data,status=503)
 
         except File.DoesNotExist:
 
-            message = (
-                "The file does not exists in the data base"
-            )
-            
-            # When error code is not 200, it means there is a 
-            # mistake so the body of the response come with 
-            # descriptive text, but that test is not parsed 
-            # in a good format with Json response, so we return 
-            # instead http response
-            # return JsonResponse(message,status=503,safe=False)
-            return HttpResponse(message,status=503)
+            data = {
+                'message': (
+                    "The file does not exists in the data base"
+                )
+            }
+
+            return JsonResponse(data,status=503)
 
         except requests.exceptions.ConnectionError:           
 
-            message = (
-                "Pragcc service is not available"
-            )
+            data = { 
+                'message': (
+                    "Pragcc service is not available"
+                )
+            }
 
-            # When error code is not 200, it means there is a 
-            # mistake so the body of the response come with 
-            # descriptive text, but that test is not parsed 
-            # in a good format with Json response, so we return 
-            # instead http response
-            # return JsonResponse(message,status=503,safe=False)
-            return HttpResponse(message,status=503)
+            return JsonResponse(data,status=503)
 
 
 class OpenMP(TemplateView):
@@ -138,16 +123,24 @@ class OpenMP(TemplateView):
             parallel_file = file.project.get_file('parallel.yml')
 
             if not file.is_parallelizable:
-                message = (
-                    "the file '%s' is not parallelizable" % file.name
-                )
-                return JsonResponse(message,status=400,safe=False)
+                
+                data = {
+                    'message': (
+                        "the file '%s' is not parallelizable" % file.name
+                    )
+                }
+
+                return JsonResponse(data,status=400)
 
             if not parallel_file:
-                message = (
-                    "This project does not have a parallel.yml file"
-                )
-                return JsonResponse(message,status=400,safe=False)
+
+                data = {
+                    'message': (
+                        "This project does not have a parallel.yml file"
+                    )
+                }
+
+                return JsonResponse(data,status=400)
 
             service = Service.objects.get(name='pragcc')
             resource = service.resource_set.get(name='openmp')
@@ -166,15 +159,8 @@ class OpenMP(TemplateView):
             status = response.status_code
 
 
-
-            # When error code is not 200, it means there is a 
-            # mistake so the body of the response come with 
-            # descriptive text, but that test is not parsed 
-            # in a good format with Json response, so we return 
-            # instead http response
             if status != 200:
-                print(data)
-                return HttpResponse(data,status=status)
+                return JsonResponse(data,status=status)
                 
             # If the code was parallelized successfully
             # the response contains the parallelized version
@@ -198,61 +184,45 @@ class OpenMP(TemplateView):
 
             obj.save()
 
-            return JsonResponse(data,status=status,safe=False)
+            return JsonResponse(data,status=status)
 
         except Service.DoesNotExist:
 
-            message = (
-                "Pragcc service is not in service providers,"
-                " please add it to service providers in the database."
-            )
-            
-            # When error code is not 200, it means there is a 
-            # mistake so the body of the response come with 
-            # descriptive text, but that test is not parsed 
-            # in a good format with Json response, so we return 
-            # instead http response
-            # return JsonResponse(message,status=503,safe=False)
-            return HttpResponse(message,status=503)
+            data = {
+                'message': (
+                    "Pragcc service is not in service providers,"
+                    " please add it to service providers in the database."
+                )
+            }
+
+            return JsonResponse(data,status=503)
 
         except Resource.DoesNotExist:
 
-            message = (
-                "OpenMP resource does not exists in the data base"
-            )
+            data = {
+                'message': (
+                    "OpenMP resource does not exists in the data base"
+                )
+            }
             
-            # When error code is not 200, it means there is a 
-            # mistake so the body of the response come with 
-            # descriptive text, but that test is not parsed 
-            # in a good format with Json response, so we return 
-            # instead http response
-            # return JsonResponse(message,status=503,safe=False)
-            return HttpResponse(message,status=503)
+            return JsonResponse(data,status=503)
 
         except File.DoesNotExist as e:
 
-            message = (
-                "The file does not exists in the data base"
-            )
-            
-            # When error code is not 200, it means there is a 
-            # mistake so the body of the response come with 
-            # descriptive text, but that test is not parsed 
-            # in a good format with Json response, so we return 
-            # instead http response
-            # return JsonResponse(message,status=503,safe=False)
-            return HttpResponse(message,status=503)
+            data = {
+                'message': (
+                    "The file does not exists in the data base"
+                )          
+            }
+
+            return JsonResponse(data,status=503)
 
         except requests.exceptions.ConnectionError:           
 
-            message = (
-                "Pragcc service is not available"
-            )
+            data = {
+                'message': (
+                    "Pragcc service is not available"
+                )
+            }
 
-            # When error code is not 200, it means there is a 
-            # mistake so the body of the response come with 
-            # descriptive text, but that test is not parsed 
-            # in a good format with Json response, so we return 
-            # instead http response
-            # return JsonResponse(message,status=503,safe=False)
-            return HttpResponse(message,status=503)
+            return JsonResponse(data,status=503)

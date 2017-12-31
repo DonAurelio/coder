@@ -50,6 +50,15 @@ export class PragccService {
     var url = `${this.api}/${resource}/${action}/${target}`;
     var body = {};
     return this.http.post(url,body)
+    // .map((response: Response) => response.json())
+    // Returns the body of the response in json format if no errors happend, 
+    // it is to say response comes with 200 status code. 
     .map((response: Response) => response.json())
+    // Returns the body of the response in json format if some error happend, 
+    // it si to say, the response status is not 200.
+    // When response status code is 0, the remote server is no running.
+    .catch((error:any) => Observable.throw( 
+      (error.status == 0) ? {'message':'The API server is not running'}:error.json()  
+    ));
   }
 }

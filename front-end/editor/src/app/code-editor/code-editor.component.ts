@@ -118,7 +118,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
         // {'error_message':'.....', 'traceback': '....'}
         // Handled errors in server follows this format
         // {'message':'....','error':'.....'} 
-        this.appendLogText( error_body.error_message || error_body.message);
+        this.appendLogText(error_body.error_message || error_body.message);
         console.log('onSaveFile Error',error_body.message,error_body.error_message);
       },
       () => {
@@ -165,9 +165,8 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
         this.appendLogText(response_body['message']);
       },
       error_body => {
-        // this.appendLogText(error_body.message);
-        this.appendLogText(error_body.error);
-        console.log('onOpenMP Error',error_body.error);
+        this.appendLogText(error_body.message || error_body.error);
+        console.log('onOpenMP Error',error_body.message);
       },
       () => {
         /* We tell he user the paralleization was succesfull*/
