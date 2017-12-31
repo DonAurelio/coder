@@ -108,7 +108,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   /* Send changes from the current selected file to the API */
   onSaveFile(): void {
     this.fileService.updateFile(this.selectedFile).subscribe(
-      response => console.log(response),
+      response => this.responseHandler(response),
       error => this.errorHandler(error),
       () => this.appendLogText("The file was saved successfully !!")
     );
@@ -116,7 +116,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
 
   onCompileFile(): void {
     this.pragccService.compileFile(this.selectedFile).subscribe(
-      response => console.log(response),
+      response => this.responseHandler(response),
       error => this.errorHandler(error),
       () => this.appendLogText('The compilation was successfull !!')
     );
@@ -128,7 +128,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
 
   onPragccOpenMP(): void {
     this.pragccService.annotateOpenMP(this.selectedFile).subscribe(
-      response => console.log(response),
+      response => this.responseHandler(response),
       error => this.errorHandler(error),
       () => {
         /* We tell he user the paralleization was succesfull*/
@@ -139,13 +139,14 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     );
   }
 
+  responseHandler(response): void {
+    console.log('response:',response);
+  }
+
   errorHandler(error): void {
     if(error.status == 0){
       this.appendLogText('The API server is not running !!');
-    }else if(error.status == 400){
-      //this.appendLogText('The code has some errors !!');
-      this.appendLogText(error.text());
-    }else{
+    }else {
       this.appendLogText(error.text());
       console.log('An error has ocurred !!');
       console.log(error);

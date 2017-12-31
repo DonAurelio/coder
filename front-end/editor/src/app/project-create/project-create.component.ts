@@ -45,7 +45,7 @@ export class ProjectCreateComponent implements OnInit {
   message : Message;
 
   constructor(private templateService: TemplateService) {
-    this.project = new Project(undefined,'','stencil');
+    this.project = new Project(undefined,undefined,'','stencil');
     this.template_names = ['stencil'];
   
     this.context = new Context(20,20,'int',100,'neumann');

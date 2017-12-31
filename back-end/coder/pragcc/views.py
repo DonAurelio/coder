@@ -50,6 +50,13 @@ class GccCompiler(TemplateView):
             data = response.json()
             status = response.status_code
 
+            # When error code is not 200, it means there is a 
+            # mistake so the body of the response come with 
+            # descriptive text, but that test is not parsed 
+            # in a good format with Json response, so we return 
+            # instead http response
+            if status != 200:
+                return HttpResponse(data,status=status)
 
             return JsonResponse(data,status=status,safe=False)
             
@@ -60,7 +67,13 @@ class GccCompiler(TemplateView):
                 " please add it to service providers in the database."
             )
             
-            return JsonResponse(message,status=503,safe=False)
+            # When error code is not 200, it means there is a 
+            # mistake so the body of the response come with 
+            # descriptive text, but that test is not parsed 
+            # in a good format with Json response, so we return 
+            # instead http response
+            # return JsonResponse(message,status=503,safe=False)
+            return HttpResponse(message,status=503)
 
         except Resource.DoesNotExist:
 
@@ -68,7 +81,13 @@ class GccCompiler(TemplateView):
                 "Compiler resource does not exists in the data base"
             )
             
-            return JsonResponse(message,status=503,safe=False)
+            # When error code is not 200, it means there is a 
+            # mistake so the body of the response come with 
+            # descriptive text, but that test is not parsed 
+            # in a good format with Json response, so we return 
+            # instead http response
+            # return JsonResponse(message,status=503,safe=False)
+            return HttpResponse(message,status=503)
 
         except File.DoesNotExist:
 
@@ -76,7 +95,13 @@ class GccCompiler(TemplateView):
                 "The file does not exists in the data base"
             )
             
-            return JsonResponse(message,status=503,safe=False)
+            # When error code is not 200, it means there is a 
+            # mistake so the body of the response come with 
+            # descriptive text, but that test is not parsed 
+            # in a good format with Json response, so we return 
+            # instead http response
+            # return JsonResponse(message,status=503,safe=False)
+            return HttpResponse(message,status=503)
 
         except requests.exceptions.ConnectionError:           
 
@@ -84,7 +109,13 @@ class GccCompiler(TemplateView):
                 "Pragcc service is not available"
             )
 
-            return JsonResponse(message,status=503,safe=False)
+            # When error code is not 200, it means there is a 
+            # mistake so the body of the response come with 
+            # descriptive text, but that test is not parsed 
+            # in a good format with Json response, so we return 
+            # instead http response
+            # return JsonResponse(message,status=503,safe=False)
+            return HttpResponse(message,status=503)
 
 
 class OpenMP(TemplateView):
@@ -142,28 +173,36 @@ class OpenMP(TemplateView):
             status = response.status_code
 
 
-            if response.status_code == 200:
-                # If the code was parallelized successfully
-                # the response contains the parallelized version
-                # of a file, so we keep it into the database
 
-                code_data = response.json()
+            # When error code is not 200, it means there is a 
+            # mistake so the body of the response come with 
+            # descriptive text, but that test is not parsed 
+            # in a good format with Json response, so we return 
+            # instead http response
+            if status != 200:
+                return HttpResponse(data,status=status)
                 
-                # The update_or_create method tries to fetch an object 
-                # from database based on the given kwargs. if a match 
-                # is found, it updates the field passed in the defaults
-                # dictionary.
+            # If the code was parallelized successfully
+            # the response contains the parallelized version
+            # of a file, so we keep it into the database
 
-                search = {
-                    'project':file.project,
-                    'name':code_data['name']
-                }
+            code_data = response.json()
+            
+            # The update_or_create method tries to fetch an object 
+            # from database based on the given kwargs. if a match 
+            # is found, it updates the field passed in the defaults
+            # dictionary.
 
-                obj, created = File.objects.update_or_create(
-                    defaults=code_data, **search
-                )
+            search = {
+                'project':file.project,
+                'name':code_data['name']
+            }
 
-                obj.save()
+            obj, created = File.objects.update_or_create(
+                defaults=code_data, **search
+            )
+
+            obj.save()
 
             return JsonResponse(data,status=status,safe=False)
 
@@ -174,7 +213,13 @@ class OpenMP(TemplateView):
                 " please add it to service providers in the database."
             )
             
-            return JsonResponse(message,status=503,safe=False)
+            # When error code is not 200, it means there is a 
+            # mistake so the body of the response come with 
+            # descriptive text, but that test is not parsed 
+            # in a good format with Json response, so we return 
+            # instead http response
+            # return JsonResponse(message,status=503,safe=False)
+            return HttpResponse(message,status=503)
 
         except Resource.DoesNotExist:
 
@@ -182,7 +227,13 @@ class OpenMP(TemplateView):
                 "OpenMP resource does not exists in the data base"
             )
             
-            return JsonResponse(message,status=503,safe=False)
+            # When error code is not 200, it means there is a 
+            # mistake so the body of the response come with 
+            # descriptive text, but that test is not parsed 
+            # in a good format with Json response, so we return 
+            # instead http response
+            # return JsonResponse(message,status=503,safe=False)
+            return HttpResponse(message,status=503)
 
         except File.DoesNotExist as e:
 
@@ -190,7 +241,13 @@ class OpenMP(TemplateView):
                 "The file does not exists in the data base"
             )
             
-            return JsonResponse(message,status=503,safe=False)
+            # When error code is not 200, it means there is a 
+            # mistake so the body of the response come with 
+            # descriptive text, but that test is not parsed 
+            # in a good format with Json response, so we return 
+            # instead http response
+            # return JsonResponse(message,status=503,safe=False)
+            return HttpResponse(message,status=503)
 
         except requests.exceptions.ConnectionError:           
 
@@ -198,4 +255,10 @@ class OpenMP(TemplateView):
                 "Pragcc service is not available"
             )
 
-            return JsonResponse(message,status=503,safe=False)
+            # When error code is not 200, it means there is a 
+            # mistake so the body of the response come with 
+            # descriptive text, but that test is not parsed 
+            # in a good format with Json response, so we return 
+            # instead http response
+            # return JsonResponse(message,status=503,safe=False)
+            return HttpResponse(message,status=503)
