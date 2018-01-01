@@ -18,6 +18,10 @@ import { ProjectListComponent } from './project-list/project-list.component';
 import { ProjectCreateComponent } from './project-create/project-create.component';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
 
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+
 const appRoutes: Routes = [
   { path: '', redirectTo:'/project', pathMatch: 'full' },
   { path: 'project', component: ProjectManagerComponent },
@@ -39,7 +43,11 @@ const appRoutes: Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    AceEditorModule
+    AceEditorModule,
+    
+    CommonModule, // Required for ToastModule
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot() // ToastrModule added
   ],
   providers: [ProjectService,FileService,TemplateService,PragccService],
   bootstrap: [AppComponent]

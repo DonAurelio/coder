@@ -6,6 +6,7 @@ import { FileService } from '../services/file.service';
 import { Project } from '../models/project';
 import { ProjectService } from '../services/project.service';
 import { PragccService } from '../services/pragcc.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-code-editor',
@@ -40,7 +41,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   /* Console text area text */
   textarea_log_text: string;
 
-  constructor(private activatedRoute: ActivatedRoute,private fileService: FileService, private projectService: ProjectService, private pragccService: PragccService) {
+  constructor(private toastService: ToastrService, private activatedRoute: ActivatedRoute,private fileService: FileService, private projectService: ProjectService, private pragccService: PragccService) {
       this.project = new Project(undefined,undefined,'no description','no type');
       this.selectedFile = new File(undefined,undefined,'somefile','somefiletype','');
       this.previewFile = new File(undefined,undefined,'somefile','somefiletype','');
@@ -73,12 +74,14 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
         this.project = response;
       },
       error => {
-        this.appendLogText("The project can not be loaded !!");
-        console.log("The project can not be loaded !!");
+        this.toastService.error("The project ccould not be loaded !!");
+        this.appendLogText("The project ccould not be loaded !!");
+        console.log("The project ccould not be loaded !!");
         console.log(error);
       },
       () => {
-        this.appendLogText("The project was loadded successfully !!");
+        this.toastService.info("The project was loadded sucessfully");
+        this.appendLogText("The project was loadded sucessfully");
       }
     );
   }
@@ -118,11 +121,13 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
         // {'error_message':'.....', 'traceback': '....'}
         // Handled errors in server follows this format
         // {'message':'....','error':'.....'} 
-        this.appendLogText(error_body.error_message || error_body.message);
+        this.toastService.error(error_body.message);
+        this.appendLogText(error_body.error_message || error_body.error);
         console.log('onSaveFile Error',error_body.message,error_body.error_message);
       },
       () => {
         // When no erros happend do some work here
+        this.toastService.success('The file was saved successfully !!');
         this.appendLogText('The file was saved successfully !!');
       }
     );
@@ -134,10 +139,12 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   onCompileFile(): void {
     this.pragccService.compileFile(this.selectedFile).subscribe(
       response_body => {
+        this.toastService.success(response_body['message']);
         this.appendLogText(response_body['message']);
       },
       error_body => {
         // this.appendLogText(error_body.message);
+        this.toastService.error(error_body.message);
         this.appendLogText(error_body.error || error_body.message );
         // console.log('onCompileFile Error',error_body.error);
       },
@@ -152,6 +159,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
    * NOT AVAILABLE YET
    */
   onDawnCC() : void {
+    this.toastService.warning('This Dawncc feature is not available yet !!');
     this.appendLogText('This feature is not available yet !!');
   }
 
@@ -162,15 +170,18 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   onOpenMP(): void {
     this.pragccService.annotateOpenMP(this.selectedFile).subscribe(
       response_body => {
+        this.toastService.info(response_body['message']);
         this.appendLogText(response_body['message']);
       },
       error_body => {
-        this.appendLogText(error_body.message || error_body.error);
-        console.log('onOpenMP Error',error_body.message);
+        this.toastService.error(error_body.message);
+        this.appendLogText(error_body.error || error_body.message);
+        console.log('onOpenMP Error',error_body.error);
       },
       () => {
         /* We tell he user the paralleization was succesfull*/
-        this.appendLogText('Code parallelization successfull !!');
+        this.toastService.success("The code was parallelized successfully !!");
+        this.appendLogText("The code was parallelized successfully !!");
         /* Then we reload the files in the file selector */
         this.loadFiles();
       }
