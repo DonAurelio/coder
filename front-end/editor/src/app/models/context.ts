@@ -13,19 +13,20 @@ export class Context {
     }
 
     var moore = {
-      up_left: [-1,-1],
+      left_up: [-1,-1],
       up: [-1,0],
-      up_right: [-1,1],
+      right_up: [-1,1],
       left: [0,-1],
       right: [0,1],
-      down_left: [1,-1],
+      left_down: [1,-1],
       down: [1,0],
-      down_right: [1,1]
+      right_down: [1,1],
+      center: [0,0]
     }
 
     var data = {
       lattice: {
-        'rowndim': this.rowdim,
+        'rowdim': this.rowdim,
         'coldim': this.coldim,
         'type': this.type,
         'neighborhood': (this.nbhd_name == 'moore') ? moore : neumann,

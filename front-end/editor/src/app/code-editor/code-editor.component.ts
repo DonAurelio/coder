@@ -170,7 +170,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   onOpenMP(): void {
     this.pragccService.annotateOpenMP(this.selectedFile).subscribe(
       response_body => {
-        this.toastService.info(response_body['message']);
+        // this.toastService.info(response_body['message']);
         this.appendLogText(response_body['message']);
       },
       error_body => {
