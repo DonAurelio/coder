@@ -10,8 +10,8 @@
           <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">{{project.name}} Files</a>
           <ul class="collapse list-unstyled" id="homeSubmenu">
               <li><a *ngFor="let file of files | async" 
-                (click)="setSelectedFile(file)"
-                [class.active]="file === selectedFile">{{file.name}}</a></li>
+                (click)="setMainEditorFile(file)"
+                [class.active]="file === mainSelectedFile">{{file.name}}</a></li>
           </ul>
         </li>
       </ul>
@@ -23,13 +23,13 @@
   <div id="content">
     <div class="panel panel-primary">
       <div class="panel-heading">
-         <small *ngIf="selectedFile.id != undefined">{{ selectedFile.name }}</small>
+         <small *ngIf="mainSelectedFile.id != undefined">{{ mainSelectedFile.name }}</small>
       </div>
       <div class="panel-body nopadding">
         <div class="col-md-6 nopadding">
             <div ace-editor
-            [(text)]="selectedFile.text"
-            [(mode)]="editor_mode"
+            [(text)]="mainSelectedFile.text"
+            [(mode)]="mainEditorMode"
             [theme]="'eclipse'"
             [options]="options"
             [readOnly]="false"
@@ -39,8 +39,8 @@
         </div>
         <div class="col-md-6 nopadding">
             <div ace-editor
-            [(text)]="previewFile.text"
-            [mode]="'c_cpp'"
+            [(text)]="secondarySelectedFile.text"
+            [mode]="secondaryEditorMode"
             [theme]="'eclipse'"
             [options]="options"
             [readOnly]="false"
@@ -51,18 +51,18 @@
       </div>
       <div class="panel-footer">
         <div class="btn-group" role="group" aria-label="...">
-            <button type="button" class="btn btn-primary" (click)="onSaveFile()" [disabled]="!selectedFile.id"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>  Save</button>
-            <button type="button" class="btn btn-success" (click)="onCompileFile()" [disabled]="!selectedFile.id"><span class="glyphicon glyphicon-console" aria-hidden="true"></span>  Compile</button>
-            <button type="button" class="btn btn-warning" (click)="onDawnCC()" [disabled]="!selectedFile.id">Dawncc</button>
+            <button type="button" class="btn btn-primary" (click)="onSaveFile()" [disabled]="!mainSelectedFile.id"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>  Save</button>
+            <button type="button" class="btn btn-success" (click)="onCompileFile()" [disabled]="!mainSelectedFile.id"><span class="glyphicon glyphicon-console" aria-hidden="true"></span>  Compile</button>
+            <button type="button" class="btn btn-warning" (click)="onDawnCC()" [disabled]="!mainSelectedFile.id">Dawncc</button>
           
             <div class="btn-group" role="group">
-              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [disabled]="!selectedFile.id">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [disabled]="!mainSelectedFile.id">
                 Pragcc
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu">
                 <li><a (click)="onOpenMP()">OpenMP</a></li>
-                <li><a>OpenACC</a></li>
+                <li><a (click)="onOpenACC()">OpenACC</a></li>
               </ul>
             </div>
           </div>

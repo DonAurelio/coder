@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:alpine
+    restart: on-failure
+    ports:
+    - "80:8010"
+    volumes:
+    - static:/usr/share/nginx/html
+    depends_on:
+      - coder
+    links:
+      - coder
+
+  coder:
+    build: ./coder
+    restart: on-failure
+    volumes:
+      - ./back-end/coder:/usr/src/app
+      - static:/usr/src/app/static
+    ports:
+      - "8011:8011"
+
+    # Expose ports without publishing them to the host machine - 
+    # they’ll only be accessible to linked services. Only the 
+    # internal port can be specified.
+    expose:
+      - "8011"
+
+  # pragcc:
+  #   build:
+  #     context: https://github.com/DonAurelio/pragcc.git
+
+  # templates:
+  #   build:
+  #     context: https://github.com/DonAurelio/parallel-templates.git
+
+volumes:
+  static:

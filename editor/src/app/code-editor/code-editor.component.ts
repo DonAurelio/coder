@@ -28,25 +28,31 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   files: Observable<File[]>;
 
   /* The selected file */
-  selectedFile: File;
+  mainSelectedFile: File;
 
   /* Code editor right hand editor text */
-  previewFile: File;
+  secondarySelectedFile: File;
 
   /**
-   * The editor highlighting mode 
+   * The main code editor highlighting mode 
    */
-  editor_mode: string;
+  mainEditorMode: string;
+
+  /**
+   * The secondary code editor highlighting mode 
+   */
+  secondaryEditorMode: string;
 
   /* Console text area text */
   textarea_log_text: string;
 
   constructor(private toastService: ToastrService, private activatedRoute: ActivatedRoute,private fileService: FileService, private projectService: ProjectService, private pragccService: PragccService) {
       this.project = new Project(undefined,undefined,'no description','no type');
-      this.selectedFile = new File(undefined,undefined,'somefile','somefiletype','');
-      this.previewFile = new File(undefined,undefined,'somefile','somefiletype','');
+      this.mainSelectedFile = new File(undefined,undefined,'somefile','somefiletype','');
+      this.secondarySelectedFile = new File(undefined,undefined,'somefile','somefiletype','');
       this.textarea_log_text = "Welcome to web coder !!\n";
-      this.editor_mode = 'c_cpp';
+      this.mainEditorMode = 'c_cpp';
+      this.secondaryEditorMode = 'c_cpp';
   }
 
   /**
@@ -91,28 +97,48 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     this.setPreviewFile();
   }
 
+  setMainEditorFile(file: File){
+    this.mainSelectedFile = file;
+    this.setMainEditorMode(file);
+
+    this.setSecondaryEditorFile(file);
+  }
+
+  setMainEditorMode(file: File){
+    /* Changing the editor highlighting mode */
+    if(file.ftype == 'yml')
+      this.mainEditorMode = 'yaml';
+    else
+      this.mainEditorMode ='c_cpp';
+  }
+
+  setSecondaryEditorFile(file: File){
+    if(file.name == 'omp.c' || file.name == 'acc.c'){
+      this.secondarySelectedFile = file;
+      this.setSecondaryEditorMode(file);
+    }
+  }
+
+  setSecondaryEditorMode(file: File){
+    /* Changing the editor highlighting mode */
+    if(file.ftype == 'yml')
+      this.secondaryEditorMode = 'yaml';
+    else
+      this.secondaryEditorMode ='c_cpp';
+  }
+
   setPreviewFile(): void {
     this.files.forEach(files =>{
       files.forEach(file => {
-        if(file.name == 'omp.c')
-          this.previewFile = file;
+        if(file.name == 'omp.c' || file.name == 'acc.c')
+        this.secondarySelectedFile = file;
       });
     });
   }
 
-  setSelectedFile(file: File): void {
-    this.selectedFile = file;
-    /* Changing the editor highlighting mode */
-    if(file.ftype == 'yml')
-      this.editor_mode = 'yaml';
-    else{
-      this.editor_mode ='c_cpp';
-    }
-  }
-
   /* Send changes from the current selected file to the API */
   onSaveFile(): void {
-    this.fileService.updateFile(this.selectedFile).subscribe(
+    this.fileService.updateFile(this.mainSelectedFile).subscribe(
       response_body => {
         // this.appendLogText(response_body['message']);
       },
@@ -137,7 +163,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
    * Perform file compilation in a remote server.
    */
   onCompileFile(): void {
-    this.pragccService.compileFile(this.selectedFile).subscribe(
+    this.pragccService.compileFile(this.mainSelectedFile).subscribe(
       response_body => {
         this.toastService.success(response_body['message']);
         this.appendLogText(response_body['message']);
@@ -168,7 +194,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
    * this tell the server to parallelize with OpenMP directives
    */
   onOpenMP(): void {
-    this.pragccService.annotateOpenMP(this.selectedFile).subscribe(
+    this.pragccService.annotateOpenMP(this.mainSelectedFile).subscribe(
       response_body => {
         // this.toastService.info(response_body['message']);
         this.appendLogText(response_body['message']);
@@ -177,6 +203,31 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
         this.toastService.error(error_body.message);
         this.appendLogText(error_body.error || error_body.message);
         console.log('onOpenMP Error',error_body.error);
+      },
+      () => {
+        /* We tell he user the paralleization was succesfull*/
+        this.toastService.success("The code was parallelized successfully !!");
+        this.appendLogText("The code was parallelized successfully !!");
+        /* Then we reload the files in the file selector */
+        this.loadFiles();
+      }
+    );
+  }
+
+  /**
+   * Perfoms file paralellization in a remote server, but 
+   * this tell the server to parallelize with OpenACC directives
+   */
+  onOpenACC(): void {
+    this.pragccService.annotateOpenACC(this.mainSelectedFile).subscribe(
+      response_body => {
+        // this.toastService.info(response_body['message']);
+        this.appendLogText(response_body['message']);
+      },
+      error_body => {
+        this.toastService.error(error_body.message);
+        this.appendLogText(error_body.error || error_body.message);
+        console.log('onOpenACC Error',error_body.error);
       },
       () => {
         /* We tell he user the paralleization was succesfull*/
