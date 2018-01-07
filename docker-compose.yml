@@ -1,13 +1,20 @@
 version: '3'
 
+# Expose ports without publishing them to the host machine - 
+# they’ll only be accessible to linked services. Only the 
+# internal port can be specified.
+# expose:
+#   - "80"
+
 services:
   nginx:
     image: nginx:alpine
     restart: on-failure
     ports:
-    - "80:8010"
+    - "8010:80"
     volumes:
-    - static:/usr/share/nginx/html
+    - static:/usr/share/nginx/html/static
+    - ./nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - coder
     links:
@@ -17,16 +24,10 @@ services:
     build: ./coder
     restart: on-failure
     volumes:
-      - ./back-end/coder:/usr/src/app
       - static:/usr/src/app/static
-    ports:
-      - "8011:8011"
-
-    # Expose ports without publishing them to the host machine - 
-    # they’ll only be accessible to linked services. Only the 
-    # internal port can be specified.
+    entrypoint: ./entrypoint.sh
     expose:
-      - "8011"
+      - "80"
 
   # pragcc:
   #   build:
