@@ -29,13 +29,15 @@ services:
     expose:
       - "80"
 
-  # pragcc:
-  #   build:
-  #     context: https://github.com/DonAurelio/pragcc.git
+  pragcc:
+    build:
+      context: https://github.com/DonAurelio/pragcc.git
+    entrypoint: ./entrypoint.sh
 
-  # templates:
-  #   build:
-  #     context: https://github.com/DonAurelio/parallel-templates.git
+  templates:
+    build:
+      context: https://github.com/DonAurelio/parallel-templates.git
+    entrypoint: ./entrypoint.sh
 
 volumes:
   static:
