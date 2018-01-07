@@ -8,6 +8,7 @@ class Service(models.Model):
     name = models.CharField(max_length=100,primary_key=True,
         help_text='Service name has to be unique')
     base_url = models.CharField(
+        max_length=400,
         help_text='API base url without ending slash')
     description = models.CharField(max_length=400,
         help_text='Describe the service in few words')
