@@ -30,6 +30,7 @@ class DownloadProjectView(TemplateView):
 
             response = HttpResponse(content_type='application/zip')
             response['Content-Disposition'] = 'attachment; filename=%s.zip' % project_name
+
             with zipfile.ZipFile(response,'w',zipfile.ZIP_DEFLATED) as zip_file:
                 for file in files:
                     zip_file.writestr(file.name,file.text)

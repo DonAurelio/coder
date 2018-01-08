@@ -10,6 +10,7 @@ import { TemplateService } from './services/templates.service';
 import { ProjectService } from './services/project.service';
 import { FileService } from './services/file.service';
 import { PragccService } from './services/pragcc.service';
+import { ConfigService } from './services/config.service';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar.component';
@@ -49,7 +50,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot() // ToastrModule added
   ],
-  providers: [ProjectService,FileService,TemplateService,PragccService],
+  providers: [ProjectService,FileService,TemplateService,PragccService,ConfigService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

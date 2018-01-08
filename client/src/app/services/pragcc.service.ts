@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import { File } from "../models/file";
+import { ConfigService } from "../services/config.service";
 
 /**
  * Pragcc server deals with code compilation and 
@@ -9,13 +10,11 @@ import { File } from "../models/file";
  */
 @Injectable()
 export class PragccService {
-
   // The url to the catt service
   api: string;
 
-  constructor(private http: Http) { 
-    // this.api = 'http://localhost:8000/api/pragcc';
-    this.api = 'http://localhost:8011/api/pragcc';
+  constructor(private configService: ConfigService,private http: Http) { 
+    this.api = `${this.configService.pragcc_service.url}/api/pragcc`;
   }
 
   /**

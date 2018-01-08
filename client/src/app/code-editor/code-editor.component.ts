@@ -242,6 +242,10 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
     );
   }
 
+  onDownloadProject(): void {
+    this.projectService.downloadProject(this.project);
+  }
+
   /**
    * Allow display messages in the code editor console
    * @param text The text to be displayed in the code editor console

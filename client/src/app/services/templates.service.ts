@@ -4,16 +4,18 @@ import 'rxjs/Rx';
 import { Observable } from 'rxjs/Rx';
 import { Project } from '../models/project';
 import { Context } from '../models/context';
+import { ConfigService } from '../services/config.service';
 
 @Injectable()
 export class TemplateService {
 
+  // Server base url
+  base_url: string;
   // The url to the catt service
   api: string;
 
-  constructor(private http: Http) {
-    // this.api = 'http://localhost:8000/api/template';
-    this.api = 'http://localhost:8011/api/template';
+  constructor(private configService: ConfigService, private http: Http) {
+    this.api = `${this.configService.templates_service.url}/api/template`;
   }
 
   /**

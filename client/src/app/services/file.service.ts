@@ -4,21 +4,23 @@ import { Http, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 
 import { File } from "../models/file";
+import { ConfigService } from '../services/config.service';
 
 /**
  * Allow File model CRUD
  */
 @Injectable()
 export class FileService {
-
+  // Server url
+  base_url: string;
   // the API base url 
   api: string;
   // the URL of the resource we require from the api
   resource: string;
 
-  constructor(private http: Http) {
-    // this.api = 'http://localhost:8000/api/project';
-    this.api = 'http://localhost:8011/api/project';
+  constructor(private configService: ConfigService,private http: Http) {
+    
+    this.api = `${this.configService.file_service.url}/api/project`;
     
     this.resource = 'files';
   }
