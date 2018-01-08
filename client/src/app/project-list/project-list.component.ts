@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from '../models/project';
 import { ProjectService } from '../services/project.service';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs/Observable';
 import { Router } from "@angular/router";
 import { Message } from '../models/message';
@@ -28,7 +29,7 @@ export class ProjectListComponent implements OnInit {
    */
   message : Message;
 
-  constructor(private projectService: ProjectService, private router: Router) { 
+  constructor(private toastrService: ToastrService,private projectService: ProjectService, private router: Router) { 
     this.message = new Message(
       'Success','alert alert-warning','','',true
     );
@@ -49,12 +50,11 @@ export class ProjectListComponent implements OnInit {
         console.log(response);
         this.projects = response;},
       error => {
-        console.log('The projects list can not be loaded');
-        console.log(error);
         this.message.error('The projects list can not be loaded');
+        this.toastrService.error('The projects list can not be loaded');
       },
       () => {
-        console.log('The projects list was loaded successfully');
+        this.toastrService.info('The projects list was loaded successfully');
         this.message.hidden = true;
         if(this.projects.length == 0)
           this.message.info('Its seems that you have not created projects yet.');
@@ -98,13 +98,12 @@ export class ProjectListComponent implements OnInit {
     this.projectService.deleteProject(this.selectedProject).subscribe(
       response => response = response,
       error => {
-        console.log("The project can not be deleted, probably it was already deleted. !!")
-        console.log(error);
+        this.toastrService.error("The project can not be deleted, probably it was already deleted. !!")
       },
       
       /* If the delection was successfull, refresh the projects list */
       () => { 
-        console.log("The project was deleted successfully !!"); 
+        this.toastrService.success("The project was deleted !!");
         this.loadProjects();
         this.selectedProject = null;
       }

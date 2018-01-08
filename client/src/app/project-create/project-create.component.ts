@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { TemplateService } from '../services/templates.service';
+import { ToastrService } from 'ngx-toastr';
 import { Context } from '../models/context';
 import { Project } from '../models/project';
 import { Message } from '../models/message';
@@ -44,7 +45,7 @@ export class ProjectCreateComponent implements OnInit {
    */
   message : Message;
 
-  constructor(private templateService: TemplateService) {
+  constructor(private toastrService: ToastrService,private templateService: TemplateService) {
     this.project = new Project(undefined,undefined,'','stencil');
     this.template_names = ['stencil'];
   
@@ -93,11 +94,11 @@ export class ProjectCreateComponent implements OnInit {
         
       },
       error_body => {
-        this.message.error(error_body.message || error_body.error);
-        console.log('createProject Error',error_body.message);
+        this.toastrService.error(error_body.message || error_body.error);
+        // console.log('createProject Error',error_body.message);
       },
       () => {
-        this.message.success('The project was created successfully !!')
+        this.toastrService.success('The project was created successfully !!');
         /* We tell to project-list component it needs to be updated */
         this.onProjectCreated.emit(true);
       }
