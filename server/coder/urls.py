@@ -18,11 +18,11 @@ from django.conf.urls import include
 from django.contrib import admin
 from project.api import api as project_api
 
-
 urlpatterns = [
 
     # Django common urls
     url(r'^admin/', admin.site.urls),
+    url(r'^project/', include('project.urls')),
 
     # APIS URLS
     url(r'^api/', include(project_api.urls)),
