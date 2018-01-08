@@ -12,7 +12,8 @@ export class TemplateService {
   api: string;
 
   constructor(private http: Http) {
-    this.api = 'http://localhost:8000/api/template';
+    // this.api = 'http://localhost:8000/api/template';
+    this.api = 'http://localhost:8011/api/template';
   }
 
   /**

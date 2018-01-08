@@ -14,7 +14,8 @@ export class ProjectService {
   resource: string;
 
   constructor(private http: Http) { 
-    this.api = 'http://localhost:8000/api/project';
+    // this.api = 'http://localhost:8000/api/project';
+    this.api = 'http://localhost:8011/api/project';
     this.resource = 'projects';
   }
 

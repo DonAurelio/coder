@@ -46,6 +46,9 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
   /* Console text area text */
   textarea_log_text: string;
 
+  /* Both editor options */
+  options: any;
+
   constructor(private toastService: ToastrService, private activatedRoute: ActivatedRoute,private fileService: FileService, private projectService: ProjectService, private pragccService: PragccService) {
       this.project = new Project(undefined,undefined,'no description','no type');
       this.mainSelectedFile = new File(undefined,undefined,'somefile','somefiletype','');

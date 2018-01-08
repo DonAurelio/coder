@@ -14,7 +14,8 @@ export class PragccService {
   api: string;
 
   constructor(private http: Http) { 
-  	this.api = 'http://localhost:8000/api/pragcc';
+    // this.api = 'http://localhost:8000/api/pragcc';
+    this.api = 'http://localhost:8011/api/pragcc';
   }
 
   /**
