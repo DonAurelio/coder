@@ -60,4 +60,4 @@ docker run -d -v ${PWD}:/usr/src/app --name  coder-back -p 8000:8000  coder-back
 
 # The Front-End
 
-!Constructing¡
+* [Angular 4 Toast Messages](https://github.com/scttcper/ngx-toastr)

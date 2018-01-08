@@ -1,0 +1,89 @@
+<div class="well well-sm col-md-12">
+  <form (ngSubmit)="createProject()" #createProjectForm="ngForm">
+    <h3>Create Cellular Automata Project</h3>
+    <hr>
+    <p [hidden]="message.hidden" (click)="message.toggle()" class="{{message.inline_css}}"><strong>{{message.type}}!</strong>  {{message.text}}</p>
+    <p></p>
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" class="form-control" id="pname" required [(ngModel)]="project.name" name="pname" #pname="ngModel">
+      <div [hidden]="pname.valid || pname.pristine" class="text-danger">
+        A project name is required
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <input type="text" class="form-control" id="description" required [(ngModel)]="project.description" name="pdescrip" #pdescrip=ngModel>
+      <div [hidden]="pdescrip.valid || pdescrip.pristine" class="text-danger">
+        A project brew description is required
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Template</label>
+      <select class="form-control" id="base_template" required [(ngModel)]="project.base_template" name="base_template">
+        <option *ngFor="let template_name of template_names" [value]="template_name">{{template_name}}</option>
+      </select>
+    </div>
+    <p>&nbsp;</p>
+    <!-- Cellular Automata Project settings-->
+    <hr>
+    <h4>Settings</h4>
+    <hr>
+    <div class="row">
+      <div class="col-xs-6 form-group">
+        <label>Matrix Number of Rows</label>
+        <input type="number" class="form-control" value="20" id="rowdim" required [(ngModel)]="context.rowdim" name="rowdim" #rowdim="ngModel">
+        <div [hidden]="rowdim.valid || rowdim.pristine" class="text-danger">
+          Number of rows is required
+        </div>
+      </div>
+      <div class="col-xs-6 form-group">
+        <label>Matrix Number of Cols</label>
+        <input type="number" class="form-control" value="20" id="coldim" required [(ngModel)]="context.coldim" name="coldim" #coldim="ngModel">
+        <div [hidden]="coldim.valid || coldim.pristine" class="text-danger">
+          Number of cols is required
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-6 form-group">
+        <label>States Type</label>
+        <select class="form-control" id="type" required [(ngModel)]="context.type" name="type">
+          <option *ngFor="let states_type of states_types" [value]="states_type">{{states_type}}</option>
+        </select>
+      </div>
+      <div class="col-xs-6 form-group">
+        <label>Number of Generations</label>
+        <input type="number" class="form-control" value="20" id="matrix_cols_number" required [(ngModel)]="context.generations" name="generations" #generations="ngModel">
+        <div [hidden]="generations.valid || generations.pristine" class="text-danger">
+          Number of generations is required
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-6 form-grop">
+        <label>Neighbor Name</label>
+        <select class="form-control" id="nbhd_name" required [(ngModel)]="context.nbhd_name" name="nbhd_name" #nbhd_name="ngModel">
+          <option *ngFor="let neighborhood_name of neighborhood_names" [value]="neighborhood_name">{{neighborhood_name}}</option>
+        </select>
+      </div>
+      <div class="col-xs-1 col-sm-offset-1 form-grop">
+        <table class="table table-bordered">
+          <tbody>
+            <tr *ngFor="let row of getCurrentNeighborPattern()">
+              <td *ngFor="let value of row">
+                <span [ngClass]="value === '1' ? 'btn btn-success' : 'btn'"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 form-group">
+        <!-- <label><br></label> -->
+        <button type="submit" class="form-control btn btn-primary" [disabled]="!createProjectForm.form.valid">Create</button>
+      </div>
+    </div>
+  </form>
+</div>

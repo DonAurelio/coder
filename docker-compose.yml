@@ -1,0 +1,49 @@
+version: '3'
+
+# Expose ports without publishing them to the host machine - 
+# they’ll only be accessible to linked services. Only the 
+# internal port can be specified.
+# expose:
+#   - "80"
+
+services:
+  client:
+    build: ./client
+    restart: on-failure
+    ports:
+    - "8010:80"
+    depends_on:
+      - nginx
+
+  nginx:
+    image: nginx:alpine
+    restart: on-failure
+    ports:
+    - "8011:80"
+    volumes:
+    - static:/usr/share/nginx/html/static
+    - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - server
+
+  server:
+    build: ./server
+    restart: on-failure
+    volumes:
+      - static:/usr/src/app/static
+    entrypoint: ./entrypoint.sh
+    expose:
+      - "80"
+
+  pragcc:
+    build:
+      context: https://github.com/DonAurelio/pragcc.git
+    entrypoint: ./entrypoint.sh
+
+  templates:
+    build:
+      context: https://github.com/DonAurelio/parallel-templates.git
+    entrypoint: ./entrypoint.sh
+
+volumes:
+  static:

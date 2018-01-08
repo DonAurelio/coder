@@ -1,0 +1,88 @@
+<!-- Reference: view-source:https://bootstrapious.com/tutorial/sidebar/index.html-->
+<div class="wrapper">
+  <!-- Sidebar Holder -->
+  <nav id="sidebar" class="bg-gray">
+      <!-- <div class="sidebar-header">
+          <h3>Bootstrap Sidebar</h3>
+      </div> -->
+      <ul class="list-unstyled components">
+        <li class="active">
+          <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">{{project.name}} Files</a>
+          <ul class="collapse list-unstyled" id="homeSubmenu">
+              <li><a *ngFor="let file of files | async" 
+                (click)="setMainEditorFile(file)"
+                [class.active]="file === mainSelectedFile">{{file.name}}</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="list-unstyled CTAs">
+          <li><a class="download">Download source</a></li>
+      </ul>
+  </nav>
+  <!-- Page Content Holder -->
+  <div id="content">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+         <small *ngIf="mainSelectedFile.id != undefined">{{ mainSelectedFile.name }}</small>
+      </div>
+      <div class="panel-body nopadding">
+        <div class="col-md-6 nopadding">
+            <div ace-editor
+            [(text)]="mainSelectedFile.text"
+            [(mode)]="mainEditorMode"
+            [theme]="'eclipse'"
+            [options]="options"
+            [readOnly]="false"
+            [autoUpdateContent]="true"
+            style="min-height: 400px; width:100%; overflow: auto;">
+            </div>
+        </div>
+        <div class="col-md-6 nopadding">
+            <div ace-editor
+            [(text)]="secondarySelectedFile.text"
+            [mode]="secondaryEditorMode"
+            [theme]="'eclipse'"
+            [options]="options"
+            [readOnly]="true"
+            [autoUpdateContent]="true"
+            style="min-height: 400px; width:100%; overflow: auto;">
+            </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <div class="btn-group" role="group" aria-label="...">
+            <button type="button" class="btn btn-primary" (click)="onSaveFile()" [disabled]="!mainSelectedFile.id"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>  Save</button>
+            <button type="button" class="btn btn-success" (click)="onCompileFile()" [disabled]="!mainSelectedFile.id"><span class="glyphicon glyphicon-console" aria-hidden="true"></span>  Compile</button>
+            <button type="button" class="btn btn-warning" (click)="onDawnCC()" [disabled]="!mainSelectedFile.id">Dawncc</button>
+          
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [disabled]="!mainSelectedFile.id">
+                Pragcc
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a (click)="onOpenMP()">OpenMP</a></li>
+                <li><a (click)="onOpenACC()">OpenACC</a></li>
+              </ul>
+            </div>
+          </div>
+
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+
+      </div>
+      <div class="panel-body">
+        <div class="component-console">
+          <div class="prompt">
+              <span class="chevron">&#8250;</span>
+              <textarea rows=10 id='text-area' readonly>{{textarea_log_text}}</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
