@@ -166,7 +166,7 @@ class TemplateDetail(TemplateView):
             template_name = kwargs['name']
             service = Service.objects.get(name='template')
             resource = service.resource_set.get(name='templates')
-            response = requests.get(resource.url())
+            response = requests.get(resource.url(),timeout=0.2)
             data = response.json()
 
             return JsonResponse(data,safe=False)

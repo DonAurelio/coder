@@ -21,7 +21,7 @@ from project.api import api as project_api
 urlpatterns = [
 
     # Django common urls
-    url(r'^admin/', admin.site.urls),
+    url(r'^', admin.site.urls),
     url(r'^project/', include('project.urls')),
 
     # APIS URLS

@@ -12,8 +12,6 @@ services:
     restart: on-failure
     ports:
     - "8010:80"
-    depends_on:
-      - nginx
 
   nginx:
     image: nginx:alpine
@@ -30,6 +28,7 @@ services:
     build: ./server
     restart: on-failure
     volumes:
+      - ./server:/usr/src/app/
       - static:/usr/src/app/static
     entrypoint: ./entrypoint.sh
     expose:

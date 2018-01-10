@@ -37,7 +37,7 @@ class Resource(models.Model):
     def is_available(self):
         message = ''
         try:
-            response = requests.get(self.url())
+            response = requests.get(self.url(),timeout=1)
             return True
         except requests.exceptions.ConnectionError as e:
              return False
@@ -47,7 +47,7 @@ class Resource(models.Model):
     def status(self):
         message = ''
         try:
-            response = requests.head(self.url())
+            response = requests.head(self.url(),timeout=1)
             if response.status_code is 200:
                 message = 'Online'
             else:

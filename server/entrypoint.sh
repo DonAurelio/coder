@@ -6,4 +6,9 @@
 
 ./manage.py collectstatic --noinput
 
-gunicorn coder.wsgi -b 0.0.0.0:80
+# Initial db data
+./manage.py loaddata prod-db.json
+
+gunicorn coder.wsgi --timeout 600 -b 0.0.0.0:80
+
+# ./manage.py runserver 0.0.0.0:80
