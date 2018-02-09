@@ -12,7 +12,7 @@
 
 ## Application Diagram
 
-<div style="text-align:center"><img src ="https://github.com/DonAurelio/coder/blob/master/doc/deploy_diagram.png" /></div>
+![alt text](https://github.com/DonAurelio/coder/blob/master/doc/deploy_diagram.png)
 
 ## Further Work
 
