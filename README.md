@@ -10,6 +10,9 @@
 
 * [Pragcc](https://github.com/DonAurelio/pragcc), it is a tool developed in Python that try assists the process of code parallelization.
 
+## Application Diagram
+
+![alt text](https://github.com/DonAurelio/coder/blob/master/doc/deploy_diagram.png)
 
 ## Further Work
 
