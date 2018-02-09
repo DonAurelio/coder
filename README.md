@@ -6,7 +6,7 @@
 
 * Coder, deals with C code edition, additionally integrate the services which assist the programmer with code parallelization.
 
-* [Templates](https://github.com/DonAurelio/parallel-templates), some problems in programming follow the same pattern of parallelism, given the above it is possible to have templates that allow to address different problems that follow the same pattern. if the user looks for code a problem that follows a pattern of parallelism, Templates can provide a basic template to start.
+* [Templates](https://github.com/DonAurelio/parallel-templates), some problems in programming follow the same pattern of parallelism. Given the above, it is possible to have templates that allow to address different problems following the same parallelism pattern. If the user have a problem that follows a given parallelism pattern, Templates can provide a basic template to start.
 
 * [Pragcc](https://github.com/DonAurelio/pragcc), it is a tool developed in Python that try assists the process of code parallelization.
 
