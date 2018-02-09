@@ -1,4 +1,4 @@
-# Welcome to Coder A microservice WEB based code editor for parallel programming
+# Welcome to Coder
 
 **Coder** is a microservices-based online code editor developed to assists the development of C applications that require parallel processing. This tool looks for be extensible by separing the functionalities of a common code editor into services. 
 
