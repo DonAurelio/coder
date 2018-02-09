@@ -13,7 +13,7 @@
 
 ## Further Work
 
-Serveral tools (Parallelizer Compilers, Compiler Directives, Libraries) have been created with the purpose of allowing parallel execution in either CPU or GPU. However, these tools are not easy to acces by the user. This project aims to associate each of these tools as an application service to assist the parallel programming process.
+Serveral tools (Parallelizer Compilers, Compiler Directives, Libraries) have been created with the purpose of allowing parallel execution in either CPU or GPU. However, they are not easily accessed by users. This project aims to associate each of them as an application service to assist the parallel programming process.
 
 ## Deploying
 
