@@ -1,5 +1,5 @@
 # Base image
-FROM python:alpine
+FROM python:3.5-alpine
 # Image propietary
 LABEL maintainer="Aurelio Vivas aurelio.vivas@correounivalle.edu.co"
 # Working directory inside the container
