@@ -19,3 +19,5 @@ RUN pip3 install --no-cache-dir -r ./requirements.txt
 # flag to publish all exposed ports and map them to to high-order ports.
 EXPOSE 80
 
+# Entrypoint
+CMD ["/bin/sh", "entrypoint.sh"]
