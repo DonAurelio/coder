@@ -13,10 +13,10 @@ export class ConfigService {
   templates_service: any;
 
   constructor() { 
-    this.pragcc_service = {'url': 'http://localhost:8011'};
-    this.file_service = {'url': 'http://localhost:8011'};
-    this.project_service = {'url': 'http://localhost:8011'};
-    this.templates_service = {'url': 'http://localhost:8011'};
+    this.pragcc_service = {'url': 'http://nginx:8000'};
+    this.file_service = {'url': 'http://nginx:8000'};
+    this.project_service = {'url': 'http://nginx:8000'};
+    this.templates_service = {'url': 'http://nginx:8000'};
   }
 
 }

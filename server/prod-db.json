@@ -29,7 +29,7 @@
   "model": "providers.service",
   "pk": "template",
   "fields": {
-    "base_url": "http://templates:5000",
+    "base_url": "http://templates:5001",
     "description": "Provides parallel programming templates for c99"
   }
 },

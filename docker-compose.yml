@@ -11,16 +11,16 @@ services:
     build: ./client
     restart: on-failure
     ports:
-    - "8010:80"
+      - "8000:80"
 
   nginx:
     image: nginx:alpine
     restart: on-failure
-    ports:
-    - "8011:80"
+    expose:
+      - "8000"
     volumes:
-    - static:/usr/share/nginx/html/static
-    - ./nginx/conf.d:/etc/nginx/conf.d
+      - static:/usr/share/nginx/html/static
+      - ./nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - server
 
@@ -32,17 +32,16 @@ services:
       - static:/usr/src/app/static
     entrypoint: ./entrypoint.sh
     expose:
-      - "80"
+      - "8001"
 
   pragcc:
     build:
       context: https://github.com/DonAurelio/pragcc.git
-    entrypoint: ./entrypoint.sh
 
   templates:
     build:
       context: https://github.com/DonAurelio/parallel-templates.git
-    entrypoint: ./entrypoint.sh
+
 
 volumes:
   static:

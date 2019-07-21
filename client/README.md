@@ -1,4 +1,33 @@
-# Editor
+# Coder Client
+
+This container servers an angular capable user interface. It needs to know where the server side is exposing the service to be consumed. Please check "/coder/client/src/app/services/config.service.ts" file cofiguration has the server location before build the container.
+
+```js
+import { Injectable } from '@angular/core';
+
+/**
+ * Application settings
+ */
+@Injectable()
+export class ConfigService {
+
+  // Services settigs
+  pragcc_service: any;
+  file_service: any;
+  project_service: any;
+  templates_service: any;
+
+  constructor() { 
+    this.pragcc_service = {'url': 'http://localhost:8011'};
+    this.file_service = {'url': 'http://localhost:8011'};
+    this.project_service = {'url': 'http://localhost:8011'};
+    this.templates_service = {'url': 'http://localhost:8011'};
+  }
+
+}
+```
+
+# About Angular Development
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.6.
 
