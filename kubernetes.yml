@@ -1,30 +1,73 @@
 apiVersion: v1
 kind: Pod
 metadata:
-   name: coder-pod
+    name: coder-pod
+    labels: 
+      app: coder
 
 # Pod specifications
 # Specification of the desired behavior of the pod
 spec:
   containers:
-  # - name: client
-  #   image: donaurelio/coder_client:1.0
-  #   ports:
-  #     # Port on which container is listenining 
-  #     # internally.
-  #     - containerPort: 80
+    - name: client
+      image: donaurelio/coder_client:1.0
+      ports:
+        # Port on which container is listenining 
+        # internally.
+        - name: public
+          containerPort: 80
+          hostPort: 8080
+          protocol: TCP
 
-  # - name: nginx
-  #   image: nginx:alpine
+    - name: nginx
+      image: nginx:alpine
+      volumeMounts:
+        - name: static
+          mountPath: /usr/share/nginx/html/static
+      ports:
+        - containerPort: 8000
 
-  - name: server
-    image: donaurelio/coder_server:1.0
-    ports:
-      - containerPort: 80
-  
-  # - name: pragcc
-  #   image: donaurelio/coder_pragcc:1.0
-  
-  # - name: templates
-  #   image: donaurelio/coder_templates:1.0
+    - name: server
+      image: donaurelio/coder_server:1.0
+      volumeMounts:
+        - name: static
+          mountPath: /usr/src/app/static
+      ports:
+        - containerPort: 8001
+
+    - name: postgres
+      image: postgres
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - containerPort: 5432
+
+    # - name: pragcc
+    #   image: donaurelio/coder_pragcc:1.0
+    
+    # - name: templates
+    #   image: donaurelio/coder_templates:1.0
+
+  volumes:
+    - name: static
+      persistentVolumeClaim:
+        claimName: static
+  env:
+    # Postgres 
+    - name: POSTGRES_USER
+      value: "coder_db"
+    - name: POSTGRES_DB
+      value: "coder_db"
+    - name: POSTGRES_PASSWORD
+      value: "coder_db"
+    # Server (Django)
+    - name: DB_HOST
+      value: "postgres"
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_NAME
+      value: "coder_db"
+    - name: DB_USER
+      value: "coder_db"
+    - name: DB_PASSWORD
+      value: "coder_db"
 
