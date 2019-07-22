@@ -7,7 +7,7 @@
 ./manage.py collectstatic --noinput
 
 # Initial db data
-./manage.py loaddata prod-db.json
+./manage.py loaddata example-db.json
 
 gunicorn coder.wsgi --timeout 600 -b 0.0.0.0:8001
 

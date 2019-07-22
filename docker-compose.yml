@@ -24,6 +24,14 @@ services:
     depends_on:
       - server
 
+  postgres:
+    image: postgres
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=coder_db
+      - POSTGRES_DB=coder_db
+      - POSTGRES_PASSWORD=coder_db
+
   server:
     build: ./server
     restart: on-failure
@@ -31,8 +39,16 @@ services:
       - ./server:/usr/src/app/
       - static:/usr/src/app/static
     entrypoint: ./entrypoint.sh
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=coder_db
+      - DB_USER=coder_db
+      - DB_PASSWORD=coder_db
     expose:
       - "8001"
+    depends_on:
+      - postgres
 
   pragcc:
     build:

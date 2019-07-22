@@ -6,6 +6,12 @@ LABEL maintainer="Aurelio Vivas aurelio.vivas@correounivalle.edu.co"
 WORKDIR /usr/src/app
 # Copy the project into the container current workdir
 COPY . .
+
+# Requirement for psycopg2-binary
+RUN \
+ apk add --no-cache postgresql-libs && \
+ apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev
+
 # Installing requirements
 RUN pip3 install --no-cache-dir -r ./requirements.txt
 
