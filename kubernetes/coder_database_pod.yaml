@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: coder-database
+  labels: 
+    app: coder-database
+
+# Pod specifications
+# Specification of the desired behavior of the pod
+spec:
+
+  volumes:
+    - name: static
+
+  containers:
+    - name: postgres
+      image: postgres
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - containerPort: 5432
+      env:
+      # Postgres 
+      - name: POSTGRES_USER
+        value: "coder_db"
+      - name: POSTGRES_DB
+        value: "coder_db"
+      - name: POSTGRES_PASSWORD
+        value: "coder_db"
