@@ -44,7 +44,7 @@ spec:
       env:
         # Server (Django)
         - name: DB_HOST
-          value: "172.17.0.4"
+          value: "172.17.0.6"
         - name: DB_PORT
           value: "5432"
         - name: DB_NAME

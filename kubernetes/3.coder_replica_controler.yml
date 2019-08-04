@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: coder-replica-controller
+spec:
+  replicas: 2
+  # Selects the pod identified with label
+  # app: coder-app
+  selector:
+    app: coder-app
+  # Define the set of pods that will be 
+  # managed for 
+  template:
+    metadata:
+      name: coder-app
+      labels:
+        app: coder-app
+    spec:
+      volumes:
+        - name: static
+      containers:
+        - name: nginx
+          image: donaurelio/coder_nginx:1.0
+          volumeMounts:
+            - name: static
+              mountPath: /usr/share/nginx/html/static
+          ports:
+            - containerPort: 8000
+              # hostPort: 8080
+              protocol: TCP
+
+        - name: django
+          image: donaurelio/coder_server:1.0
+          command: []
+          volumeMounts:
+            - name: static
+              mountPath: /usr/src/app/static
+          ports:
+            - containerPort: 8001
+          env:
+            # Server (Django)
+            - name: DB_HOST
+              value: "172.17.0.6"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "coder_db"
+            - name: DB_USER
+              value: "coder_db"
+            - name: DB_PASSWORD
+              value: "coder_db"
+
+        - name: pragcc
+          image: donaurelio/coder_pragcc:1.0
+        
+        - name: templates
+          image: donaurelio/coder_templates:1.0
+
