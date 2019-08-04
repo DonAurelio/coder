@@ -13,15 +13,15 @@ spec:
     - name: static
 
   containers:
-    - name: client
-      image: donaurelio/coder_client:1.0
-      ports:
-        # Port on which container is listenining 
-        # internally.
-        - name: public
-          containerPort: 80
-          hostPort: 8080
-          protocol: TCP
+  #  - name: client
+  #    image: donaurelio/coder_client:1.0
+  #    ports:
+  #      # Port on which container is listenining 
+  #      # internally.
+  #      - name: public
+  #        containerPort: 80
+  #        hostPort: 8080
+  #        protocol: TCP
 
     - name: nginx
       image: donaurelio/coder_nginx:1.0
@@ -30,7 +30,7 @@ spec:
           mountPath: /usr/share/nginx/html/static
       ports:
         - containerPort: 8000
-          hostPort: 8000
+          hostPort: 8080
           protocol: TCP
 
     - name: django
