@@ -1,4 +1,4 @@
-# Coder:Microservice Based Online Code Editor Initiative to Assits Parallel Programming
+# Coder: Microservice Based Online Code Editor Initiative to Assits Parallel Programming
 
 **Coder** is an initiative for a microservices-based online code editor to assists the development of C scientific programs. Code optimization, automatic parallelizers and code analysis tools are the target tools to be integrated on this initiative.
 This tool allow extensibility by separing the functionalities of a common code editor into services.
@@ -22,8 +22,8 @@ The follwoing services were developed to test Coder basic funtionalities. Howeve
 
 ## Deployments 
 
-* Docker Compose 
-* Kubernetes
+* [Docker Compose](https://github.com/DonAurelio/coder/tree/master/compose) 
+* [Kubernetes](https://github.com/DonAurelio/coder/tree/master/kubernetes)
 
 ## Further Work
 
