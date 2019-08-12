@@ -1,47 +1,29 @@
-# Welcome to Coder
+# Coder:Microservice Based Online Code Editor Initiative to Assits Parallel Programming
 
-**Coder** is a microservices-based online code editor developed to assists the development of C applications that require parallel processing. This tool looks for be extensible by separing the functionalities of a common code editor into services. 
+**Coder** is an initiative for a microservices-based online code editor to assists the development of C scientific programs. Code optimization, automatic parallelizers and code analysis tools are the target tools to be integrated on this initiative.
+This tool allow extensibility by separing the functionalities of a common code editor into services.
+
+## Intructory Videos
+
+* [Introduction](https://www.youtube.com/watch?v=0I5hRkwDllk&t=8s)
+* [How does it works ?](https://www.youtube.com/watch?v=ixcd9PUuE3I)
 
 ## Available Services
 
-* Coder, deals with C code edition, additionally integrate the services which assist the programmer with code parallelization.
+The follwoing services were developed to test Coder basic funtionalities. However, it is expected to integrate proper code optimization tools or extend the existing ones.
 
-* [Templates](https://github.com/DonAurelio/parallel-templates), some problems in programming follow the same pattern of parallelism. Given the above, it is possible to have templates that allow to address different problems following the same parallelism pattern. If the user have a problem that follows a given parallelism pattern, Templates can provide a basic template to start.
-
-* [Pragcc](https://github.com/DonAurelio/pragcc), it is a tool developed in Python that try assists the process of code parallelization.
+* Coder: Deals with C code edition, additionally integrate the services which assist the programmer with code optimization and parallelization.
+* [Templates](https://github.com/DonAurelio/parallel-templates): Provide C templates to start a parallel programming proyect.
+* [Pragcc](https://github.com/DonAurelio/pragcc): Provides an basic parallelization method as a source to source compiler.
 
 ## Application Diagram
 
 ![alt text](https://github.com/DonAurelio/coder/blob/master/doc/deploy_diagram.png)
 
+## Deployments 
 
-## Setting Up 
-
-Install [Docker-CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/#supported-storage-drivers) and [Docker-Compose](https://docs.docker.com/compose/install/#install-compose). Then, placed in the proyect directory, perform the following command.
-
-```sh
-docker-compose up -d
-```
-
-As the web interface is an Angular applications,i.e, a javascript application running on the client side. We need to tell the client application how to reach the server. The server is running behind an nginx proxy. So we need to know what is the IP address of the nginx proxi so the angular application can communicate with it. Please check the nginx container IP as follows:
-
-```sh 
-docker inspect coder_nginx_1 | grep IP
-
-"IPAddress": "172.20.0.3",
-```
-
-When you have the nginx ip addres, add a new alias to you /etc/hosts/file.
-
-```sh 
-docker inspect coder_nginx_1 | grep IP
-
-172.20.0.3	nginx
-```
-
-Unfortunatelly every time you run the container the IP address could change so you will need this steps everytime you restart your containers.
-
-the application will be available at http://localhost:8000
+* Docker Compose 
+* Kubernetes
 
 ## Further Work
 

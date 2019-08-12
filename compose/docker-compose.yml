@@ -8,10 +8,10 @@ version: '3'
 
 services:
   client:
-    build: ./client
+    build: ../client
     restart: on-failure
     ports:
-      - "8000:80"
+      - "80:80"
 
   nginx:
     image: nginx:alpine
@@ -20,7 +20,7 @@ services:
       - "8000"
     volumes:
       - static:/usr/share/nginx/html/static
-      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ../nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - server
 
@@ -33,10 +33,10 @@ services:
       - POSTGRES_PASSWORD=coder_db
 
   server:
-    build: ./server
+    build: ../server
     restart: on-failure
     volumes:
-      - ./server:/usr/src/app/
+      - ../server:/usr/src/app/
       - static:/usr/src/app/static
     entrypoint: ./entrypoint.sh
     environment:
