@@ -44,7 +44,7 @@ COPY --from=builder /ng-app/dist /usr/share/nginx/html
 # about which ports are intended to be published. To actually publish the port when running 
 # the container, use the -p flag on docker run to publish and map one or more ports, or the -P 
 # flag to publish all exposed ports and map them to to high-order ports.
-# NGINX is listenning at 8001
+# NGINX is listenning at 80
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]

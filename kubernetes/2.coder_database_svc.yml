@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: coder-database-svc
+spec:
+  # Select those pods with 
+  # attribute label = coder-database-pod
+  selector:
+    app: coder-database-pod
+  ports:
+  # Por on which the service will reseive 
+  # requests
+  - port: 5432
+  # Port on which the application is 
+  # running inside a pod 
+    targetPort: 5432

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: coder-webapp-pod
+  # Labels used to be selected 
+  # by other kuberntes's constructs 
+  # (Service,Replica Controllers, etc)
+  labels: 
+    app: coder-webapp-pod
+# Pod specifications
+spec:
+  containers:
+    - name: angular
+      image: donaurelio/coder_client:1.0
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - containerPort: 80
+          hostPort: 80

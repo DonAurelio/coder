@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: coder-database
+  name: coder-database-pod
+  # Labels used to be selected 
+  # by other kuberntes's constructs 
+  # (Service,Replica Controllers, etc)
   labels: 
-    app: coder-database
-
+    app: coder-database-pod
 # Pod specifications
-# Specification of the desired behavior of the pod
 spec:
-
   volumes:
     - name: static
 
