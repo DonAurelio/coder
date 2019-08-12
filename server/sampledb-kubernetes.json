@@ -1,0 +1,111 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$36000$tSJyXaGeNcFc$QjrPiIpab97IMEGN3G60lZ6OlCMG6LaNSD3aDA16Nh0=",
+    "last_login": "2019-08-12T13:58:33.968Z",
+    "is_superuser": true,
+    "username": "coder",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2019-08-12T13:51:08.747Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "providers.service",
+  "pk": "pragcc",
+  "fields": {
+    "base_url": "http://localhost:5000",
+    "description": "Provides compilation an parallelization"
+  }
+},
+{
+  "model": "providers.service",
+  "pk": "template",
+  "fields": {
+    "base_url": "http://localhost:5001",
+    "description": "Provides parallel programming templates for c99"
+  }
+},
+{
+  "model": "providers.resource",
+  "pk": 2,
+  "fields": {
+    "service": "pragcc",
+    "name": "compiler",
+    "description": "Allows .c files compilation"
+  }
+},
+{
+  "model": "providers.resource",
+  "pk": 3,
+  "fields": {
+    "service": "pragcc",
+    "name": "openmp",
+    "description": "Allow .c files parallelization with OpenMP compiler directives"
+  }
+},
+{
+  "model": "providers.resource",
+  "pk": 4,
+  "fields": {
+    "service": "template",
+    "name": "templates",
+    "description": "Provides a list of available templates and allow specific template rendesization"
+  }
+},
+{
+  "model": "providers.resource",
+  "pk": 5,
+  "fields": {
+    "service": "pragcc",
+    "name": "openacc",
+    "description": "Allow .c files parallelization with OpenACC compiler directives"
+  }
+},
+{
+  "model": "project.project",
+  "pk": 1,
+  "fields": {
+    "name": "Example 1",
+    "description": "This is a hellow world example",
+    "base_template": "stencil",
+    "created_at": "2019-08-12T14:01:45.294Z"
+  }
+},
+{
+  "model": "project.file",
+  "pk": 1,
+  "fields": {
+    "project": 1,
+    "name": "stencil.c",
+    "ftype": "c99",
+    "text": "\n#include <stdio.h>  /* Standard I/O Library: printf */\n#include <stdlib.h> /* Standard Library: malloc, calloc, free, ralloc */\n\n\n/**\n * Used in the 'neighborhood' function.\n */\n#define MOD(a,b) ((((a)%(b))+(b))%(b))\n\n#ifndef Generations\n#define Generations 100\n#endif\n\n#ifndef RowDim\n#define RowDim 1000\n#endif\n\n#ifndef ColDim\n#define ColDim 1000\n#endif\n\n\n/**\n * Represents the neighborhood of a given cell.\n */\nstruct Neighborhood\n{\n    \n    int center;\n    \n    int down;\n    \n    int left;\n    \n    int left_down;\n    \n    int left_up;\n    \n    int right;\n    \n    int right_down;\n    \n    int right_up;\n    \n    int up;\n    \n\n};\n\n\n/**\n * Used for cellular space initialization.\n */\nvoid initialize(int ** matrix){\n    // place cellular space initialization code here ...\n}\n\n\n/**\n * Returns the neighborhood of a given cell in the cellular space.\n * A periodic boundary condition is considered. If another type\n * of neighborhood is required, you must modify this function.\n */\nstruct Neighborhood neighborhood(int ** matrix, int row, int col){\n    struct Neighborhood nbhd;\n\n    \n    nbhd.center = matrix[ MOD(row + 0,RowDim) ][ MOD(col + 0,ColDim) ];\n    \n    nbhd.down = matrix[ MOD(row + 1,RowDim) ][ MOD(col + 0,ColDim) ];\n    \n    nbhd.left = matrix[ MOD(row + 0,RowDim) ][ MOD(col + -1,ColDim) ];\n    \n    nbhd.left_down = matrix[ MOD(row + 1,RowDim) ][ MOD(col + -1,ColDim) ];\n    \n    nbhd.left_up = matrix[ MOD(row + -1,RowDim) ][ MOD(col + -1,ColDim) ];\n    \n    nbhd.right = matrix[ MOD(row + 0,RowDim) ][ MOD(col + 1,ColDim) ];\n    \n    nbhd.right_down = matrix[ MOD(row + 1,RowDim) ][ MOD(col + 1,ColDim) ];\n    \n    nbhd.right_up = matrix[ MOD(row + -1,RowDim) ][ MOD(col + 1,ColDim) ];\n    \n    nbhd.up = matrix[ MOD(row + -1,RowDim) ][ MOD(col + 0,ColDim) ];\n    \n\n    return nbhd;\n}\n\n\n/**\n * Elemental function.\n * Returns the new state of a cell given its neighborhood.\n * This function is applied to each element in the celular space.\n */\nint function(struct Neighborhood nbhd){\n    \n    // place the code here ...\n\n    // you need to return the new state\n    // return 0;\n}\n\n\n\n/**\n * It is responsible for the evolution of the system.\n * Note: This function should not be modified.\n */\nvoid evolve(int ** in){\n\n    int ** out = (int **) malloc(RowDim*sizeof( int *));\n\n    /* checking if there is enough memory space to create the celular space */\n    if( out == NULL ){\n        perror(\"Not Enough Memory\\n\");\n        exit(-1);\n    }\n\n    for (int i=0; i<RowDim; ++i){ \n        out[i] = (int *) malloc(ColDim*sizeof(int));\n    }\n\n    /* cellular space processing */\n    for (int g = 1; g <= Generations; ++g){\n     \n        for (int i = 0; i < RowDim; ++i){\n            for (int j = 0; j < ColDim; ++j){\n                struct Neighborhood nbhd = neighborhood(in,i,j);\n                out[i][j] = function(nbhd);\n            }\n        }\n\n        for (int i = 0; i < RowDim; ++i){\n            for (int j = 0; j < ColDim; ++j){\n                in[i][j] = out[i][j];\n            }\n        }\n    }\n\n\n    for (int i=0; i<RowDim; ++i) free(out[i]);\n    free(out);\n}\n\n\n/**\n * Main function.\n * Note: This function should not be modified.\n */\nint main(int argc, char const **argv)\n{\n\n    /* allocate memory for the celular space */\n    int ** in = (int **) malloc(RowDim*sizeof( int *));\n\n    /* checking if there is enough memory space to create the celular space */\n    if( in == NULL ){\n        perror(\"Not Enough Memory\\n\");\n        exit(-1);\n    }\n\n    for (int i=0; i<RowDim; ++i){ \n        in[i] = (int *) malloc(ColDim*sizeof(int));\n    }\n\n    initialize(in);\n    evolve(in);\n\n    /* releasing resources */\n    for (int i=0; i<RowDim; ++i) free(in[i]);\n    free(in);\n\n    return EXIT_SUCCESS;\n}\n\n"
+  }
+},
+{
+  "model": "project.file",
+  "pk": 2,
+  "fields": {
+    "project": 1,
+    "name": "parallel.yml",
+    "ftype": "yml",
+    "text": "version: 1.0\nname: 'stencil'\ndescription: |\n    Template with stencil parallel programming pattern.\n    support OpenMP loop coarse grain parallelization and OpenACC fine\n    grain parallelization.\nfuncts:\n  all:\n    - main\n    - initialize\n    - function\n    - neighborhood\n    - evolve\n  parallel:\n    evolve:\n      mp:\n        parallel_for:\n          - nro: 2\n            clauses:\n              num_threads: 4\n          - nro: 4\n            clauses:\n              num_therads: 4\n"
+  }
+},
+{
+  "model": "project.file",
+  "pk": 3,
+  "fields": {
+    "project": 1,
+    "name": "Makefile",
+    "ftype": "plain/text",
+    "text": ""
+  }
+}
+]
