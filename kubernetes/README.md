@@ -13,15 +13,15 @@ Start the database pod
 kubectl apply -f 1.coder_database_pod.yml
 ```
 
-## Server Deployment
-
 Deploy a service to make the database reachable by the server pod
 
 ```sh
 kubectl apply -f 2.coder_database_svc.yml
 ```
 
-Deploy the replica controller which deals with the **server pod** creation and replication. The server pod comprise nginx, django, pragcc and templates. The nginx serves the django application; django serves as the interface between the database, pragcc and templates containers.
+## Server Pod Deployment
+
+Deploy a replica controller which deals with the **server pod** creation and replication. The server pod comprise nginx, django, pragcc and templates. The nginx serves the django application; django serves as the interface between the database, pragcc and templates containers.
 
 ```sh
 kubectl apply -f 3.coder_server_rc.yml
@@ -33,7 +33,7 @@ Deploy a service with load balancing capabilities to point **server pod** replic
 kubectl  apply -f 4.coder_server_svc.yml
 ```
 
-Check that services and pods are running properly
+Check that the services and pods are running properly
 
 ```sh
 kubectl get services,rc,pods
@@ -51,7 +51,7 @@ pod/coder-database-pod                1/1     Running            0          143m
 pod/coder-server-rc-7qfrc             4/4     Running            0          140m
 ```
 
-In clase of errors, you can check the log of a containers running in a pod ad follows. In this case **coder-server-rc-7qfrc** is the name of the pod running the **server pod** containers. and django is the name of the container with the logs we are interested.
+In clase of errors, you can check the log of a containers running in a pod as shown below. In this case **coder-server-rc-7qfrc**. And django is the name of the container which the logs we are looking for.
 
 ```sh
 kubectl logs coder-server-rc-7qfrc -c django
@@ -70,7 +70,7 @@ spec:
 ...
 ```
 
-Apply the changes using
+Apply the changes
 
 
 ```sh
@@ -79,7 +79,7 @@ kubectl apply -f 3.coder_server_rc.yml
 replicationcontroller/coder-server-rc configured
 ```
 
-check that the new pod is running properly. The load balancing is permformed by the **coder-server-service** at *4.coder_server_svc.yml* configured in the previous steps .
+Check that the new pod is running properly. The load balancing is permformed automatically by the **coder-server-service** at *4.coder_server_svc.yml* configured in the previous steps.
 
 ```sh
 kubectl get pods
@@ -92,7 +92,7 @@ pod/coder-server-rc-wshvs             4/4     Running            0          2m
 
 ### Load a Sample Database
 
-To load a sample database you need to get into the server (django application) container.
+To load a sample database you need to get into the django container running in the server pod. You can choose between *coder-server-rc-wshvs* or *coder-server-rc-7qfrc* because both pod's containers are connected to the same database.
 
 ```sh 
 kubectl exec -it coder-server-rc-7qfrc -c django -- sh
@@ -123,7 +123,7 @@ Use the following link http://10.110.196.167:8000
 ## Deploy the Web Interface
 
 
-As the web interface is an Angular applications,i.e, a javascript application running on the client side. We need to tell the client application how to reach the server. So the angular application can communicate with it.
+The client side is an Angular 4 applications,i.e., a javascript application inteded to run on the client side. Then, we need to tell the client application how to reach the server. The server pod is running behind the kubernetes service contruct called **coder-server-svc**.
 
 ```sh
 kubectl get services
@@ -133,7 +133,7 @@ service/coder-database-svc   ClusterIP      10.102.39.159    <none>        5432/
 service/coder-server-svc     LoadBalancer   10.110.196.167   <pending>     8000:32652/TCP   3h36m
 ```
 
-When you have the service ip address, add a new alias to you */etc/hosts* file as follows, indicating where to find the server.
+When you have the service ip address, add a new alias to your */etc/hosts* file as follows, indicating where to find the server.
 
 ```sh 
 sudo nano /etc/hosts
@@ -141,4 +141,6 @@ sudo nano /etc/hosts
 10.110.196.167	coder_server
 ```
 
-Every time you run the kubernetes the IP address could change, so you need to perform this step everytime kubernetes pods start/restart. The webpage will be available at http://localhost:80
+Every time you run the kubernetes the IP address could change, so you need to perform this step every kubernetes's pods start/restart. 
+
+The client side web page will be available at http://localhost:80
