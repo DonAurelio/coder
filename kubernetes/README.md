@@ -33,7 +33,7 @@ Deploy a service with load balancing capabilities to point **server pod** replic
 kubectl  apply -f 4.coder_server_svc.yml
 ```
 
-Check service and pods are running properly
+Check that services and pods are running properly
 
 ```sh
 kubectl get services,rc,pods
@@ -57,45 +57,48 @@ In clase of errors, you can check the log of a containers running in a pod ad fo
 kubectl logs coder-server-rc-7qfrc -c django
 ```
 
-## Scaling Server Pod
+### Scaling Server Pod
 
+Set the **replicas** attribute in the *3.coder-server-rc.yml* file 
 
+```sh
+nano 3.coder-server-rc.yml
 
-
-As the web interface is an Angular applications,i.e, a javascript application running on the client side. We need to tell the client application how to reach the server. The server is running behind an nginx proxy. So we need to know what is the IP address of the nginx proxy. So the angular application can communicate with it. Please check the nginx container IP as follows:
-
-```sh 
-docker inspect compose_nginx_1 | grep IPAddress
-
-"IPAddress": "172.20.0.3",
+...
+spec:
+  replicas: 2
+...
 ```
 
-When you have the nginx ip addres, add a new alias to you */etc/hosts* file as follows
+Apply the changes using
 
-```sh 
-sudo nano /etc/hosts
 
-172.20.0.3	coder_server
+```sh
+kubectl apply -f 3.coder_server_rc.yml
+
+replicationcontroller/coder-server-rc configured
 ```
 
-Unfortunatelly every time you run the container the IP address could change, so you need to perform this step everytime contrainers start/restart. The application will be available at http://localhost:8000
+check that the new pod is running properly. The load balancing is permformed by the **coder-server-service** at *4.coder_server_svc.yml* configured in the previous steps .
 
-To see the running containers use
+```sh
+kubectl get pods
 
-```sh 
-docker-compose ps -a
+NAME                                  READY   STATUS             RESTARTS   AGE
+pod/coder-database-pod                1/1     Running            0          143m
+pod/coder-server-rc-7qfrc             4/4     Running            4          8h
+pod/coder-server-rc-wshvs             4/4     Running            0          2m
 ```
 
-## Load a Sample Database
+### Load a Sample Database
 
 To load a sample database you need to get into the server (django application) container.
 
 ```sh 
-docker exec -it compose_server_1 sh
+kubectl exec -it coder-server-rc-7qfrc -c django -- sh
 ```
 
 You will be login into the django server. Perform the following command to load the database data.
-
 
 ```sh 
 ./manage.py loaddata sampledb-compose.json 
@@ -103,22 +106,39 @@ You will be login into the django server. Perform the following command to load 
 Installed 11 object(s) from 1 fixture(s)
 ```
 
-## Access Django Admin
+### Access Django Admin deployed in the Server
 
-The sample database has a defaul user called **coder** with password **coder1234**. To get the django admin interface, you need to get the server container IP address. As the server is behind a nginx proxy serving the static files, whe as docker for the IP of the nginx server. 
+The sample database has a default user called **coder** with password **coder1234**. To access the server you can user the **coder-server-service (coder-server-svc)** kubernetes interface.
 
-```sh 
-docker inspect compose_nginx_1 | grep IPAddress
+```sh
+kubectl get services
 
-"IPAddress": "172.20.0.5"
+NAME                         TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+service/coder-database-svc   ClusterIP      10.102.39.159    <none>        5432/TCP         3h42m
+service/coder-server-svc     LoadBalancer   10.110.196.167   <pending>     8000:32652/TCP   3h36m
 ```
 
-Then type in the browser the following http://172.20.0.5:8000
+Use the following link http://10.110.196.167:8000
 
-## Delete Containers and Images
+## Deploy the Web Interface
 
-The following command removes volumes, images and all container's dependencies created with ```docker-compose up```
+
+As the web interface is an Angular applications,i.e, a javascript application running on the client side. We need to tell the client application how to reach the server. So the angular application can communicate with it.
+
+```sh
+kubectl get services
+
+NAME                         TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+service/coder-database-svc   ClusterIP      10.102.39.159    <none>        5432/TCP         3h42m
+service/coder-server-svc     LoadBalancer   10.110.196.167   <pending>     8000:32652/TCP   3h36m
+```
+
+When you have the service ip address, add a new alias to you */etc/hosts* file as follows, indicating where to find the server.
 
 ```sh 
-docker-compose down -v --rmi all --remove-orphans
+sudo nano /etc/hosts
+
+10.110.196.167	coder_server
 ```
+
+Every time you run the kubernetes the IP address could change, so you need to perform this step everytime kubernetes pods start/restart. The webpage will be available at http://localhost:80

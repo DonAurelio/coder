@@ -3,7 +3,7 @@ kind: ReplicationController
 metadata:
   name: coder-server-rc
 spec:
-  replicas: 1
+  replicas: 2
   # Selects the pod identified with label
   # app: coder-app
   selector:
