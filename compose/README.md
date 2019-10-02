@@ -5,6 +5,10 @@
 * [Docker-CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/#supported-storage-drivers)
 * [Docker-Compose](https://docs.docker.com/compose/install/#install-compose)
 
+## Application Diagram
+
+![alt text](https://github.com/DonAurelio/coder/blob/master/doc/Compose.png)
+
 ## Deployment
 
 Start the database

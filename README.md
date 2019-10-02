@@ -20,10 +20,50 @@ The follwoing services were developed to test Coder basic funtionalities. Howeve
 
 ![alt text](https://github.com/DonAurelio/coder/blob/master/doc/deploy_diagram.png)
 
-## Deployments 
+## Deployment
 
 * [Docker Compose](https://github.com/DonAurelio/coder/tree/master/compose) 
 * [Kubernetes](https://github.com/DonAurelio/coder/tree/master/kubernetes)
+
+
+## Server Endpoints
+
+### Projects
+
+List available projects
+
+`GET http://<server-ip>:<server-port>/api/project/projects/`
+
+Get project with specific id. 
+
+`GET http://<server-ip>:<server-port>/api/project/projects/1/`
+
+## Files
+
+List available files
+
+`GET http://<server-ip>:<server-port>/api/project/files/`
+
+Get files belonging to a project with specific id.
+
+`GET http://<server-ip>:<server-port>/api/project/files?project=<project-id>`
+
+## Pragcc Service
+
+The pragcc service perform C99 source code compilation and parallelization with OpenMP or OpenACC Directives.
+
+Compile a file
+
+`POST http://<server-ip>:<server-port>/api/pragcc/compiler/compile/files/<file-id>`
+
+Annotate code with OpenMP directives, the file with the given id must be C99 source code.
+
+`POST http://<server-ip>:<server-port>/api/pragcc/openmp/parallelize/files/<file-id>`
+
+Annotate code with OpenACC directives, the file with the given id must be C99 source code.
+
+`POST http://<server-ip>:<server-port>/api/pragcc/openacc/parallelize/files/<file-id>`
+
 
 ## Further Work
 

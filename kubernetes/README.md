@@ -5,6 +5,10 @@
 * [Docker-CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/#supported-storage-drivers) 
 * [Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/)
 
+## Application Diagram
+
+![alt text](https://github.com/DonAurelio/coder/blob/master/doc/Kubernetes.png)
+
 ## Deployment
 
 Start the database pod
@@ -13,7 +17,7 @@ Start the database pod
 kubectl apply -f coder.yml
 ```
 
-## Check Pods and Services
+### Check Pods and Services
 
 ```sh 
 kubectl get services,pods
@@ -38,7 +42,7 @@ NAME                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)  
 service/coder-server-svc     NodePort    10.101.69.99    <none>        8000:30000/TCP   7s
 ```
 
-## Load Sample Database
+### Initialize Datasabe and Load Sample Data
 
 To load a sample database you need to get into the django container running in the server pod. You can choose between *coder-server-rc-7c22x* or *oder-server-rc-9svfr* as both pod's containers are connected to the same database.
 
@@ -49,12 +53,14 @@ kubectl exec -it coder-server-rc-7c22x -c django -- sh
 You will be login into the django server. Perform the following command to load the database data.
 
 ```sh 
+./manage.py makemigrations
+./manage.py migrate
 ./manage.py loaddata sampledb-compose.json 
 
 Installed 11 object(s) from 1 fixture(s)
 ```
 
-## Access Django Admin deployed in the Server
+### Access Django Admin deployed in the Server
 
 The sample database has a default user called **coder** with password **coder1234**.
 
@@ -69,12 +75,10 @@ coder-server-svc     NodePort    10.101.69.99    <none>        8000:30000/TCP   
 The following Use the following link:
 
 * http://10.101.69.99:8000 (locally)
-* http://127.0.0.1:8000 (locally)
 * http://<virtual-machine-ip>:8000 (work only from host machine)
-* http://<computer-ip>:8000 (outside)
+* http://<computer-ip>:30000 (outside)
 
-
-## Scaling Server Pod
+### Scaling Server Pod
 
 Set the **replicas** attribute in the *3.coder-server-rc.yml* file 
 
@@ -93,7 +97,7 @@ Apply the changes
 kubectl apply -f coder.yml
 ```
 
-## Acces the  the Web Interface
+### Acces the  the Web Interface
 
 
 The client side is an Angular 4 applications,i.e., a javascript application inteded to run on the client side. We need to tell the client application how to reach the server. The **server pod** is running behind the kubernetes service contruct called **coder-server-svc**.
