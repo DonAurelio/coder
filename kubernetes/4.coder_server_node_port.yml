@@ -1,0 +1,17 @@
+# NodePort allow to map a port of the 
+# host with a port of the container 
+# running the web server
+apiVersion: v1
+kind: Service
+metadata:
+  name: coder-server-svc
+spec:
+  type: NodePort
+  selector:
+    app: coder-server-pod
+  ports:
+    - protocol: TCP
+      # Web server container port
+      port: 8000
+      # Host port
+      nodePort: 30000
