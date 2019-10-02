@@ -1,12 +1,12 @@
-# Coder: Microservice Based Online Code Editor Initiative to Assits Parallel Programming
+# Coder: Microservice Based Online Code Editor Initiative to Support Parallel Programming
 
-**Coder** is an initiative for a microservices-based online code editor to assists the development of C scientific programs. Code optimization, automatic parallelizers and code analysis tools are the target tools to be integrated on this initiative.
-This tool allow extensibility by separing the functionalities of a common code editor into services.
+**Coder** is an initiative for a microservices-based online code editor to assist the development of C scientific applications. Code optimization, automatic parallelizers and code analysis are the target tools to be integrated on this initiative.
+This tool allow extensibility by providing these tools as services.
 
 ## Intructory Videos
 
 * [Introduction](https://www.youtube.com/watch?v=0I5hRkwDllk&t=8s)
-* [How does it works ?](https://www.youtube.com/watch?v=ixcd9PUuE3I)
+* [Demo](https://www.youtube.com/watch?v=ixcd9PUuE3I)
 
 ## Available Services
 
