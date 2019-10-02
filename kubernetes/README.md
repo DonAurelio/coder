@@ -5,59 +5,76 @@
 * [Docker-CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/#supported-storage-drivers) 
 * [Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/)
 
-## Database Deployment
+## Deployment
 
 Start the database pod
 
 ```sh
-kubectl apply -f 1.coder_database_pod.yml
+kubectl apply -f coder.yml
 ```
 
-Deploy a service to make the database reachable by the server pod
+## Check Pods and Services
+
+```sh 
+kubectl get services,pods
+
+NAME                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+service/coder-database-svc   ClusterIP   10.102.71.253   <none>        5432/TCP         29m
+service/coder-server-svc     NodePort    10.101.69.99    <none>        8000:30000/TCP   7s
+service/kubernetes           ClusterIP   10.96.0.1       <none>        443/TCP          60m
+
+NAME                        READY   STATUS    RESTARTS   AGE
+pod/coder-database-pod      1/1     Running   1          29m
+pod/coder-server-rc-7c22x   4/4     Running   4          29m
+pod/coder-server-rc-9svfr   4/4     Running   4          29m
+pod/coder-webapp-pod        1/1     Running   1          29m
+
+```
+
+The line containing **service/coder-server-svc** describe where will be available the load balancing endpoint to be redirected to any pod (Replica 1 or 2). We will be able to acces the server in `10.101.69.99:8000` locally (our computer). For outside we have to use `<computer-ip>:30000`. If you are running minikube in a virtual machine, then you require to use `<virtual-machine-ip>:30000` then, the application will no be available from outside
 
 ```sh
-kubectl apply -f 2.coder_database_svc.yml
+NAME                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+service/coder-server-svc     NodePort    10.101.69.99    <none>        8000:30000/TCP   7s
 ```
 
-## Server Pod Deployment
+## Load Sample Database
 
-Deploy a replica controller which deals with the **server pod** creation and replication. The server pod comprise nginx, django, pragcc and templates. The nginx serves the django application; django serves as the interface between the database, pragcc and templates containers.
+To load a sample database you need to get into the django container running in the server pod. You can choose between *coder-server-rc-7c22x* or *oder-server-rc-9svfr* as both pod's containers are connected to the same database.
+
+```sh 
+kubectl exec -it coder-server-rc-7c22x -c django -- sh
+```
+
+You will be login into the django server. Perform the following command to load the database data.
+
+```sh 
+./manage.py loaddata sampledb-compose.json 
+
+Installed 11 object(s) from 1 fixture(s)
+```
+
+## Access Django Admin deployed in the Server
+
+The sample database has a default user called **coder** with password **coder1234**.
 
 ```sh
-kubectl apply -f 3.coder_server_rc.yml
+kubectl get services
+
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+coder-database-svc   ClusterIP   10.102.71.253   <none>        5432/TCP         42m
+coder-server-svc     NodePort    10.101.69.99    <none>        8000:30000/TCP   13m
 ```
 
-Deploy a service with load balancing capabilities to point **server pod** replicas when created.
+The following Use the following link:
 
-```sh
-kubectl  apply -f 4.coder_server_svc.yml
-```
-
-Check that the services and pods are running properly
-
-```sh
-kubectl get services,rc,pods
+* http://10.101.69.99:8000 (locally)
+* http://127.0.0.1:8000 (locally)
+* http://<virtual-machine-ip>:8000 (work only from host machine)
+* http://<computer-ip>:8000 (outside)
 
 
-NAME                         TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
-service/coder-database-svc   ClusterIP      10.102.39.159    <none>        5432/TCP         3h42m
-service/coder-server-svc     LoadBalancer   10.110.196.167   <pending>     8000:32652/TCP   3h36m
-
-NAME                                    DESIRED   CURRENT   READY   AGE
-replicationcontroller/coder-server-rc   1         1         1       140m
-
-NAME                                  READY   STATUS             RESTARTS   AGE
-pod/coder-database-pod                1/1     Running            0          143m
-pod/coder-server-rc-7qfrc             4/4     Running            0          140m
-```
-
-In clase of errors, you can check the log of a containers running in a pod as shown below. In this case **coder-server-rc-7qfrc**. And django is the name of the container which the logs we are looking for.
-
-```sh
-kubectl logs coder-server-rc-7qfrc -c django
-```
-
-### Scaling Server Pod
+## Scaling Server Pod
 
 Set the **replicas** attribute in the *3.coder-server-rc.yml* file 
 
@@ -72,65 +89,21 @@ spec:
 
 Apply the changes
 
-
 ```sh
-kubectl apply -f 3.coder_server_rc.yml
-
-replicationcontroller/coder-server-rc configured
+kubectl apply -f coder.yml
 ```
 
-Check that the new pod is running properly. The load balancing is permformed automatically by the **coder-server-service** at *4.coder_server_svc.yml* configured in the previous steps.
+## Acces the  the Web Interface
 
-```sh
-kubectl get pods
 
-NAME                                  READY   STATUS             RESTARTS   AGE
-pod/coder-database-pod                1/1     Running            0          143m
-pod/coder-server-rc-7qfrc             4/4     Running            4          8h
-pod/coder-server-rc-wshvs             4/4     Running            0          2m
-```
-
-### Load a Sample Database
-
-To load a sample database you need to get into the django container running in the server pod. You can choose between *coder-server-rc-wshvs* or *coder-server-rc-7qfrc* because both pod's containers are connected to the same database.
-
-```sh 
-kubectl exec -it coder-server-rc-7qfrc -c django -- sh
-```
-
-You will be login into the django server. Perform the following command to load the database data.
-
-```sh 
-./manage.py loaddata sampledb-compose.json 
-
-Installed 11 object(s) from 1 fixture(s)
-```
-
-### Access Django Admin deployed in the Server
-
-The sample database has a default user called **coder** with password **coder1234**. To access the server you can user the **coder-server-service (coder-server-svc)** kubernetes interface.
+The client side is an Angular 4 applications,i.e., a javascript application inteded to run on the client side. We need to tell the client application how to reach the server. The **server pod** is running behind the kubernetes service contruct called **coder-server-svc**.
 
 ```sh
 kubectl get services
 
-NAME                         TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
-service/coder-database-svc   ClusterIP      10.102.39.159    <none>        5432/TCP         3h42m
-service/coder-server-svc     LoadBalancer   10.110.196.167   <pending>     8000:32652/TCP   3h36m
-```
-
-Use the following link http://10.110.196.167:8000
-
-## Deploy the Web Interface
-
-
-The client side is an Angular 4 applications,i.e., a javascript application inteded to run on the client side. Then, we need to tell the client application how to reach the server. The server pod is running behind the kubernetes service contruct called **coder-server-svc**.
-
-```sh
-kubectl get services
-
-NAME                         TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
-service/coder-database-svc   ClusterIP      10.102.39.159    <none>        5432/TCP         3h42m
-service/coder-server-svc     LoadBalancer   10.110.196.167   <pending>     8000:32652/TCP   3h36m
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+coder-database-svc   ClusterIP   10.102.71.253   <none>        5432/TCP         42m
+coder-server-svc     NodePort    10.101.69.99    <none>        8000:30000/TCP   13m
 ```
 
 When you have the service ip address, add a new alias to your */etc/hosts* file as follows, indicating where to find the server.
@@ -138,7 +111,7 @@ When you have the service ip address, add a new alias to your */etc/hosts* file 
 ```sh 
 sudo nano /etc/hosts
 
-10.110.196.167	coder_server
+10.101.69.99	coder_server
 ```
 
 Every time you run the kubernetes the IP address could change, so you need to perform this step every kubernetes's pods start/restart. 

@@ -22,7 +22,7 @@ docker-compose up
 or as background processes:
 
 ```sh
-docker-compose up
+docker-compose up -d 
 ```
 
 As the web interface is an Angular 4 applications,i.e, a javascript application running on the client side. We need to tell the client application how to reach the server. The server IP address can be obtained as follows:

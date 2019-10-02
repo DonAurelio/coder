@@ -11,7 +11,7 @@ spec:
     app: coder-server-pod
   ports:
     - protocol: TCP
-      # Web server container port
+      # Nginx container port
       port: 8000
       # Host port
       nodePort: 30000

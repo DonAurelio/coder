@@ -1,0 +1,156 @@
+# Database POD
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: coder-database-pod
+  # Labels used to be selected 
+  # by other kuberntes's constructs 
+  # (Service,Replica Controllers, etc)
+  labels: 
+    app: coder-database-pod
+# Pod specifications
+spec:
+  volumes:
+    - name: static
+
+  containers:
+    - name: postgres
+      image: postgres
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - containerPort: 5432
+      env:
+      # Postgres 
+      - name: POSTGRES_USER
+        value: "coder_db"
+      - name: POSTGRES_DB
+        value: "coder_db"
+      - name: POSTGRES_PASSWORD
+        value: "coder_db"
+
+---
+
+# Database Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: coder-database-svc
+spec:
+  # Select those pods with 
+  # attribute label = coder-database-pod
+  selector:
+    app: coder-database-pod
+  ports:
+  # Por on which the service will reseive 
+  # requests
+  - port: 5432
+  # Port on which the application is 
+  # running inside a pod 
+    targetPort: 5432
+
+--- 
+
+# Server (nginx,django,templates,pragcc) pod
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: coder-server-rc
+spec:
+  replicas: 2
+  # Selects the pod identified with label
+  # app: coder-app
+  selector:
+    app: coder-server-pod
+  # Define the set of pods that will be 
+  # managed for this replica controller
+  template:
+    metadata:
+      name: coder-server-pod
+      labels:
+        app: coder-server-pod
+    spec:
+      volumes:
+        - name: static
+      containers:
+        # Django applications and static files 
+        # must be served by nginx
+        - name: nginx
+          image: donaurelio/coder_nginx:1.0
+          volumeMounts:
+            - name: static
+              mountPath: /usr/share/nginx/html/static
+          ports:
+            - containerPort: 8000
+              # hostPort: 8081
+              protocol: TCP
+
+        - name: django
+          image: donaurelio/coder_server:1.0
+          command: []
+          volumeMounts:
+            - name: static
+              mountPath: /usr/src/app/static
+          ports:
+            - containerPort: 8001
+              protocol: TCP
+          env:
+            - name: DB_HOST
+              value: "coder-database-svc"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "coder_db"
+            - name: DB_USER
+              value: "coder_db"
+            - name: DB_PASSWORD
+              value: "coder_db"
+
+        - name: pragcc
+          image: donaurelio/coder_pragcc:1.0
+        
+        - name: templates
+          image: donaurelio/coder_templates:1.0
+
+---
+# Server Service
+# NodePort allow to map a port of the 
+# host with a port of the container 
+# running the web server
+apiVersion: v1
+kind: Service
+metadata:
+  name: coder-server-svc
+spec:
+  type: NodePort
+  selector:
+    app: coder-server-pod
+  ports:
+    - protocol: TCP
+      # Nginx container port
+      port: 8000
+      # Host port
+      nodePort: 30000
+
+---
+# Font-end (Web server application)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: coder-webapp-pod
+  # Labels used to be selected 
+  # by other kuberntes's constructs 
+  # (Service,Replica Controllers, etc)
+  labels: 
+    app: coder-webapp-pod
+# Pod specifications
+spec:
+  containers:
+    - name: angular
+      image: donaurelio/coder_client:1.0
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - containerPort: 80
+          hostPort: 80
+
