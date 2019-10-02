@@ -74,9 +74,9 @@ coder-server-svc     NodePort    10.101.69.99    <none>        8000:30000/TCP   
 
 The following Use the following link:
 
-* http://10.101.69.99:8000 (locally)
-* http://<virtual-machine-ip>:8000 (work only from host machine)
-* http://<computer-ip>:30000 (outside)
+* `http://10.101.69.99:8000` (locally)
+* `http://<virtual-machine-ip>:8000` (work only from host machine)
+* `http://<computer-ip>:30000` (outside)
 
 ### Scaling Server Pod
 

@@ -36,9 +36,9 @@ List available projects
 
 Get project with specific id. 
 
-`GET http://<server-ip>:<server-port>/api/project/projects/1/`
+`GET http://<server-ip>:<server-port>/api/project/projects/<project-id>/`
 
-## Files
+### Files
 
 List available files
 
@@ -48,7 +48,7 @@ Get files belonging to a project with specific id.
 
 `GET http://<server-ip>:<server-port>/api/project/files?project=<project-id>`
 
-## Pragcc Service
+### Pragcc Service
 
 The pragcc service perform C99 source code compilation and parallelization with OpenMP or OpenACC Directives.
 
