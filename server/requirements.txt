@@ -1,6 +1,6 @@
 certifi==2017.11.5
 chardet==3.0.4
-Django==1.11.4
+Django==1.11.23
 django-cors-headers==2.1.0
 django-tastypie==0.14.0
 gunicorn==19.7.1
